@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import * as anime from 'animejs';
 import * as THREE from 'three';
 import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink } from 'lucide-react';
 import { toast } from "sonner";
@@ -19,6 +18,43 @@ const Index = () => {
     experience: useRef(null),
     contact: useRef(null)
   };
+  
+  // Consolidated skills array - easy to add or remove skills
+  const skills = [
+    // Languages
+    { name: 'JavaScript', category: 'Language' },
+    { name: 'Python', category: 'Language' },
+    { name: 'HTML', category: 'Language' },
+    { name: 'CSS', category: 'Language' },
+    
+    // Frontend
+    { name: 'React', category: 'Frontend' },
+    { name: 'Tailwind CSS', category: 'Frontend' },
+    { name: 'Three.js', category: 'Frontend' },
+    { name: 'WebGL', category: 'Frontend' },
+    { name: 'WebVR', category: 'Frontend' },
+    
+    // Backend
+    { name: 'Node.js', category: 'Backend' },
+    { name: 'Express.js', category: 'Backend' },
+    { name: 'Django', category: 'Backend' },
+    { name: 'Flask', category: 'Backend' },
+    { name: 'FastAPI', category: 'Backend' },
+    
+    // Databases
+    { name: 'MongoDB', category: 'Database' },
+    { name: 'MySQL', category: 'Database' },
+    { name: 'PostgreSQL', category: 'Database' },
+    
+    // Tools & Platforms
+    { name: 'Git & GitHub', category: 'Tool' },
+    { name: 'Vercel', category: 'Tool' },
+    { name: 'Render', category: 'Tool' },
+    
+    // Libraries
+    { name: 'Pandas', category: 'Library' },
+    { name: 'NumPy', category: 'Library' }
+  ];
   
   // Theme colors - Updated with new color scheme
   const theme = {
@@ -151,41 +187,6 @@ const Index = () => {
     };
   }, [darkMode]);
   
-  // Anime.js animations for skills
-  useEffect(() => {
-    const animateSkills = () => {
-      anime({
-        targets: '.skill-progress',
-        width: function(el) {
-          return el.getAttribute('data-progress') + '%';
-        },
-        easing: 'easeInOutQuart',
-        duration: 1800,
-        delay: anime.stagger(100)
-      });
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateSkills();
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    const skillsSection = document.getElementById('skills');
-    if (skillsSection) {
-      observer.observe(skillsSection);
-    }
-    
-    return () => {
-      if (skillsSection) {
-        observer.unobserve(skillsSection);
-      }
-    };
-  }, []);
-  
   // Scroll observer for navigation
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -269,18 +270,6 @@ const Index = () => {
       }
     }
   };
-  
-  // Skill data
-  const skills = [
-    { name: 'JavaScript', level: 90, color: currentTheme.primary },
-    { name: 'React', level: 95, color: currentTheme.primary },
-    { name: 'Node.js', level: 85, color: currentTheme.primary },
-    { name: 'Python', level: 80, color: currentTheme.primary },
-    { name: 'Three.js', level: 75, color: currentTheme.primary },
-    { name: 'MongoDB', level: 85, color: currentTheme.primary },
-    { name: 'MySQL', level: 80, color: currentTheme.primary },
-    { name: 'Django', level: 75, color: currentTheme.primary }
-  ];
   
   // Project data
   const projects = [
@@ -741,68 +730,40 @@ const Index = () => {
                 </span>
               </motion.h2>
               
-              <div className="grid md:grid-cols-2 gap-8">
-                {skills.map((skill, index) => (
-                  <motion.div
-                    key={skill.name}
-                    variants={fadeInUp}
-                    className="overflow-hidden"
-                  >
-                    <div 
-                      className="p-6 rounded-2xl mb-4"
-                      style={{ 
-                        backgroundColor: currentTheme.cardBg,
-                        border: `1px solid ${currentTheme.cardBorder}`
-                      }}
-                    >
-                      <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold">{skill.name}</h3>
-                        <span style={{ color: skill.color }}>{skill.level}%</span>
-                      </div>
-                      
-                      <div 
-                        className="w-full h-2 rounded-full overflow-hidden"
-                        style={{ backgroundColor: `${skill.color}30` }}
-                      >
-                        <div 
-                          className="skill-progress h-full rounded-full"
-                          data-progress={skill.level}
-                          style={{ 
-                            width: "0%", 
-                            backgroundColor: skill.color
+              {/* Display skills by category */}
+              {['Language', 'Frontend', 'Backend', 'Database', 'Tool', 'Library'].map(category => {
+                const categorySkills = skills.filter(skill => skill.category === category);
+                if (categorySkills.length === 0) return null;
+                
+                return (
+                  <motion.div key={category} variants={fadeInUp} className="mb-10">
+                    <h3 className="text-xl font-bold mb-4 text-center">{category === 'Tool' ? 'Tools & Platforms' : `${category}s`}</h3>
+                    <div className="flex flex-wrap justify-center gap-4">
+                      {categorySkills.map(skill => (
+                        <motion.div
+                          key={skill.name}
+                          whileHover={{ 
+                            scale: 1.1, 
+                            backgroundColor: currentTheme.primary,
+                            color: "#FFFFFF"
                           }}
-                        ></div>
-                      </div>
+                          className="transition-all duration-300 shadow-sm"
+                          style={{ 
+                            backgroundColor: currentTheme.cardBg,
+                            borderRadius: "12px",
+                            padding: "14px 20px",
+                            color: currentTheme.foreground,
+                            border: `1px solid ${currentTheme.cardBorder}`
+                          }}
+                        >
+                          {skill.name}
+                        </motion.div>
+                      ))}
                     </div>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
               
-              <motion.div
-                variants={fadeInUp}
-                className="mt-16"
-              >
-                <h3 className="text-2xl font-bold text-center mb-8">Other Technologies</h3>
-                <div className="flex flex-wrap justify-center gap-4">
-                  {['HTML', 'CSS', 'Tailwind', 'PostgreSQL', 'Git', 'Vercel', 'Render', 'FastAPI', 'Flask', 'Express', 'Pandas', 'NumPy'].map((tech) => (
-                    <motion.div
-                      key={tech}
-                      whileHover={{ 
-                        scale: 1.05,
-                        backgroundColor: currentTheme.primary,
-                        color: "#FFFFFF"
-                      }}
-                      className="p-3 rounded-lg transition-all duration-300"
-                      style={{ 
-                        backgroundColor: currentTheme.cardBg,
-                        border: `1px solid ${currentTheme.cardBorder}`
-                      }}
-                    >
-                      {tech}
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
             </motion.div>
           </div>
         </section>
