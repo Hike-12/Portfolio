@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import * as THREE from 'three';
 import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit } from 'lucide-react';
 import { toast } from "sonner";
 import { 
@@ -13,12 +12,17 @@ import {
   SiPandas, SiNumpy
 } from 'react-icons/si';
 import { MdVrpano } from 'react-icons/md';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Three.js to avoid SSR issues
+const THREE = dynamic(() => import('three'), { ssr: false });
 
 const Index = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [activeSection, setActiveSection] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
   const threeCanvasRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -27,6 +31,11 @@ const Index = () => {
     experience: useRef(null),
     contact: useRef(null)
   };
+  
+  // Set isMounted to true once component mounts on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   // Consolidated skills array - easy to add or remove skills with official icons
   const skills = [
@@ -65,7 +74,7 @@ const Index = () => {
     { name: 'NumPy', category: 'Library', icon: <SiNumpy className="text-[#013243]" size={22} /> }
   ];
   
-  // Theme colors - Updated with new color scheme
+  // Theme colors - Updated to ensure proper text contrast
   const theme = {
     light: {
       background: '#F1EFEC', // Light cream/off-white
@@ -74,7 +83,10 @@ const Index = () => {
       secondary: '#D4C9BE',  // Beige/tan as secondary
       accent: '#123458',     // Navy blue as accent
       cardBg: '#FFFFFF',     // White card background
-      cardBorder: '#D4C9BE'  // Beige/tan for borders
+      cardBorder: '#D4C9BE', // Beige/tan for borders
+      primaryText: '#FFFFFF', // White text for primary backgrounds
+      darkBgText: '#FFFFFF',  // White text for dark backgrounds
+      lightBgText: '#123458'  // Navy text for light backgrounds
     },
     dark: {
       background: '#030303', // Almost black background
@@ -83,121 +95,129 @@ const Index = () => {
       secondary: '#123458',  // Navy blue as secondary 
       accent: '#D4C9BE',     // Beige/tan as accent
       cardBg: '#0A0A0A',     // Slightly lighter black for cards
-      cardBorder: '#1A1A1A'  // Slightly lighter borders
+      cardBorder: '#1A1A1A', // Slightly lighter borders
+      primaryText: '#030303', // Dark text for primary backgrounds
+      darkBgText: '#F1EFEC',  // Light text for dark backgrounds
+      lightBgText: '#030303'  // Dark text for light backgrounds
     }
   };
   
   const currentTheme = darkMode ? theme.dark : theme.light;
   
-  // Initialize Three.js scene
+  // Initialize Three.js scene - Only run when component is mounted on client
   useEffect(() => {
-    if (!threeCanvasRef.current) return;
+    if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
     
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas: threeCanvasRef.current,
-      alpha: true,
-      antialias: true 
-    });
-    
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
-    // Create particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 2000;
-    const posArray = new Float32Array(particlesCount * 3);
-    const colors = new Float32Array(particlesCount * 3);
-    
-    // Set up particles with our theme colors
-    for (let i = 0; i < particlesCount * 3; i++) {
-      // Position
-      posArray[i] = (Math.random() - 0.5) * 10;
+    // Import Three.js dynamically to avoid SSR issues
+    import('three').then((THREE) => {
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ 
+        canvas: threeCanvasRef.current,
+        alpha: true,
+        antialias: true 
+      });
       
-      // Colors - convert hex to RGB
-      if (i % 3 === 0) {
-        // Use the color palette based on theme
-        const colorOptions = darkMode ? 
-          ['#789DBC', '#564256', '#2A7D4F'] : 
-          ['#789DBC', '#FFE3E3', '#C9E9D2'];
-        
-        const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
-        colors[i] = color.r;
-        colors[i + 1] = color.g;
-        colors[i + 2] = color.b;
-      }
-    }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.02,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true
-    });
-    
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    
-    // Camera position
-    camera.position.z = 4;
-    
-    // Mouse movement effect
-    let mouseX = 0;
-    let mouseY = 0;
-    
-    const handleMouseMove = (event) => {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      // Rotate particles based on mouse position
-      particlesMesh.rotation.x += 0.0005;
-      particlesMesh.rotation.y += 0.0005;
-      
-      // Follow mouse with subtle movement
-      particlesMesh.rotation.x += mouseY * 0.0003;
-      particlesMesh.rotation.y += mouseX * 0.0003;
-      
-      renderer.render(scene, camera);
-    };
-    
-    animate();
-    
-    // Handle resize
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       
-      // Dispose of resources
-      particlesGeometry.dispose();
-      particlesMaterial.dispose();
-      renderer.dispose();
-    };
-  }, [darkMode]);
+      // Create particles
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 2000;
+      const posArray = new Float32Array(particlesCount * 3);
+      const colors = new Float32Array(particlesCount * 3);
+      
+      // Set up particles with our theme colors
+      for (let i = 0; i < particlesCount * 3; i++) {
+        // Position
+        posArray[i] = (Math.random() - 0.5) * 10;
+        
+        // Colors - convert hex to RGB
+        if (i % 3 === 0) {
+          // Use the color palette based on theme
+          const colorOptions = darkMode ? 
+            ['#789DBC', '#564256', '#2A7D4F'] : 
+            ['#789DBC', '#FFE3E3', '#C9E9D2'];
+          
+          const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
+          colors[i] = color.r;
+          colors[i + 1] = color.g;
+          colors[i + 2] = color.b;
+        }
+      }
+      
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.02,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+      });
+      
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+      
+      // Camera position
+      camera.position.z = 4;
+      
+      // Mouse movement effect
+      let mouseX = 0;
+      let mouseY = 0;
+      
+      const handleMouseMove = (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      };
+      
+      window.addEventListener('mousemove', handleMouseMove);
+      
+      // Animation loop
+      const animate = () => {
+        requestAnimationFrame(animate);
+        
+        // Rotate particles based on mouse position
+        particlesMesh.rotation.x += 0.0005;
+        particlesMesh.rotation.y += 0.0005;
+        
+        // Follow mouse with subtle movement
+        particlesMesh.rotation.x += mouseY * 0.0003;
+        particlesMesh.rotation.y += mouseX * 0.0003;
+        
+        renderer.render(scene, camera);
+      };
+      
+      animate();
+      
+      // Handle resize
+      const handleResize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      
+      // Cleanup
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('resize', handleResize);
+        
+        // Dispose of resources
+        particlesGeometry.dispose();
+        particlesMaterial.dispose();
+        renderer.dispose();
+      };
+    });
+  }, [darkMode, isMounted]);
   
-  // Scroll observer for navigation
+  // Scroll observer for navigation - Only run on client
   useEffect(() => {
+    if (!isMounted) return;
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -218,7 +238,7 @@ const Index = () => {
         (ref) => ref.current && observer.unobserve(ref.current)
       );
     };
-  }, []);
+  }, [isMounted]);
   
   // Smooth scroll function
   const scrollToSection = (sectionId) => {
@@ -234,11 +254,11 @@ const Index = () => {
   
   // Copy email to clipboard
   const copyEmail = () => {
-  if (typeof navigator !== 'undefined' && navigator.clipboard) {
-    navigator.clipboard.writeText('aliqyaan12@gmail.com');
-    toast("Email copied to clipboard!");
-  }
-};
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('aliqyaan12@gmail.com');
+      toast("Email copied to clipboard!");
+    }
+  };
   
   // Form handling functions
   const [formData, setFormData] = useState({
@@ -346,33 +366,67 @@ const Index = () => {
   
   // Project data
   const projects = [
-    {
-      title: 'Restaurant Booking System',
-      description: 'A comprehensive booking system with VR restaurant preview, QR code check-ins, and chatbot integration.',
-      tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
-      features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
-      image: '/placeholder.svg',
-      github: 'https://github.com/Hike-12/restaurant-booking'
-    },
-    {
-      title: 'Text To VR Image Converter',
-      description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
-      tech: ['JavaScript', 'WebVR', 'AI Integration', 'Canvas API'],
-      link: 'https://hike-12.github.io/VR_Image/',
-      github: 'https://github.com/Hike-12/VR_Image',
-      features: ['AI Generation', 'Mobile VR', 'Image Upload', 'Cross-platform'],
-      image: '/placeholder.svg'
-    },
-    {
-      title: 'Solar System 3D',
-      description: 'Interactive 3D solar system with realistic textures and orbital mechanics.',
-      tech: ['Three.js', 'WebGL', 'JavaScript', 'Realistic Textures'],
-      link: 'https://solar-system-mu-amber.vercel.app/',
-      github: 'https://github.com/Hike-12/solar-system',
-      features: ['3D Visualization', 'Realistic Physics', 'Interactive Controls', 'Educational'],
-      image: '/placeholder.svg'
-    }
-  ];
+  {
+    title: 'Restaurant Booking System',
+    description: 'A comprehensive booking system with VR restaurant preview, QR code check-ins, and chatbot integration.',
+    tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
+    features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
+    image: '/placeholder.svg',
+    github: 'https://github.com/Hike-12/restaurant-booking'
+  },
+  {
+    title: 'Text To VR Image Converter',
+    description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
+    tech: ['JavaScript', 'WebVR', 'AI Integration', 'Canvas API'],
+    link: 'https://hike-12.github.io/VR_Image/',
+    github: 'https://github.com/Hike-12/VR_Image',
+    features: ['AI Generation', 'Mobile VR', 'Image Upload', 'Cross-platform'],
+    image: '/placeholder.svg'
+  },
+  {
+    title: 'Solar System 3D',
+    description: 'Interactive 3D solar system with realistic textures and orbital mechanics.',
+    tech: ['Three.js', 'WebGL', 'JavaScript', 'Realistic Textures'],
+    link: 'https://solar-system-mu-amber.vercel.app/',
+    github: 'https://github.com/Hike-12/solar-system',
+    features: ['3D Visualization', 'Realistic Physics', 'Interactive Controls', 'Educational'],
+    image: '/placeholder.svg'
+  },
+  {
+    title: 'Certifiyo',
+    description: 'A dynamic certificate generation platform with batch CSV uploads, live preview, and instant PDF generation.',
+    tech: ['React', 'Node.js', 'MongoDB', 'PDFKit'],
+    features: ['Live Preview', 'Bulk Upload', 'PDF Export', 'Email Support'],
+    github: 'https://github.com/Hike-12/Certifiyo',
+    image: '/placeholder.svg'
+  },
+  {
+    title: 'Habitz – Habit Tracker',
+    description: 'A gamified, AI-powered habit tracker with social accountability, challenges, and real-time visualizations.',
+    tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Groq AI'],
+    features: ['Streak Tracker', 'QR Updates', 'Habit Visualizer', 'AI Coach'],
+    github: 'https://github.com/Hike-12/HackHazard',
+    link: 'https://habitz-three.vercel.app/',
+    image: '/placeholder.svg'
+  },
+  {
+    title: 'Auraflix',
+    description: 'A cinematic event management platform with booking, seat visualization, queue system, and user reviews.',
+    tech: ['Django', 'MySQL', 'HTML/CSS', 'JavaScript'],
+    features: ['Booking System', 'Queue Management', 'User Reviews', 'Event Calendar'],
+    github: 'https://github.com/Hike-12/Auraflix',
+    image: '/placeholder.svg'
+  },
+  {
+    title: 'AR Animal Classifier',
+    description: 'An augmented reality app that recognizes endangered animals and displays their info using an AR overlay.',
+    tech: ['Unity', 'C#', 'AR Foundation', 'Vuforia'],
+    features: ['AR Overlay', 'Image Recognition', '3D Models', 'Offline Mode'],
+    github: 'https://github.com/Hike-12/AR',
+    image: '/placeholder.svg'
+  }
+];
+
   
   // Achievements data
   const achievements = [
@@ -389,6 +443,20 @@ const Index = () => {
       image: '/placeholder.svg'
     }
   ];
+
+  // If not mounted yet (during SSR), return a minimal loading state
+  if (!isMounted) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: currentTheme.background }}
+      >
+        <div className="text-center">
+          <p style={{ color: currentTheme.foreground }}>Loading portfolio...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: currentTheme.background, color: currentTheme.foreground }}>
@@ -431,8 +499,11 @@ const Index = () => {
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className="capitalize transition-all duration-300 hover:font-medium relative py-1"
-                  style={{ color: activeSection === item ? currentTheme.primary : currentTheme.foreground }}
+                  className="capitalize transition-all duration-300 hover:font-medium relative py-1 hover:text-opacity-100"
+                  style={{ 
+                    color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
+                    opacity: activeSection === item ? 1 : 0.8
+                  }}
                 >
                   {item}
                   {activeSection === item && (
@@ -570,9 +641,10 @@ const Index = () => {
               >
                 <button
                   onClick={() => scrollToSection('contact')}
-                  className="px-8 py-6 text-white rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
+                  className="px-8 py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
                   style={{ 
-                    backgroundColor: currentTheme.primary // Changed from gradient to solid color
+                    backgroundColor: currentTheme.primary,
+                    color: currentTheme.primaryText // Ensuring contrast
                   }}
                 >
                   Get In Touch
@@ -732,7 +804,7 @@ const Index = () => {
                           whileHover={{ 
                             scale: 1.03, 
                             backgroundColor: currentTheme.primary,
-                            color: "#FFFFFF"
+                            color: currentTheme.primaryText // Using correct text color for contrast
                           }}
                           transition={{ duration: 0.3 }}
                           className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer"
@@ -835,7 +907,7 @@ const Index = () => {
                               whileHover={{ 
                                 scale: 1.05, 
                                 backgroundColor: currentTheme.primary,
-                                color: "#FFFFFF"
+                                color: currentTheme.primaryText // Text color that contrasts with primary background
                               }}
                               className="flex items-center gap-2 transition-all duration-200"
                               style={{ 
@@ -846,7 +918,7 @@ const Index = () => {
                                 border: `1px solid ${currentTheme.cardBorder}`
                               }}
                             >
-                              <div className="flex-shrink-0">
+                              <div className="flex-shrink-0 group-hover:text-current">
                                 {skill.icon}
                               </div>
                               <span className="skill-name text-sm font-medium">{skill.name}</span>
@@ -974,9 +1046,10 @@ const Index = () => {
                           {project.tech.map((tech) => (
                             <span
                               key={tech}
-                              className="px-3 py-1 text-xs rounded-full text-white"
+                              className="px-3 py-1 text-xs rounded-full"
                               style={{ 
-                                backgroundColor: currentTheme.primary
+                                backgroundColor: currentTheme.primary,
+                                color: currentTheme.primaryText // Ensuring proper contrast
                               }}
                             >
                               {tech}
@@ -991,7 +1064,7 @@ const Index = () => {
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-6 py-2 rounded-full inline-flex items-center"
+                            className="px-6 py-2 rounded-full inline-flex items-center hover:bg-opacity-90 transition-all"
                             style={{ 
                               backgroundColor: currentTheme.cardBg,
                               border: `1px solid ${currentTheme.primary}`,
@@ -1007,9 +1080,10 @@ const Index = () => {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-6 py-2 rounded-full text-white inline-flex items-center"
+                            className="px-6 py-2 rounded-full inline-flex items-center"
                             style={{ 
-                              backgroundColor: currentTheme.primary
+                              backgroundColor: currentTheme.primary,
+                              color: currentTheme.primaryText // Ensuring proper contrast
                             }}
                           >
                             <ExternalLink size={16} className="mr-2" /> Live Demo
@@ -1217,10 +1291,10 @@ const Index = () => {
                   <h3 className="font-semibold mb-2">Email</h3>
                   <button 
                     onClick={copyEmail}
-                    className="text-sm hover:underline transition-colors"
+                    className="text-sm hover:underline transition-colors group"
                     style={{ color: currentTheme.primary }}
                   >
-                    aliqyaan12@gmail.com
+                    <span className="group-hover:text-current">aliqyaan12@gmail.com</span>
                   </button>
                 </div>
                 
@@ -1324,10 +1398,11 @@ const Index = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl text-white font-medium transition-all duration-300 flex items-center justify-center"
+                    className="w-full py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center"
                     style={{ 
                       background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
-                      opacity: isSubmitting ? 0.7 : 1
+                      opacity: isSubmitting ? 0.7 : 1,
+                      color: currentTheme.primaryText // Ensuring proper contrast
                     }}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
@@ -1341,9 +1416,10 @@ const Index = () => {
               >
                 <a 
                   href="mailto:aliqyaan12@gmail.com"
-                  className="px-8 py-6 text-white rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+                  className="px-8 py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
                   style={{ 
-                    background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})` 
+                    background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
+                    color: darkMode ? currentTheme.lightBgText : currentTheme.darkBgText // Dynamic contrast
                   }}
                 >
                   <Mail size={18} className="mr-2" /> Email Me
@@ -1353,7 +1429,7 @@ const Index = () => {
                   href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+                  className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center hover:bg-opacity-90"
                   style={{ 
                     borderColor: currentTheme.primary,
                     color: currentTheme.primary
@@ -1385,4 +1461,5 @@ const Index = () => {
   );
 };
 
-export default Index;
+// Use dynamic export with no SSR to prevent hydration issues
+export default dynamic(() => Promise.resolve(Index), { ssr: false });
