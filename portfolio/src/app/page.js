@@ -4,6 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink } from 'lucide-react';
 import { toast } from "sonner";
+import { 
+  SiJavascript, SiPython, SiHtml5, SiCss3,
+  SiReact, SiTailwindcss, SiThreedotjs, SiWebgl, 
+  SiNodedotjs, SiExpress, SiDjango, SiFlask, SiFastapi,
+  SiMongodb, SiMysql, SiPostgresql,
+  SiGit, SiGithub, SiVercel, SiRender,
+  SiPandas, SiNumpy
+} from 'react-icons/si';
+import { MdVrpano } from 'react-icons/md';
 
 const Index = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -19,41 +28,41 @@ const Index = () => {
     contact: useRef(null)
   };
   
-  // Consolidated skills array - easy to add or remove skills
+  // Consolidated skills array - easy to add or remove skills with official icons
   const skills = [
     // Languages
-    { name: 'JavaScript', category: 'Language', icon: '🟨' },
-    { name: 'Python', category: 'Language', icon: '🐍' },
-    { name: 'HTML', category: 'Language', icon: '📄' },
-    { name: 'CSS', category: 'Language', icon: '🎨' },
+    { name: 'JavaScript', category: 'Language', icon: <SiJavascript className="text-[#F7DF1E]" size={22} /> },
+    { name: 'Python', category: 'Language', icon: <SiPython className="text-[#3776AB]" size={22} /> },
+    { name: 'HTML', category: 'Language', icon: <SiHtml5 className="text-[#E34F26]" size={22} /> },
+    { name: 'CSS', category: 'Language', icon: <SiCss3 className="text-[#1572B6]" size={22} /> },
     
     // Frontend
-    { name: 'React', category: 'Frontend', icon: '⚛️' },
-    { name: 'Tailwind CSS', category: 'Frontend', icon: '🌊' },
-    { name: 'Three.js', category: 'Frontend', icon: '🔺' },
-    { name: 'WebGL', category: 'Frontend', icon: '🌐' },
-    { name: 'WebVR', category: 'Frontend', icon: '🥽' },
+    { name: 'React', category: 'Frontend', icon: <SiReact className="text-[#61DAFB]" size={22} /> },
+    { name: 'Tailwind CSS', category: 'Frontend', icon: <SiTailwindcss className="text-[#06B6D4]" size={22} /> },
+    { name: 'Three.js', category: 'Frontend', icon: <SiThreedotjs className="text-[#000000]" size={22} /> },
+    { name: 'WebGL', category: 'Frontend', icon: <SiWebgl className="text-[#990000]" size={22} /> },
+    { name: 'WebVR', category: 'Frontend', icon: <MdVrpano className="text-[#FF4154]" size={22} /> },
     
     // Backend
-    { name: 'Node.js', category: 'Backend', icon: '🟢' },
-    { name: 'Express.js', category: 'Backend', icon: '🚂' },
-    { name: 'Django', category: 'Backend', icon: '🐍' },
-    { name: 'Flask', category: 'Backend', icon: '🧪' },
-    { name: 'FastAPI', category: 'Backend', icon: '⚡' },
+    { name: 'Node.js', category: 'Backend', icon: <SiNodedotjs className="text-[#339933]" size={22} /> },
+    { name: 'Express.js', category: 'Backend', icon: <SiExpress className="text-[#000000]" size={22} /> },
+    { name: 'Django', category: 'Backend', icon: <SiDjango className="text-[#092E20]" size={22} /> },
+    { name: 'Flask', category: 'Backend', icon: <SiFlask className="text-[#000000]" size={22} /> },
+    { name: 'FastAPI', category: 'Backend', icon: <SiFastapi className="text-[#009688]" size={22} /> },
     
     // Databases
-    { name: 'MongoDB', category: 'Database', icon: '🍃' },
-    { name: 'MySQL', category: 'Database', icon: '🐬' },
-    { name: 'PostgreSQL', category: 'Database', icon: '🐘' },
+    { name: 'MongoDB', category: 'Database', icon: <SiMongodb className="text-[#47A248]" size={22} /> },
+    { name: 'MySQL', category: 'Database', icon: <SiMysql className="text-[#4479A1]" size={22} /> },
+    { name: 'PostgreSQL', category: 'Database', icon: <SiPostgresql className="text-[#336791]" size={22} /> },
     
     // Tools & Platforms
-    { name: 'Git & GitHub', category: 'Tool', icon: '📊' },
-    { name: 'Vercel', category: 'Tool', icon: '▲' },
-    { name: 'Render', category: 'Tool', icon: '🚀' },
+    { name: 'Git & GitHub', category: 'Tool', icon: <SiGithub className="text-[#181717]" size={22} /> },
+    { name: 'Vercel', category: 'Tool', icon: <SiVercel className="text-[#000000]" size={22} /> },
+    { name: 'Render', category: 'Tool', icon: <SiRender className="text-[#46E3B7]" size={22} /> },
     
     // Libraries
-    { name: 'Pandas', category: 'Library', icon: '🐼' },
-    { name: 'NumPy', category: 'Library', icon: '🔢' }
+    { name: 'Pandas', category: 'Library', icon: <SiPandas className="text-[#150458]" size={22} /> },
+    { name: 'NumPy', category: 'Library', icon: <SiNumpy className="text-[#013243]" size={22} /> }
   ];
   
   // Theme colors - Updated with new color scheme
@@ -788,7 +797,9 @@ const Index = () => {
                                 border: `1px solid ${currentTheme.cardBorder}`
                               }}
                             >
-                              <span className="skill-icon text-lg">{skill.icon}</span>
+                              <div className="flex-shrink-0">
+                                {skill.icon}
+                              </div>
                               <span className="skill-name text-sm font-medium">{skill.name}</span>
                             </motion.div>
                           ))}
@@ -1202,7 +1213,7 @@ const Index = () => {
         >
           <div className="max-w-6xl mx-auto text-center">
             <p className="opacity-70">
-              © 2025 Aliqyaan Mahimwala. Built with React, Three.js, and Anime.js
+              © 2025 Aliqyaan Mahimwala.
             </p>
           </div>
         </footer>
