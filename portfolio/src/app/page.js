@@ -234,8 +234,72 @@ const Index = () => {
   
   // Copy email to clipboard
   const copyEmail = () => {
+  if (typeof navigator !== 'undefined' && navigator.clipboard) {
     navigator.clipboard.writeText('aliqyaan12@gmail.com');
     toast("Email copied to clipboard!");
+  }
+};
+  
+  // Form handling functions
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Simple validation
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        toast.success("Message sent successfully!");
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          message: ''
+        });
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   // Animation variants
@@ -287,13 +351,15 @@ const Index = () => {
       description: 'A comprehensive booking system with VR restaurant preview, QR code check-ins, and chatbot integration.',
       tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
       features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
-      image: '/placeholder.svg'
+      image: '/placeholder.svg',
+      github: 'https://github.com/Hike-12/restaurant-booking'
     },
     {
       title: 'Text To VR Image Converter',
       description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
       tech: ['JavaScript', 'WebVR', 'AI Integration', 'Canvas API'],
       link: 'https://hike-12.github.io/VR_Image/',
+      github: 'https://github.com/Hike-12/VR_Image',
       features: ['AI Generation', 'Mobile VR', 'Image Upload', 'Cross-platform'],
       image: '/placeholder.svg'
     },
@@ -302,7 +368,24 @@ const Index = () => {
       description: 'Interactive 3D solar system with realistic textures and orbital mechanics.',
       tech: ['Three.js', 'WebGL', 'JavaScript', 'Realistic Textures'],
       link: 'https://solar-system-mu-amber.vercel.app/',
+      github: 'https://github.com/Hike-12/solar-system',
       features: ['3D Visualization', 'Realistic Physics', 'Interactive Controls', 'Educational'],
+      image: '/placeholder.svg'
+    }
+  ];
+  
+  // Achievements data
+  const achievements = [
+    {
+      title: 'First Place - AuraFlix Hackathon',
+      date: 'September 2024',
+      description: 'Led a team of four developers to create a machine learning-powered video streaming platform that won first place among 30+ competing teams. Our solution featured personalized content recommendations and innovative accessibility features.',
+      image: '/placeholder.svg'
+    },
+    {
+      title: 'Qualified - SIH Internal Round',
+      date: 'July 2024',
+      description: 'Developed an AI-enhanced educational platform that qualified for the Smart India Hackathon internal round. The project featured interactive learning modules with VR integration and automated assessment capabilities.',
       image: '/placeholder.svg'
     }
   ];
@@ -830,6 +913,33 @@ const Index = () => {
                         border: `1px solid ${currentTheme.cardBorder}`
                       }}
                     >
+                      {/* Image placeholder with gradient overlay */}
+                      <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden">
+                        <div 
+                          className="absolute inset-0 flex items-center justify-center"
+                          style={{ 
+                            background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
+                            border: `1px solid ${currentTheme.cardBorder}`
+                          }}
+                        >
+                          <div className="flex flex-col items-center justify-center text-center p-4">
+                            <div 
+                              className="w-16 h-16 rounded-full mb-3 flex items-center justify-center"
+                              style={{ backgroundColor: `${currentTheme.primary}30` }}
+                            >
+                              {index === 0 ? (
+                                <Mail size={24} style={{ color: currentTheme.primary }} />
+                              ) : index === 1 ? (
+                                <MdVrpano size={24} style={{ color: currentTheme.primary }} />
+                              ) : (
+                                <Globe size={24} style={{ color: currentTheme.primary }} />
+                              )}
+                            </div>
+                            <p style={{ color: currentTheme.primary }}>Project Preview</p>
+                          </div>
+                        </div>
+                      </div>
+                      
                       <div 
                         className="absolute top-0 right-0 w-24 h-24 rounded-full -translate-y-12 translate-x-12 opacity-10"
                         style={{ 
@@ -866,7 +976,7 @@ const Index = () => {
                               key={tech}
                               className="px-3 py-1 text-xs rounded-full text-white"
                               style={{ 
-                                backgroundColor: currentTheme.primary // Changed from gradient to solid
+                                backgroundColor: currentTheme.primary
                               }}
                             >
                               {tech}
@@ -875,21 +985,37 @@ const Index = () => {
                         </div>
                       </div>
                       
-                      {project.link && (
-                        <div className="mt-auto">
+                      <div className="mt-auto flex flex-wrap gap-3">
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-6 py-2 rounded-full inline-flex items-center"
+                            style={{ 
+                              backgroundColor: currentTheme.cardBg,
+                              border: `1px solid ${currentTheme.primary}`,
+                              color: currentTheme.primary
+                            }}
+                          >
+                            <Github size={16} className="mr-2" /> View Code
+                          </a>
+                        )}
+                        
+                        {project.link && (
                           <a
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-6 py-2 rounded-full text-white inline-flex items-center"
                             style={{ 
-                              backgroundColor: currentTheme.primary // Changed from gradient to solid
+                              backgroundColor: currentTheme.primary
                             }}
                           >
-                            View Live Demo <ExternalLink size={16} className="ml-2" />
+                            <ExternalLink size={16} className="mr-2" /> Live Demo
                           </a>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -993,48 +1119,47 @@ const Index = () => {
               >
                 <h3 className="text-2xl font-bold text-center mb-8">Achievements</h3>
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div 
-                    className="p-8 rounded-3xl flex flex-col items-center text-center"
-                    style={{ 
-                      backgroundColor: currentTheme.cardBg,
-                      border: `1px solid ${currentTheme.cardBorder}`
-                    }}
-                  >
-                    <motion.div 
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      className="text-4xl mb-4"
+                  {achievements.map((achievement, index) => (
+                    <div 
+                      key={index}
+                      className="p-8 rounded-3xl relative overflow-hidden"
+                      style={{ 
+                        backgroundColor: currentTheme.cardBg,
+                        border: `1px solid ${currentTheme.cardBorder}`
+                      }}
                     >
-                      🏆
-                    </motion.div>
-                    <h4 
-                      className="text-xl font-bold mb-2"
-                      style={{ color: currentTheme.primary }}
-                    >
-                      First Place
-                    </h4>
-                    <p className="opacity-80">AuraFlix Hackathon Winner</p>
-                  </div>
-                  <div 
-                    className="p-8 rounded-3xl flex flex-col items-center text-center"
-                    style={{ 
-                      backgroundColor: currentTheme.cardBg,
-                      border: `1px solid ${currentTheme.cardBorder}`
-                    }}
-                  >
-                    <motion.div 
-                      whileHover={{ scale: 1.1, rotate: -5 }}
-                      className="text-4xl mb-4"
-                    >
-                      🎯
-                    </motion.div>
-                    <h4 
-                      className="text-xl font-bold mb-2"
-                      style={{ color: currentTheme.primary }}
-                    >
-                      Qualified
-                    </h4>
-                    <p className="opacity-80">SIH Internal Round</p>
-                  </div>
+                      {/* Image placeholder */}
+                      <div className="mb-6 relative h-40 w-full rounded-xl overflow-hidden">
+                        <div 
+                          className="absolute inset-0 flex items-center justify-center"
+                          style={{ 
+                            background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
+                            border: `1px solid ${currentTheme.cardBorder}`
+                          }}
+                        >
+                          <div className="flex flex-col items-center justify-center">
+                            <motion.div 
+                              whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
+                              className="text-5xl mb-2"
+                            >
+                              <img src={achievement.image} alt={achievement.title} className="w-12 h-12 object-contain" />
+                            </motion.div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <h4 
+                        className="text-xl font-bold mb-3 text-center"
+                        style={{ color: currentTheme.primary }}
+                      >
+                        {achievement.title}
+                      </h4>
+                      <p className="opacity-80 text-center mb-4">{achievement.date}</p>
+                      <p className="opacity-80 leading-relaxed">
+                        {achievement.description}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             </motion.div>
@@ -1079,7 +1204,7 @@ const Index = () => {
               
               <motion.div
                 variants={fadeInUp}
-                className="grid md:grid-cols-3 gap-8 mb-12"
+                className="grid md:grid-cols-2 gap-8 mb-12"
               >
                 <div 
                   className="p-8 rounded-3xl flex flex-col items-center"
@@ -1116,27 +1241,99 @@ const Index = () => {
                     +91 8122005252
                   </a>
                 </div>
-                
+              </motion.div>
+              
+              {/* Contact Form */}
+              <motion.form
+                variants={fadeInUp}
+                onSubmit={handleSubmit}
+                className="max-w-3xl mx-auto mb-12"
+              >
                 <div 
-                  className="p-8 rounded-3xl flex flex-col items-center"
+                  className="p-8 rounded-3xl text-left"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
                   }}
                 >
-                  <Github size={28} style={{ color: currentTheme.primary }} className="mb-4" />
-                  <h3 className="font-semibold mb-2">GitHub</h3>
-                  <a 
-                    href="https://github.com/Hike-12" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-sm hover:underline transition-colors"
-                    style={{ color: currentTheme.primary }}
+                  <h3 className="text-2xl font-bold mb-6 text-center">Send Me a Message</h3>
+                  
+                  <div className="mb-6">
+                    <label htmlFor="name" className="block mb-2 font-medium">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full p-4 rounded-xl"
+                      style={{ 
+                        backgroundColor: currentTheme.background,
+                        border: `1px solid ${currentTheme.cardBorder}`,
+                        color: currentTheme.foreground
+                      }}
+                      placeholder="Your name"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-6">
+                    <label htmlFor="email" className="block mb-2 font-medium">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full p-4 rounded-xl"
+                      style={{ 
+                        backgroundColor: currentTheme.background,
+                        border: `1px solid ${currentTheme.cardBorder}`,
+                        color: currentTheme.foreground
+                      }}
+                      placeholder="Your email address"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-8">
+                    <label htmlFor="message" className="block mb-2 font-medium">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows="5"
+                      className="w-full p-4 rounded-xl resize-none"
+                      style={{ 
+                        backgroundColor: currentTheme.background,
+                        border: `1px solid ${currentTheme.cardBorder}`,
+                        color: currentTheme.foreground
+                      }}
+                      placeholder="Your message"
+                      required
+                    ></textarea>
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-xl text-white font-medium transition-all duration-300 flex items-center justify-center"
+                    style={{ 
+                      background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
+                      opacity: isSubmitting ? 0.7 : 1
+                    }}
                   >
-                    Hike-12
-                  </a>
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
                 </div>
-              </motion.div>
+              </motion.form>
               
               <motion.div
                 variants={fadeInUp}
