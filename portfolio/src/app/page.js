@@ -14,6 +14,12 @@ import {
 import { MdVrpano } from 'react-icons/md';
 import dynamic from 'next/dynamic';
 
+// Helper function to detect touch devices
+const isTouchDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+};
+
 // Dynamically import Three.js to avoid SSR issues
 const THREE = dynamic(() => import('three'), { ssr: false });
 
@@ -477,11 +483,11 @@ const Index = () => {
           borderBottom: `1px solid ${currentTheme.cardBorder}`
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex justify-between items-center">
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-extrabold"
+              className="text-xl sm:text-2xl font-extrabold"
             >
               {/* Reduced gradient to solid color */}
               <span className="text-transparent" 
@@ -492,9 +498,8 @@ const Index = () => {
                 Aliqyaan
               </span>
             </motion.div>
-            
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-3 lg:space-x-8">
               {['home', 'about', 'skills', 'projects', 'experience', 'contact'].map((item) => (
                 <button
                   key={item}
@@ -517,9 +522,8 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            
             {/* Mobile Navigation Toggle & Theme Toggle */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
@@ -558,7 +562,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
         {/* Mobile Navigation Menu */}
         <AnimatePresence>
           {menuOpen && (
@@ -569,7 +572,7 @@ const Index = () => {
               className="md:hidden overflow-hidden"
               style={{ backgroundColor: currentTheme.cardBg }}
             >
-              <div className="px-6 py-4 flex flex-col space-y-4">
+              <div className="px-4 py-4 flex flex-col space-y-3">
                 {['home', 'about', 'skills', 'projects', 'experience', 'contact'].map((item) => (
                   <button
                     key={item}
@@ -592,29 +595,27 @@ const Index = () => {
         <section 
           id="home" 
           ref={sectionRefs.home}
-          className="min-h-screen flex items-center justify-center px-6 pt-24"
+          className="min-h-screen flex items-center justify-center px-3 sm:px-6 pt-24"
         >
-          <div className="max-w-5xl mx-auto text-center">
+          <div className="max-w-3xl sm:max-w-5xl mx-auto text-center">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="space-y-12"
+              className="space-y-8 sm:space-y-12"
             >
               <motion.div
                 variants={fadeInUp}
-                className="w-32 h-32 mx-auto rounded-full overflow-hidden flex items-center justify-center"
-                style={{ 
-                  backgroundColor: currentTheme.primary // Changed from gradient to solid color
-                }}
+                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full overflow-hidden flex items-center justify-center"
+                style={{ backgroundColor: currentTheme.primary }}
               >
-                <span className="text-4xl font-bold text-white">AM</span>
+                <span className="text-3xl sm:text-4xl font-bold text-white">AM</span>
               </motion.div>
               
               <div>
                 <motion.h1
                   variants={fadeInUp}
-                  className="text-5xl md:text-7xl font-bold mb-4"
+                  className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4"
                 >
                   Aliqyaan{" "}
                   <span 
@@ -629,7 +630,7 @@ const Index = () => {
                 
                 <motion.p
                   variants={fadeInUp}
-                  className="text-xl md:text-2xl mb-10 opacity-80"
+                  className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-80"
                 >
                   Full Stack Developer & Computer Engineering Student
                 </motion.p>
@@ -637,14 +638,14 @@ const Index = () => {
               
               <motion.div
                 variants={fadeInUp}
-                className="flex flex-wrap justify-center gap-6"
+                className="flex flex-wrap justify-center gap-4 sm:gap-6"
               >
                 <button
                   onClick={() => scrollToSection('contact')}
-                  className="px-8 py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
+                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
                   style={{ 
                     backgroundColor: currentTheme.primary,
-                    color: currentTheme.primaryText // Ensuring contrast
+                    color: currentTheme.primaryText
                   }}
                 >
                   Get In Touch
@@ -654,7 +655,7 @@ const Index = () => {
                   href="https://github.com/Hike-12" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
                   style={{ 
                     borderColor: currentTheme.primary,
                     color: currentTheme.primary
@@ -666,11 +667,11 @@ const Index = () => {
               
               <motion.div
                 variants={fadeIn}
-                className="pt-12"
+                className="pt-8 sm:pt-12"
               >
-                <div className="animate-bounce mx-auto w-8 h-12 flex justify-center">
+                <div className="animate-bounce mx-auto w-6 sm:w-8 h-10 sm:h-12 flex justify-center">
                   <div 
-                    className="w-0.5 h-8 rounded-full"
+                    className="w-0.5 h-6 sm:h-8 rounded-full"
                     style={{ backgroundColor: currentTheme.primary }}
                   ></div>
                 </div>
@@ -683,7 +684,7 @@ const Index = () => {
         <section 
           id="about" 
           ref={sectionRefs.about}
-          className="py-20 px-6"
+          className="py-14 sm:py-20 px-3 sm:px-6"
         >
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -694,7 +695,7 @@ const Index = () => {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-4xl font-bold text-center mb-16"
+                className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
               >
                 About{" "}
                 <span 
@@ -707,25 +708,24 @@ const Index = () => {
                 </span>
               </motion.h2>
               
-              <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
                 <motion.div 
                   variants={fadeInUp}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <p className="text-lg leading-relaxed">
+                  <p className="text-base sm:text-lg leading-relaxed">
                     Hey! I’m Aliqyaan Mahimwala — a 19-year-old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I’m a full-stack web developer who loves building clean, smooth, and user-friendly web apps that just work.
                   </p>
-                  
-                  <p className="text-lg leading-relaxed">
+                  <p className="text-base sm:text-lg leading-relaxed">
                     I usually work with modern tools and frameworks, and Django’s my go-to on the backend. Whether it’s writing backend logic, fine-tuning the UI, or figuring out a tricky bug, I enjoy the process of making things better — one line of code at a time.
                   </p>
-                  <p className="text-lg leading-relaxed">
+                  <p className="text-base sm:text-lg leading-relaxed">
                     Always learning, always building — trying to keep things neat, functional, and maybe a little fun too.
                   </p>
                   
-                  <div className="grid grid-cols-2 gap-6 mt-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
                     <div 
-                      className="p-6 rounded-2xl"
+                      className="p-4 sm:p-6 rounded-2xl"
                       style={{ 
                         backgroundColor: currentTheme.cardBg,
                         borderLeft: `4px solid ${currentTheme.primary}`,
@@ -742,7 +742,7 @@ const Index = () => {
                     </div>
                     
                     <div 
-                      className="p-6 rounded-2xl"
+                      className="p-4 sm:p-6 rounded-2xl"
                       style={{ 
                         backgroundColor: currentTheme.cardBg,
                         borderLeft: `4px solid ${currentTheme.accent}`,
@@ -764,7 +764,7 @@ const Index = () => {
                   variants={fadeInUp}
                 >
                   <div 
-                    className="p-8 rounded-3xl relative overflow-hidden"
+                    className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
                     style={{ 
                       backgroundColor: currentTheme.cardBg,
                       border: `1px solid ${currentTheme.cardBorder}`,
@@ -777,11 +777,11 @@ const Index = () => {
                       }}
                     ></div>
                     
-                    <h3 className="text-2xl font-bold mb-8">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">
                       Areas of Focus
                     </h3>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                       {[
                         { 
                           title: 'Full-Stack Development', 
@@ -833,7 +833,7 @@ const Index = () => {
         <section 
           id="skills" 
           ref={sectionRefs.skills}
-          className="py-20 px-6"
+          className="py-14 sm:py-20 px-3 sm:px-6"
           style={{ 
             backgroundColor: darkMode ? 'rgba(36, 36, 71, 0.3)' : 'rgba(254, 249, 242, 0.5)'
           }}
@@ -847,7 +847,7 @@ const Index = () => {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-4xl font-bold text-center mb-16"
+                className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
               >
                 Technical{" "}
                 <span 
@@ -860,7 +860,7 @@ const Index = () => {
                 </span>
               </motion.h2>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
                 {['Language', 'Frontend', 'Backend', 'Database', 'Tool', 'Library'].map(category => {
                   const categorySkills = skills.filter(skill => skill.category === category);
                   if (categorySkills.length === 0) return null;
@@ -888,7 +888,7 @@ const Index = () => {
                         ></div>
                         
                         <h3 
-                          className="text-xl font-bold mb-6 pb-3 relative"
+                          className="text-xl font-bold mb-6 sm:mb-8 pb-3 relative"
                           style={{ 
                             borderBottom: `2px solid ${currentTheme.primary}30`,
                           }}
@@ -933,7 +933,7 @@ const Index = () => {
               
               <motion.p 
                 variants={fadeInUp} 
-                className="text-center opacity-70 italic mt-4"
+                className="text-center opacity-70 italic mt-4 text-sm sm:text-base"
               >
                 *Constantly expanding my skillset through new projects and learning.
               </motion.p>
@@ -946,7 +946,7 @@ const Index = () => {
         <section 
           id="projects" 
           ref={sectionRefs.projects}
-          className="py-20 px-6"
+          className="py-14 sm:py-20 px-3 sm:px-6"
         >
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -957,7 +957,7 @@ const Index = () => {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-4xl font-bold text-center mb-16"
+                className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
               >
                 Featured{" "}
                 <span 
@@ -970,7 +970,7 @@ const Index = () => {
                 </span>
               </motion.h2>
               
-              <div className="grid lg:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.title}
@@ -1102,7 +1102,7 @@ const Index = () => {
         <section 
           id="experience" 
           ref={sectionRefs.experience}
-          className="py-20 px-6"
+          className="py-14 sm:py-20 px-3 sm:px-6"
           style={{ 
             backgroundColor: darkMode ? 'rgba(36, 36, 71, 0.3)' : 'rgba(254, 249, 242, 0.5)'
           }}
@@ -1116,7 +1116,7 @@ const Index = () => {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-4xl font-bold text-center mb-16"
+                className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
               >
                 Professional{" "}
                 <span 
@@ -1133,13 +1133,13 @@ const Index = () => {
                 variants={fadeInUp}
               >
                 <div 
-                  className="p-8 rounded-3xl relative overflow-hidden"
+                  className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
                   }}
                 >
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
                     <div>
                       <h3 
                         className="text-2xl font-bold mb-1"
@@ -1154,7 +1154,7 @@ const Index = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div className="flex items-start">
                       <div 
                         className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
@@ -1189,21 +1189,21 @@ const Index = () => {
               
               <motion.div
                 variants={fadeInUp}
-                className="mt-12"
+                className="mt-8 sm:mt-12"
               >
-                <h3 className="text-2xl font-bold text-center mb-8">Achievements</h3>
-                <div className="grid md:grid-cols-2 gap-8">
+                <h3 className="text-2xl font-bold text-center mb-6 sm:mb-8">Achievements</h3>
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
                   {achievements.map((achievement, index) => (
                     <div 
                       key={index}
-                      className="p-8 rounded-3xl relative overflow-hidden"
+                      className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
                       style={{ 
                         backgroundColor: currentTheme.cardBg,
                         border: `1px solid ${currentTheme.cardBorder}`
                       }}
                     >
                       {/* Image placeholder */}
-                      <div className="mb-6 relative h-40 w-full rounded-xl overflow-hidden">
+                      <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
                         <div 
                           className="absolute inset-0 flex items-center justify-center"
                           style={{ 
@@ -1214,7 +1214,7 @@ const Index = () => {
                           <div className="flex flex-col items-center justify-center">
                             <motion.div 
                               whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
-                              className="text-5xl mb-2"
+                              className="text-4xl sm:text-5xl mb-2"
                             >
                               <img src={achievement.image} alt={achievement.title} className="w-12 h-12 object-contain" />
                             </motion.div>
@@ -1223,7 +1223,7 @@ const Index = () => {
                       </div>
                       
                       <h4 
-                        className="text-xl font-bold mb-3 text-center"
+                        className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-center"
                         style={{ color: currentTheme.primary }}
                       >
                         {achievement.title}
@@ -1244,7 +1244,7 @@ const Index = () => {
         <section 
           id="contact" 
           ref={sectionRefs.contact}
-          className="py-20 px-6"
+          className="py-14 sm:py-20 px-3 sm:px-6"
         >
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -1256,7 +1256,7 @@ const Index = () => {
             >
               <motion.h2 
                 variants={fadeInUp}
-                className="text-4xl font-bold mb-8"
+                className="text-3xl sm:text-4xl font-bold mb-8"
               >
                 Let's{" "}
                 <span 
@@ -1271,17 +1271,17 @@ const Index = () => {
               
               <motion.p
                 variants={fadeInUp}
-                className="text-xl mb-12 opacity-80"
+                className="text-xl mb-8 sm:mb-12 opacity-80"
               >
                 I'm always open to discussing new opportunities, collaborations, or just having a chat about technology!
               </motion.p>
               
               <motion.div
                 variants={fadeInUp}
-                className="grid md:grid-cols-2 gap-8 mb-12"
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12"
               >
                 <div 
-                  className="p-8 rounded-3xl flex flex-col items-center"
+                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
@@ -1299,7 +1299,7 @@ const Index = () => {
                 </div>
                 
                 <div 
-                  className="p-8 rounded-3xl flex flex-col items-center"
+                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
@@ -1321,10 +1321,10 @@ const Index = () => {
               <motion.form
                 variants={fadeInUp}
                 onSubmit={handleSubmit}
-                className="max-w-3xl mx-auto mb-12"
+                className="max-w-3xl mx-auto mb-8 sm:mb-12"
               >
                 <div 
-                  className="p-8 rounded-3xl text-left"
+                  className="p-6 sm:p-8 rounded-3xl text-left"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
@@ -1332,7 +1332,7 @@ const Index = () => {
                 >
                   <h3 className="text-2xl font-bold mb-6 text-center">Send Me a Message</h3>
                   
-                  <div className="mb-6">
+                  <div className="mb-4 sm:mb-6">
                     <label htmlFor="name" className="block mb-2 font-medium">
                       Name
                     </label>
@@ -1353,7 +1353,7 @@ const Index = () => {
                     />
                   </div>
                   
-                  <div className="mb-6">
+                  <div className="mb-4 sm:mb-6">
                     <label htmlFor="email" className="block mb-2 font-medium">
                       Email
                     </label>
@@ -1374,7 +1374,7 @@ const Index = () => {
                     />
                   </div>
                   
-                  <div className="mb-8">
+                  <div className="mb-6 sm:mb-8">
                     <label htmlFor="message" className="block mb-2 font-medium">
                       Message
                     </label>
@@ -1412,7 +1412,7 @@ const Index = () => {
               
               <motion.div
                 variants={fadeInUp}
-                className="flex flex-wrap justify-center gap-6"
+                className="flex flex-wrap justify-center gap-4 sm:gap-6"
               >
                 <a 
                   href="mailto:aliqyaan12@gmail.com"
@@ -1444,14 +1444,14 @@ const Index = () => {
         
         {/* Footer */}
         <footer 
-          className="py-8 px-6 border-t"
+          className="py-6 sm:py-8 px-3 sm:px-6 border-t"
           style={{ 
             borderColor: currentTheme.cardBorder,
             backgroundColor: darkMode ? 'rgba(36, 36, 71, 0.5)' : 'rgba(254, 249, 242, 0.8)'
           }}
         >
           <div className="max-w-6xl mx-auto text-center">
-            <p className="opacity-70">
+            <p className="opacity-70 text-sm sm:text-base">
               © 2025 Aliqyaan Mahimwala.
             </p>
           </div>
