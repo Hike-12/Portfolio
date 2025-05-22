@@ -22,38 +22,38 @@ const Index = () => {
   // Consolidated skills array - easy to add or remove skills
   const skills = [
     // Languages
-    { name: 'JavaScript', category: 'Language' },
-    { name: 'Python', category: 'Language' },
-    { name: 'HTML', category: 'Language' },
-    { name: 'CSS', category: 'Language' },
+    { name: 'JavaScript', category: 'Language', icon: '🟨' },
+    { name: 'Python', category: 'Language', icon: '🐍' },
+    { name: 'HTML', category: 'Language', icon: '📄' },
+    { name: 'CSS', category: 'Language', icon: '🎨' },
     
     // Frontend
-    { name: 'React', category: 'Frontend' },
-    { name: 'Tailwind CSS', category: 'Frontend' },
-    { name: 'Three.js', category: 'Frontend' },
-    { name: 'WebGL', category: 'Frontend' },
-    { name: 'WebVR', category: 'Frontend' },
+    { name: 'React', category: 'Frontend', icon: '⚛️' },
+    { name: 'Tailwind CSS', category: 'Frontend', icon: '🌊' },
+    { name: 'Three.js', category: 'Frontend', icon: '🔺' },
+    { name: 'WebGL', category: 'Frontend', icon: '🌐' },
+    { name: 'WebVR', category: 'Frontend', icon: '🥽' },
     
     // Backend
-    { name: 'Node.js', category: 'Backend' },
-    { name: 'Express.js', category: 'Backend' },
-    { name: 'Django', category: 'Backend' },
-    { name: 'Flask', category: 'Backend' },
-    { name: 'FastAPI', category: 'Backend' },
+    { name: 'Node.js', category: 'Backend', icon: '🟢' },
+    { name: 'Express.js', category: 'Backend', icon: '🚂' },
+    { name: 'Django', category: 'Backend', icon: '🐍' },
+    { name: 'Flask', category: 'Backend', icon: '🧪' },
+    { name: 'FastAPI', category: 'Backend', icon: '⚡' },
     
     // Databases
-    { name: 'MongoDB', category: 'Database' },
-    { name: 'MySQL', category: 'Database' },
-    { name: 'PostgreSQL', category: 'Database' },
+    { name: 'MongoDB', category: 'Database', icon: '🍃' },
+    { name: 'MySQL', category: 'Database', icon: '🐬' },
+    { name: 'PostgreSQL', category: 'Database', icon: '🐘' },
     
     // Tools & Platforms
-    { name: 'Git & GitHub', category: 'Tool' },
-    { name: 'Vercel', category: 'Tool' },
-    { name: 'Render', category: 'Tool' },
+    { name: 'Git & GitHub', category: 'Tool', icon: '📊' },
+    { name: 'Vercel', category: 'Tool', icon: '▲' },
+    { name: 'Render', category: 'Tool', icon: '🚀' },
     
     // Libraries
-    { name: 'Pandas', category: 'Library' },
-    { name: 'NumPy', category: 'Library' }
+    { name: 'Pandas', category: 'Library', icon: '🐼' },
+    { name: 'NumPy', category: 'Library', icon: '🔢' }
   ];
   
   // Theme colors - Updated with new color scheme
@@ -730,39 +730,81 @@ const Index = () => {
                 </span>
               </motion.h2>
               
-              {/* Display skills by category */}
-              {['Language', 'Frontend', 'Backend', 'Database', 'Tool', 'Library'].map(category => {
-                const categorySkills = skills.filter(skill => skill.category === category);
-                if (categorySkills.length === 0) return null;
-                
-                return (
-                  <motion.div key={category} variants={fadeInUp} className="mb-10">
-                    <h3 className="text-xl font-bold mb-4 text-center">{category === 'Tool' ? 'Tools & Platforms' : `${category}s`}</h3>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {categorySkills.map(skill => (
-                        <motion.div
-                          key={skill.name}
-                          whileHover={{ 
-                            scale: 1.1, 
-                            backgroundColor: currentTheme.primary,
-                            color: "#FFFFFF"
-                          }}
-                          className="transition-all duration-300 shadow-sm"
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {['Language', 'Frontend', 'Backend', 'Database', 'Tool', 'Library'].map(category => {
+                  const categorySkills = skills.filter(skill => skill.category === category);
+                  if (categorySkills.length === 0) return null;
+                  
+                  return (
+                    <motion.div 
+                      key={category} 
+                      variants={fadeInUp}
+                      className="skill-category relative"
+                    >
+                      <div 
+                        className="p-6 rounded-2xl relative overflow-hidden h-full"
+                        style={{ 
+                          backgroundColor: currentTheme.cardBg,
+                          border: `1px solid ${currentTheme.cardBorder}`,
+                          boxShadow: `0 4px 20px rgba(0,0,0,0.05)`
+                        }}
+                      >
+                        {/* Accent circle in the background */}
+                        <div 
+                          className="absolute top-0 right-0 w-24 h-24 rounded-full -translate-y-12 translate-x-12 opacity-5"
                           style={{ 
-                            backgroundColor: currentTheme.cardBg,
-                            borderRadius: "12px",
-                            padding: "14px 20px",
-                            color: currentTheme.foreground,
-                            border: `1px solid ${currentTheme.cardBorder}`
+                            background: `radial-gradient(circle, ${currentTheme.primary}, ${currentTheme.accent})` 
+                          }}
+                        ></div>
+                        
+                        <h3 
+                          className="text-xl font-bold mb-6 pb-3 relative"
+                          style={{ 
+                            borderBottom: `2px solid ${currentTheme.primary}30`,
                           }}
                         >
-                          {skill.name}
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                );
-              })}
+                          {category === 'Tool' ? 'Tools & Platforms' : `${category}s`}
+                          <span 
+                            className="absolute bottom-0 left-0 h-0.5 w-16"
+                            style={{ backgroundColor: currentTheme.primary }}
+                          ></span>
+                        </h3>
+                        
+                        <div className="flex flex-wrap gap-3">
+                          {categorySkills.map(skill => (
+                            <motion.div
+                              key={skill.name}
+                              whileHover={{ 
+                                scale: 1.05, 
+                                backgroundColor: currentTheme.primary,
+                                color: "#FFFFFF"
+                              }}
+                              className="flex items-center gap-2 transition-all duration-200"
+                              style={{ 
+                                backgroundColor: currentTheme.background === '#030303' ? '#151515' : '#FFFFFF',
+                                borderRadius: "12px",
+                                padding: "8px 12px",
+                                color: currentTheme.foreground,
+                                border: `1px solid ${currentTheme.cardBorder}`
+                              }}
+                            >
+                              <span className="skill-icon text-lg">{skill.icon}</span>
+                              <span className="skill-name text-sm font-medium">{skill.name}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+              
+              <motion.p 
+                variants={fadeInUp} 
+                className="text-center opacity-70 italic mt-4"
+              >
+                *Constantly expanding my skillset through new projects and learning.
+              </motion.p>
               
             </motion.div>
           </div>
