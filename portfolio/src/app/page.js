@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
-import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit } from 'lucide-react';
 import { toast } from "sonner";
 import { 
   SiJavascript, SiPython, SiHtml5, SiCss3,
@@ -623,84 +623,49 @@ const Index = () => {
                     ></div>
                     
                     <h3 className="text-2xl font-bold mb-8">
-                      Quick Stats
+                      Areas of Focus
                     </h3>
                     
                     <div className="space-y-6">
-                      <div>
-                        <div className="flex justify-between mb-2">
-                          <span>Projects Completed</span>
-                          <span 
-                            className="font-bold"
-                            style={{ color: currentTheme.primary }}
-                          >
-                            10+
-                          </span>
-                        </div>
-                        <div 
-                          className="w-full h-2 rounded-full"
-                          style={{ backgroundColor: `${currentTheme.primary}30` }}
+                      {[
+                        { 
+                          title: 'Full-Stack Development', 
+                          icon: <Code size={30} style={{ color: currentTheme.primary }} />, 
+                          description: 'Creating seamless user experiences with modern frameworks and clean code'
+                        },
+                        { 
+                          title: 'Interactive 3D & VR', 
+                          icon: <Globe size={30} style={{ color: currentTheme.primary }} />, 
+                          description: 'Building immersive digital experiences with Three.js and WebVR'
+                        },
+                        { 
+                          title: 'AI Integration', 
+                          icon: <BrainCircuit size={30} style={{ color: currentTheme.primary }} />, 
+                          description: 'Incorporating intelligent features to enhance application capabilities'
+                        }
+                      ].map((item, index) => (
+                        <motion.div
+                          key={item.title}
+                          whileHover={{ 
+                            scale: 1.03, 
+                            backgroundColor: currentTheme.primary,
+                            color: "#FFFFFF"
+                          }}
+                          transition={{ duration: 0.3 }}
+                          className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer"
+                          style={{ borderColor: currentTheme.cardBorder }}
                         >
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            whileInView={{ width: '80%' }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                            viewport={{ once: true }}
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: currentTheme.primary }}
-                          ></motion.div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="flex justify-between mb-2">
-                          <span>Technologies Mastered</span>
-                          <span 
-                            className="font-bold"
-                            style={{ color: currentTheme.primary }}
-                          >
-                            15+
-                          </span>
-                        </div>
-                        <div 
-                          className="w-full h-2 rounded-full"
-                          style={{ backgroundColor: `${currentTheme.primary}30` }}
-                        >
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            whileInView={{ width: '90%' }}
-                            transition={{ duration: 1, delay: 0.4 }}
-                            viewport={{ once: true }}
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: currentTheme.primary }}
-                          ></motion.div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="flex justify-between mb-2">
-                          <span>Hackathon Performance</span>
-                          <span 
-                            className="font-bold"
-                            style={{ color: currentTheme.accent }}
-                          >
-                            1st Place
-                          </span>
-                        </div>
-                        <div 
-                          className="w-full h-2 rounded-full"
-                          style={{ backgroundColor: `${currentTheme.accent}30` }}
-                        >
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            whileInView={{ width: '100%' }}
-                            transition={{ duration: 1, delay: 0.6 }}
-                            viewport={{ once: true }}
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: currentTheme.accent }}
-                          ></motion.div>
-                        </div>
-                      </div>
+                          <div className="p-3 rounded-lg" style={{ 
+                            backgroundColor: `${currentTheme.primary}15`,
+                          }}>
+                            {item.icon}
+                          </div>
+                          <div>
+                            <h4 className="font-bold mb-1">{item.title}</h4>
+                            <p className="text-sm opacity-80">{item.description}</p>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
                 </motion.div>
