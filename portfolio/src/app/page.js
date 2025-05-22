@@ -404,6 +404,7 @@ const Index = () => {
     tech: ['React', 'Node.js', 'MongoDB', 'PDFKit'],
     features: ['Live Preview', 'Bulk Upload', 'PDF Export', 'Email Support'],
     github: 'https://github.com/Hike-12/Certifiyo',
+    link:'https://certifiyo.vercel.app/',
     image: '/placeholder.svg'
   },
   {
@@ -421,6 +422,7 @@ const Index = () => {
     tech: ['Django', 'MySQL', 'HTML/CSS', 'JavaScript'],
     features: ['Booking System', 'Queue Management', 'User Reviews', 'Event Calendar'],
     github: 'https://github.com/Hike-12/Auraflix',
+    link: 'https://influenceiq-nine.vercel.app/',
     image: '/placeholder.svg'
   },
   {
@@ -429,6 +431,7 @@ const Index = () => {
     tech: ['Unity', 'C#', 'AR Foundation', 'Vuforia'],
     features: ['AR Overlay', 'Image Recognition', '3D Models', 'Offline Mode'],
     github: 'https://github.com/Hike-12/AR',
+    link: 'https://augmint.vercel.app/',
     image: '/placeholder.svg'
   }
 ];
@@ -1444,16 +1447,52 @@ const Index = () => {
         
         {/* Footer */}
         <footer 
-          className="py-6 sm:py-8 px-3 sm:px-6 border-t"
+          className="py-8 sm:py-10 px-3 sm:px-6 border-t"
           style={{ 
             borderColor: currentTheme.cardBorder,
             backgroundColor: darkMode ? 'rgba(36, 36, 71, 0.5)' : 'rgba(254, 249, 242, 0.8)'
           }}
         >
-          <div className="max-w-6xl mx-auto text-center">
-            <p className="opacity-70 text-sm sm:text-base">
-              © 2025 Aliqyaan Mahimwala.
-            </p>
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 mb-2 md:mb-0">
+              <span className="font-semibold text-base sm:text-lg" style={{ color: currentTheme.primary }}>
+                Aliqyaan Mahimwala
+              </span>
+              <span className="hidden sm:inline-block text-xs opacity-60">|</span>
+              <span className="text-xs sm:text-sm opacity-70">
+                © 2025 All rights reserved.
+              </span>
+            </div>
+            <div className="flex gap-4">
+              <a
+                href="mailto:aliqyaan12@gmail.com"
+                className="rounded-full p-2 hover:bg-opacity-80 transition"
+                style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
+                aria-label="Email"
+              >
+                <Mail size={18} />
+              </a>
+              <a
+                href="https://github.com/Hike-12"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 hover:bg-opacity-80 transition"
+                style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
+                aria-label="GitHub"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 hover:bg-opacity-80 transition"
+                style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
+            </div>
           </div>
         </footer>
       </main>
