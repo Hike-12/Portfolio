@@ -558,13 +558,14 @@ const Index = () => {
                   className="space-y-6"
                 >
                   <p className="text-lg leading-relaxed">
-                    I'm a passionate Computer Engineering student at Father Conceicao Rodrigues College Of Engineering with a CGPA of 9.5.
-                    I specialize in full-stack development with expertise in React, Node.js, and cutting-edge web technologies.
+                    Hey! I’m Aliqyaan Mahimwala — a 19-year-old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I’m a full-stack web developer who loves building clean, smooth, and user-friendly web apps that just work.
                   </p>
                   
                   <p className="text-lg leading-relaxed">
-                    My journey includes winning first place at the AuraFlix Hackathon and qualifying for SIH Internal Rounds.
-                    I love creating immersive web experiences using Three.js and building scalable applications.
+                    I usually work with modern tools and frameworks, and Django’s my go-to on the backend. Whether it’s writing backend logic, fine-tuning the UI, or figuring out a tricky bug, I enjoy the process of making things better — one line of code at a time.
+                  </p>
+                  <p className="text-lg leading-relaxed">
+                    Always learning, always building — trying to keep things neat, functional, and maybe a little fun too.
                   </p>
                   
                   <div className="grid grid-cols-2 gap-6 mt-8">
