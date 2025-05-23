@@ -120,6 +120,7 @@ const Index = () => {
     if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
     
     const isMobile = window.innerWidth < 768;
+    
     // Import Three.js dynamically to avoid SSR issues
     import('three').then((THREE) => {
       // Scene setup
@@ -1020,7 +1021,7 @@ const scrollToSection = (sectionId) => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={staggerContainer}
             >
               <motion.h2 
@@ -1040,6 +1041,7 @@ const scrollToSection = (sectionId) => {
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                 {projects.map((project, index) => (
+                  console.log("Rendering project:", project.title),
                   <motion.div
                     key={project.title}
                     variants={fadeInUp}
