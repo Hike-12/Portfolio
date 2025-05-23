@@ -377,17 +377,8 @@ const Index = () => {
     description: 'A comprehensive booking system with VR restaurant preview, QR code check-ins, and chatbot integration.',
     tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
     features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
-    image: '/placeholder.svg',
-    github: 'https://github.com/Hike-12/restaurant-booking'
-  },
-  {
-    title: 'Text To VR Image Converter',
-    description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
-    tech: ['JavaScript', 'WebVR', 'AI Integration', 'Canvas API'],
-    link: 'https://hike-12.github.io/VR_Image/',
-    github: 'https://github.com/Hike-12/VR_Image',
-    features: ['AI Generation', 'Mobile VR', 'Image Upload', 'Cross-platform'],
-    image: '/placeholder.svg'
+    github: 'https://github.com/Hike-12/Restraunt-Booking',
+    image: '/Restaurant.png',
   },
   {
     title: 'Solar System 3D',
@@ -396,16 +387,16 @@ const Index = () => {
     link: 'https://solar-system-mu-amber.vercel.app/',
     github: 'https://github.com/Hike-12/solar-system',
     features: ['3D Visualization', 'Realistic Physics', 'Interactive Controls', 'Educational'],
-    image: '/placeholder.svg'
+    image: '/SolarSystem.png'
   },
   {
-    title: 'Certifiyo',
+    title: 'Trippeer',
     description: 'A dynamic certificate generation platform with batch CSV uploads, live preview, and instant PDF generation.',
     tech: ['React', 'Node.js', 'MongoDB', 'PDFKit'],
     features: ['Live Preview', 'Bulk Upload', 'PDF Export', 'Email Support'],
     github: 'https://github.com/Hike-12/Certifiyo',
     link:'https://certifiyo.vercel.app/',
-    image: '/placeholder.svg'
+    image: '/Certifiyo.png'
   },
   {
     title: 'Habitz – Habit Tracker',
@@ -414,25 +405,34 @@ const Index = () => {
     features: ['Streak Tracker', 'QR Updates', 'Habit Visualizer', 'AI Coach'],
     github: 'https://github.com/Hike-12/HackHazard',
     link: 'https://habitz-three.vercel.app/',
-    image: '/placeholder.svg'
+    image: '/HabitTracker.png'
   },
   {
-    title: 'Auraflix',
-    description: 'A cinematic event management platform with booking, seat visualization, queue system, and user reviews.',
-    tech: ['Django', 'MySQL', 'HTML/CSS', 'JavaScript'],
-    features: ['Booking System', 'Queue Management', 'User Reviews', 'Event Calendar'],
-    github: 'https://github.com/Hike-12/Auraflix',
-    link: 'https://influenceiq-nine.vercel.app/',
-    image: '/placeholder.svg'
-  },
-  {
-    title: 'AR Animal Classifier',
-    description: 'An augmented reality app that recognizes endangered animals and displays their info using an AR overlay.',
-    tech: ['Unity', 'C#', 'AR Foundation', 'Vuforia'],
-    features: ['AR Overlay', 'Image Recognition', '3D Models', 'Offline Mode'],
-    github: 'https://github.com/Hike-12/AR',
-    link: 'https://augmint.vercel.app/',
-    image: '/placeholder.svg'
+  title: 'InfluenceIQ',
+  description: 'A platform built to track fake fame, recency bias, and fleeting trends in the influencer and entertainment space. Combines analytics and insights to highlight short-lived popularity.',
+  tech: ['MongoDB', 'Express.js', 'React', 'Node.js', 'FastAPI'],
+  features: ['Trend Analysis', 'Influencer Tracking', 'Recency Bias Metrics', 'Interactive Dashboard'],
+  github: 'https://github.com/Hike-12/Auraflix',
+  link: 'https://influenceiq-nine.vercel.app/',
+  image: '/Auraflix.png'
+},
+{
+  title: 'Text To VR Image Converter',
+  description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
+  tech: ['JavaScript', 'WebVR', 'AI Integration', 'Canvas API'],
+  link: 'https://hike-12.github.io/VR_Image/',
+  github: 'https://github.com/Hike-12/VR_Image',
+  features: ['AI Generation', 'Mobile VR', 'Image Upload', 'Cross-platform'],
+  image: '/VR.png'
+},
+{
+  title: 'AR Website',
+  description: 'A playful AR web app that lets users view fun 3D models in their camera background and take photos with them.',
+  tech: ['React', 'Three.js', 'AR.js', 'WebXR'],
+  features: ['Camera Overlay', '3D Models', 'Photo Capture', 'Web-based AR'],
+  github: 'https://github.com/Hike-12/AR',
+  link: 'https://augmint.vercel.app/',
+  image: '/AR.png'
   }
 ];
 
@@ -443,13 +443,13 @@ const Index = () => {
       title: 'First Place - AuraFlix Hackathon',
       date: 'September 2024',
       description: 'Led a team of four developers to create a machine learning-powered video streaming platform that won first place among 30+ competing teams. Our solution featured personalized content recommendations and innovative accessibility features.',
-      image: '/placeholder.svg'
+      image: '/Aura.jpg'
     },
     {
       title: 'Qualified - SIH Internal Round',
       date: 'July 2024',
       description: 'Developed an AI-enhanced educational platform that qualified for the Smart India Hackathon internal round. The project featured interactive learning modules with VR integration and automated assessment capabilities.',
-      image: '/placeholder.svg'
+      image: '/SIH.jpg'
     }
   ];
 
@@ -989,31 +989,36 @@ const Index = () => {
                       }}
                     >
                       {/* Image placeholder with gradient overlay */}
-                      <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden">
-                        <div 
-                          className="absolute inset-0 flex items-center justify-center"
-                          style={{ 
-                            background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
-                            border: `1px solid ${currentTheme.cardBorder}`
-                          }}
-                        >
-                          <div className="flex flex-col items-center justify-center text-center p-4">
-                            <div 
-                              className="w-16 h-16 rounded-full mb-3 flex items-center justify-center"
-                              style={{ backgroundColor: `${currentTheme.primary}30` }}
-                            >
-                              {index === 0 ? (
-                                <Mail size={24} style={{ color: currentTheme.primary }} />
-                              ) : index === 1 ? (
-                                <MdVrpano size={24} style={{ color: currentTheme.primary }} />
-                              ) : (
-                                <Globe size={24} style={{ color: currentTheme.primary }} />
-                              )}
-                            </div>
-                            <p style={{ color: currentTheme.primary }}>Project Preview</p>
-                          </div>
-                        </div>
-                      </div>
+                      <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900">
+  <img
+    src={project.image}
+    alt={project.title}
+    className="object-cover w-full h-full"
+    style={{ objectPosition: "center" }}
+    onError={e => {
+      e.target.style.display = 'none';
+      e.target.parentNode.querySelector('.fallback-gradient').style.display = 'flex';
+    }}
+  />
+  <div
+    className="fallback-gradient absolute inset-0 flex items-center justify-center"
+    style={{
+      display: "none",
+      background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
+      border: `1px solid ${currentTheme.cardBorder}`
+    }}
+  >
+    <div className="flex flex-col items-center justify-center text-center p-4">
+      <div
+        className="w-16 h-16 rounded-full mb-3 flex items-center justify-center"
+        style={{ backgroundColor: `${currentTheme.primary}30` }}
+      >
+        <Globe size={24} style={{ color: currentTheme.primary }} />
+      </div>
+      <p style={{ color: currentTheme.primary }}>Project Preview</p>
+    </div>
+  </div>
+</div>
                       
                       <div 
                         className="absolute top-0 right-0 w-24 h-24 rounded-full -translate-y-12 translate-x-12 opacity-10"
@@ -1142,6 +1147,24 @@ const Index = () => {
                     border: `1px solid ${currentTheme.cardBorder}`
                   }}
                 >
+                  {/* Image placeholder for professional experience */}
+                  <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{ 
+                        border: `1px solid ${currentTheme.cardBorder}`
+                      }}
+                    >
+                      <div className="flex flex-col items-center justify-center w-full h-full">
+                        <motion.div 
+                          whileHover={{ scale: 1.1 }}
+                          className="text-4xl sm:text-5xl mb-2 w-full h-full"
+                        >
+                          <img src="/Trip.jpg" alt="Professional Experience" className="object-contain w-full h-full" />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
                     <div>
                       <h3 
@@ -1210,16 +1233,15 @@ const Index = () => {
                         <div 
                           className="absolute inset-0 flex items-center justify-center"
                           style={{ 
-                            background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
                             border: `1px solid ${currentTheme.cardBorder}`
                           }}
                         >
-                          <div className="flex flex-col items-center justify-center">
+                          <div className="flex flex-col items-center justify-center w-full h-full">
                             <motion.div 
-                              whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
-                              className="text-4xl sm:text-5xl mb-2"
+                              whileHover={{ scale: 1.1 }}
+                              className="text-4xl sm:text-5xl mb-2 w-full h-full"
                             >
-                              <img src={achievement.image} alt={achievement.title} className="w-12 h-12 object-contain" />
+                              <img src={achievement.image} alt={achievement.title} className="object-contain w-full h-full" />
                             </motion.div>
                           </div>
                         </div>
