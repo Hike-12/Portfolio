@@ -259,7 +259,6 @@ const Index = () => {
   // Smooth scroll function
   // Replace the existing scrollToSection function with this improved version
 const scrollToSection = (sectionId) => {
-  console.log('Scrolling to section:', sectionId);
   
   const element = document.getElementById(sectionId);
   if (element) {
@@ -287,8 +286,6 @@ const scrollToSection = (sectionId) => {
         // Fallback for older mobile browsers
         window.scrollTo(0, offsetPosition);
       }
-      
-      console.log('Scroll attempted to position:', offsetPosition);
     }, 300); // Increased timeout for mobile
   } else {
     console.error('Element not found:', sectionId);
@@ -525,17 +522,23 @@ const scrollToSection = (sectionId) => {
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex justify-between items-center">
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              className="text-xl sm:text-2xl font-extrabold"
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="w-10 h-10 flex items-center justify-center rounded-lg cursor-pointer"
+              style={{
+                backgroundColor: currentTheme.primary,
+              }}
+              onClick={() => scrollToSection('home')}
             >
-              {/* Reduced gradient to solid color */}
-              <span className="text-transparent" 
+              <span 
+                className="text-2xl font-bold" 
                 style={{ 
-                  color: currentTheme.primary
-                }}
+                  color: currentTheme.primaryText,
+                  fontFamily: 'var(--font-dancing-script)'
+                 }}
               >
-                Aliqyaan
+                A
               </span>
             </motion.div>
             {/* Desktop Navigation */}
@@ -580,7 +583,6 @@ const scrollToSection = (sectionId) => {
               <button
                 className="md:hidden w-10 h-10 rounded-full flex flex-col items-center justify-center space-y-1.5"
                 onClick={() => {
-                  console.log("Menu button clicked");
                   setMenuOpen(!menuOpen)}}
                 style={{ backgroundColor: currentTheme.cardBg }}
                 aria-label="Toggle menu"
@@ -619,7 +621,6 @@ const scrollToSection = (sectionId) => {
                   <button
                     key={item}
                     onClick={() =>{ 
-                      console.log("Menu item clicked",item);
                       scrollToSection(item)}}
                     className="capitalize text-left py-2 transition-colors"
                     style={{ color: activeSection === item ? currentTheme.primary : currentTheme.foreground }}
@@ -911,7 +912,7 @@ const scrollToSection = (sectionId) => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={staggerContainer}
             >
               <motion.h2 
@@ -1041,7 +1042,6 @@ const scrollToSection = (sectionId) => {
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                 {projects.map((project, index) => (
-                  console.log("Rendering project:", project.title),
                   <motion.div
                     key={project.title}
                     variants={fadeInUp}
@@ -1189,7 +1189,7 @@ const scrollToSection = (sectionId) => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={staggerContainer}
             >
               <motion.h2 
@@ -1345,7 +1345,7 @@ const scrollToSection = (sectionId) => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={staggerContainer}
               className="text-center"
             >
