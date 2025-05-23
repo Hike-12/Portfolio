@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono,Dancing_Script } from "next/font/google";
+import { Geist, Geist_Mono, Dancing_Script } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 const dancingScript = Dancing_Script({
   subsets: ['latin'],
-  weight: ['400', '700'], // '700' for a bolder look if available and desired
+  weight: ['400', '700'],
   variable: '--font-dancing-script',
 });
 
@@ -25,18 +25,29 @@ export const viewport = {
   userScalable: false,
 }
 
-// Regular metadata without viewport
+// Updated metadata with proper favicon setup
 export const metadata = {
   title: 'Aliqyaan Mahimwala | Portfolio',
   description: 'Full Stack Developer & Computer Engineering Student',
   icons: {
-    icon: '/logo.png',
+    icon: [
+      { url: '/logo.ico' },
+      { url: '/logo.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/logo.ico', sizes: '16x16', type: 'image/x-icon' },
+    ],
+    shortcut: '/logo.ico',
+    apple: '/logo.ico',
   },
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/logo.ico" />
+        <link rel="shortcut icon" href="/logo.ico" />
+        <link rel="apple-touch-icon" href="/logo.ico" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} antialiased`}
       >

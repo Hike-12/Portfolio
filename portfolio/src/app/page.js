@@ -119,7 +119,7 @@ const Index = () => {
   useEffect(() => {
     if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
     
-    const isMobile = window.innerWidth < 768;
+    const isMobile = false;
     
     // Import Three.js dynamically to avoid SSR issues
     import('three').then((THREE) => {
@@ -129,8 +129,7 @@ const Index = () => {
       const renderer = new THREE.WebGLRenderer({ 
         canvas: threeCanvasRef.current,
         alpha: true,
-        antialias: !isMobile,
-        powerPreference: 'low-power' 
+        antialias: !isMobile, 
       });
       
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -138,7 +137,7 @@ const Index = () => {
       
       // Create particles
       const particlesGeometry = new THREE.BufferGeometry();
-      const particlesCount = isMobile ? 500 : 2000;
+      const particlesCount = isMobile ? 500 : 10000;
       const posArray = new Float32Array(particlesCount * 3);
       const colors = new Float32Array(particlesCount * 3);
       
