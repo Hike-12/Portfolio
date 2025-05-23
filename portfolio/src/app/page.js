@@ -1,7 +1,7 @@
 "use client";
 import React,{ useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit,ChevronDown } from 'lucide-react';
 import { toast } from "sonner";
 import { 
   SiJavascript, SiPython, SiHtml5, SiCss3,
@@ -601,92 +601,109 @@ const Index = () => {
       <main className="relative z-10">
         {/* Hero Section */}
         <section 
-          id="home" 
-          ref={sectionRefs.home}
-          className="min-h-screen flex items-center justify-center px-3 sm:px-6 pt-24"
-        >
-          <div className="max-w-3xl sm:max-w-5xl mx-auto text-center">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="space-y-8 sm:space-y-12"
+  id="home" 
+  ref={sectionRefs.home}
+  className="min-h-screen flex items-center justify-center px-3 sm:px-6 pt-24"
+>
+  <div className="max-w-3xl sm:max-w-5xl mx-auto w-full">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={staggerContainer}
+      className="space-y-8 sm:space-y-12"
+    >
+      {/* Responsive Layout Container */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between md:space-x-8">
+        {/* Text Content - Full width on mobile, left side on desktop */}
+        <div className="text-center md:text-left md:flex-1">
+          <motion.h1
+            variants={fadeInUp}
+            className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4"
+          >
+            Aliqyaan{" "}
+            <span 
+              className="text-transparent"
+              style={{ 
+                color: currentTheme.primary
+              }}
             >
-              <motion.div
-                variants={fadeInUp}
-                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full overflow-hidden flex items-center justify-center"
-                style={{ backgroundColor: currentTheme.primary }}
-              >
-                <span className="text-3xl sm:text-4xl font-bold text-white">AM</span>
-              </motion.div>
-              
-              <div>
-                <motion.h1
-                  variants={fadeInUp}
-                  className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4"
-                >
-                  Aliqyaan{" "}
-                  <span 
-                    className="text-transparent"
-                    style={{ 
-                      color: currentTheme.primary // Changed from gradient to solid color
-                    }}
-                  >
-                    Mahimwala
-                  </span>
-                </motion.h1>
-                
-                <motion.p
-                  variants={fadeInUp}
-                  className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-80"
-                >
-                  Full Stack Developer &amp; Computer Engineering Student
-                </motion.p>
-              </div>
-              
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-wrap justify-center gap-4 sm:gap-6"
-              >
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
-                  style={{ 
-                    backgroundColor: currentTheme.primary,
-                    color: currentTheme.primaryText
-                  }}
-                >
-                  Get In Touch
-                </button>
-                
-                <a 
-                  href="https://github.com/Hike-12" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
-                  style={{ 
-                    borderColor: currentTheme.primary,
-                    color: currentTheme.primary
-                  }}
-                >
-                  <Github size={18} className="mr-2" /> GitHub
-                </a>
-              </motion.div>
-              
-              <motion.div
-                variants={fadeIn}
-                className="pt-8 sm:pt-12"
-              >
-                <div className="animate-bounce mx-auto w-6 sm:w-8 h-10 sm:h-12 flex justify-center">
-                  <div 
-                    className="w-0.5 h-6 sm:h-8 rounded-full"
-                    style={{ backgroundColor: currentTheme.primary }}
-                  ></div>
-                </div>
-              </motion.div>
-            </motion.div>
+              Mahimwala
+            </span>
+          </motion.h1>
+          
+          <motion.p
+            variants={fadeInUp}
+            className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-80"
+          >
+            Full Stack Developer &amp; Computer Engineering Student
+          </motion.p>
+          
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6"
+          >
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="px-6 py-4 sm:px-8 sm:py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
+              style={{ 
+                backgroundColor: currentTheme.primary,
+                color: currentTheme.primaryText
+              }}
+            >
+              Get In Touch
+            </button>
+            
+            <a 
+              href="https://github.com/Hike-12" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-6 py-4 sm:px-8 sm:py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+              style={{ 
+                borderColor: currentTheme.primary,
+                color: currentTheme.primary
+              }}
+            >
+              <Github size={18} className="mr-2" /> GitHub
+            </a>
+          </motion.div>
+        </div>
+        
+        {/* Photo - Center on mobile, right side on desktop */}
+        <motion.div
+          variants={fadeInUp}
+          className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0"
+        >
+          <div 
+            className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg"
+            style={{ borderColor: currentTheme.primary }}
+          >
+            <Image 
+              src="/Me.jpg" 
+              alt="Aliqyaan Mahimwala" 
+              width={400} 
+              height={400}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
-        </section>
+        </motion.div>
+      </div>
+      
+      <motion.div
+        variants={fadeIn}
+        className="pt-8 sm:pt-12"
+      >
+        <div className="animate-bounce mx-auto w-6 sm:w-8 h-10 sm:h-12 flex justify-center">
+          <ChevronDown 
+            size={24} 
+            className="sm:w-8 sm:h-8"
+            style={{ color: currentTheme.primary }}
+          />
+        </div>
+      </motion.div>
+    </motion.div>
+  </div>
+</section>
         
         {/* About Section */}
         <section 
