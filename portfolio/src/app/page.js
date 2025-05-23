@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import React,{ useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit } from 'lucide-react';
 import { toast } from "sonner";
@@ -30,6 +30,7 @@ const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const threeCanvasRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0); 
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -108,8 +109,11 @@ const Index = () => {
       lightBgText: '#030303'  // Dark text for light backgrounds
     }
   };
-  
   const currentTheme = darkMode ? theme.dark : theme.light;
+  const toggleTheme = () => {
+  setDarkMode(!darkMode);
+  setForceUpdate(prev => prev + 1); // Force a re-render
+};
   
   // Initialize Three.js scene - Only run when component is mounted on client
   useEffect(() => {
@@ -245,7 +249,7 @@ const Index = () => {
         (ref) => ref.current && observer.unobserve(ref.current)
       );
     };
-  }, [isMounted, sectionRefs]); // <-- Added sectionRefs
+  }, [isMounted]); // <-- Added sectionRefs
   
   // Smooth scroll function
   const scrollToSection = (sectionId) => {
@@ -529,7 +533,7 @@ const Index = () => {
             {/* Mobile Navigation Toggle & Theme Toggle */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={toggleTheme}
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
                 style={{ backgroundColor: currentTheme.cardBg }}
                 aria-label="Toggle dark mode"
@@ -764,7 +768,7 @@ const Index = () => {
                   </div>
                 </motion.div>
                 
-                <motion.div
+                <div
                   variants={fadeInUp}
                 >
                   <div 
@@ -789,45 +793,53 @@ const Index = () => {
                       {[
                         { 
                           title: 'Full-Stack Development', 
-                          icon: <Code size={30} style={{ color: currentTheme.primary }} />, 
+                          icon: <Code size={30} />, 
                           description: 'Creating seamless user experiences with modern frameworks and clean code'
                         },
                         { 
                           title: 'Interactive 3D & VR', 
-                          icon: <Globe size={30} style={{ color: currentTheme.primary }} />, 
+                          icon: <Globe size={30} />, 
                           description: 'Building immersive digital experiences with Three.js and WebVR'
                         },
                         { 
                           title: 'AI Integration', 
-                          icon: <BrainCircuit size={30} style={{ color: currentTheme.primary }} />, 
+                          icon: <BrainCircuit size={30} />, 
                           description: 'Incorporating intelligent features to enhance application capabilities'
                         }
-                      ].map((item, index) => (
-                        <motion.div
+                      ].map((item) => (
+                        <div
                           key={item.title}
-                          whileHover={{ 
-                            scale: 1.03, 
-                            backgroundColor: currentTheme.primary,
-                            color: currentTheme.primaryText // Using correct text color for contrast
+                          className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer hover:scale-105 hover:bg-opacity-90 transition-all duration-300"
+                          style={{ 
+                            borderColor: currentTheme.cardBorder,
+                            // Adding hover styles via CSS instead of onHover attribute
+                            ':hover': {
+                              backgroundColor: currentTheme.primary,
+                              color: currentTheme.primaryText
+                            }
                           }}
-                          transition={{ duration: 0.3 }}
-                          className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer"
-                          style={{ borderColor: currentTheme.cardBorder }}
                         >
-                          <div className="p-3 rounded-lg" style={{ 
-                            backgroundColor: `${currentTheme.primary}15`,
-                          }}>
-                            {item.icon}
+                          <div 
+                            className="p-3 rounded-lg flex items-center justify-center" 
+                            style={{ 
+                              backgroundColor: `${currentTheme.primary}15`,
+                              color: currentTheme.primary
+                            }}
+                          >
+                          {React.cloneElement(item.icon, { 
+                              color: currentTheme.primary,
+                              size: 30
+                            })}
                           </div>
                           <div>
-                            <h4 className="font-bold mb-1">{item.title}</h4>
-                            <p className="text-sm opacity-80">{item.description}</p>
+                            <h4 className="font-bold mb-1" style={{ color: 'inherit' }}>{item.title}</h4>
+                            <p className="text-sm opacity-80" style={{ color: 'inherit' }}>{item.description}</p>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
