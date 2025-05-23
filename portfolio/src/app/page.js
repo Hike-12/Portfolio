@@ -119,6 +119,7 @@ const Index = () => {
   useEffect(() => {
     if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
     
+    const isMobile = window.innerWidth < 768;
     // Import Three.js dynamically to avoid SSR issues
     import('three').then((THREE) => {
       // Scene setup
@@ -127,7 +128,8 @@ const Index = () => {
       const renderer = new THREE.WebGLRenderer({ 
         canvas: threeCanvasRef.current,
         alpha: true,
-        antialias: true 
+        antialias: !isMobile,
+        powerPreference: 'low-power' 
       });
       
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -135,7 +137,7 @@ const Index = () => {
       
       // Create particles
       const particlesGeometry = new THREE.BufferGeometry();
-      const particlesCount = 2000;
+      const particlesCount = isMobile ? 500 : 2000;
       const posArray = new Float32Array(particlesCount * 3);
       const colors = new Float32Array(particlesCount * 3);
       
@@ -191,12 +193,14 @@ const Index = () => {
         requestAnimationFrame(animate);
         
         // Rotate particles based on mouse position
-        particlesMesh.rotation.x += 0.0005;
-        particlesMesh.rotation.y += 0.0005;
-        
-        // Follow mouse with subtle movement
-        particlesMesh.rotation.x += mouseY * 0.0003;
-        particlesMesh.rotation.y += mouseX * 0.0003;
+        const rotationSpeed = isMobile ? 0.0002 : 0.0005;
+      particlesMesh.rotation.x += rotationSpeed;
+      particlesMesh.rotation.y += rotationSpeed;
+      
+      // Reduced mouse effect on mobile
+      const mouseEffect = isMobile ? 0.0001 : 0.0003;
+      particlesMesh.rotation.x += mouseY * mouseEffect;
+      particlesMesh.rotation.y += mouseX * mouseEffect;
         
         renderer.render(scene, camera);
       };
@@ -252,16 +256,43 @@ const Index = () => {
   }, [isMounted]); // <-- Added sectionRefs
   
   // Smooth scroll function
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      setMenuOpen(false);
-      window.scrollTo({
-        top: element.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-  };
+  // Replace the existing scrollToSection function with this improved version
+const scrollToSection = (sectionId) => {
+  console.log('Scrolling to section:', sectionId);
+  
+  const element = document.getElementById(sectionId);
+  if (element) {
+    // Close mobile menu first
+    setMenuOpen(false);
+    
+    // Use a longer timeout to ensure menu closes properly on mobile
+    setTimeout(() => {
+      // Get the header height for offset
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.offsetHeight : 80;
+      
+      // Calculate position with better mobile compatibility
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition-20; // Extra 20px buffer
+      
+      // Use different scroll methods for better mobile support
+      if ('scrollBehavior' in document.documentElement.style) {
+        // Modern browsers
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // Fallback for older mobile browsers
+        window.scrollTo(0, offsetPosition);
+      }
+      
+      console.log('Scroll attempted to position:', offsetPosition);
+    }, 300); // Increased timeout for mobile
+  } else {
+    console.error('Element not found:', sectionId);
+  }
+};
   
   // Copy email to clipboard
   const copyEmail = () => {
@@ -547,7 +578,9 @@ const Index = () => {
               
               <button
                 className="md:hidden w-10 h-10 rounded-full flex flex-col items-center justify-center space-y-1.5"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => {
+                  console.log("Menu button clicked");
+                  setMenuOpen(!menuOpen)}}
                 style={{ backgroundColor: currentTheme.cardBg }}
                 aria-label="Toggle menu"
               >
@@ -584,7 +617,9 @@ const Index = () => {
                 {['home', 'about', 'skills', 'projects', 'experience', 'contact'].map((item) => (
                   <button
                     key={item}
-                    onClick={() => scrollToSection(item)}
+                    onClick={() =>{ 
+                      console.log("Menu item clicked",item);
+                      scrollToSection(item)}}
                     className="capitalize text-left py-2 transition-colors"
                     style={{ color: activeSection === item ? currentTheme.primary : currentTheme.foreground }}
                   >
