@@ -13,6 +13,7 @@ import {
 } from 'react-icons/si';
 import { MdVrpano } from 'react-icons/md';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 // Helper function to detect touch devices
 const isTouchDevice = () => {
@@ -223,7 +224,7 @@ const Index = () => {
   // Scroll observer for navigation - Only run on client
   useEffect(() => {
     if (!isMounted) return;
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -234,17 +235,17 @@ const Index = () => {
       },
       { threshold: 0.3 }
     );
-    
+
     Object.values(sectionRefs).forEach(
       (ref) => ref.current && observer.observe(ref.current)
     );
-    
+
     return () => {
       Object.values(sectionRefs).forEach(
         (ref) => ref.current && observer.unobserve(ref.current)
       );
     };
-  }, [isMounted]);
+  }, [isMounted, sectionRefs]); // <-- Added sectionRefs
   
   // Smooth scroll function
   const scrollToSection = (sectionId) => {
@@ -635,7 +636,7 @@ const Index = () => {
                   variants={fadeInUp}
                   className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-80"
                 >
-                  Full Stack Developer & Computer Engineering Student
+                  Full Stack Developer &amp; Computer Engineering Student
                 </motion.p>
               </div>
               
@@ -717,7 +718,7 @@ const Index = () => {
                   className="space-y-4 sm:space-y-6"
                 >
                   <p className="text-base sm:text-lg leading-relaxed">
-                    Hey! I’m Aliqyaan Mahimwala — a 19-year-old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I’m a full-stack web developer who loves building clean, smooth, and user-friendly web apps that just work.
+                    Hey! I&apos;m Aliqyaan Mahimwala — a 19-year-old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I&apos;m a full-stack web developer who loves building clean, smooth, and user-friendly web apps that just work.
                   </p>
                   <p className="text-base sm:text-lg leading-relaxed">
                     I usually work with modern tools and frameworks, and Django’s my go-to on the backend. Whether it’s writing backend logic, fine-tuning the UI, or figuring out a tricky bug, I enjoy the process of making things better — one line of code at a time.
@@ -990,35 +991,38 @@ const Index = () => {
                     >
                       {/* Image placeholder with gradient overlay */}
                       <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900">
-  <img
-    src={project.image}
-    alt={project.title}
-    className="object-cover w-full h-full"
-    style={{ objectPosition: "center" }}
-    onError={e => {
-      e.target.style.display = 'none';
-      e.target.parentNode.querySelector('.fallback-gradient').style.display = 'flex';
-    }}
-  />
-  <div
-    className="fallback-gradient absolute inset-0 flex items-center justify-center"
-    style={{
-      display: "none",
-      background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
-      border: `1px solid ${currentTheme.cardBorder}`
-    }}
-  >
-    <div className="flex flex-col items-center justify-center text-center p-4">
-      <div
-        className="w-16 h-16 rounded-full mb-3 flex items-center justify-center"
-        style={{ backgroundColor: `${currentTheme.primary}30` }}
-      >
-        <Globe size={24} style={{ color: currentTheme.primary }} />
-      </div>
-      <p style={{ color: currentTheme.primary }}>Project Preview</p>
-    </div>
-  </div>
-</div>
+                        {/* Use Next.js Image */}
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          style={{ objectFit: "cover", objectPosition: "center" }}
+                          onError={e => {
+                            e.target.style.display = 'none';
+                            e.target.parentNode.querySelector('.fallback-gradient').style.display = 'flex';
+                          }}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          priority={index === 0}
+                        />
+                        <div
+                          className="fallback-gradient absolute inset-0 flex items-center justify-center"
+                          style={{
+                            display: "none",
+                            background: `linear-gradient(135deg, ${currentTheme.primary}20, ${currentTheme.accent}40)`,
+                            border: `1px solid ${currentTheme.cardBorder}`
+                          }}
+                        >
+                          <div className="flex flex-col items-center justify-center text-center p-4">
+                            <div
+                              className="w-16 h-16 rounded-full mb-3 flex items-center justify-center"
+                              style={{ backgroundColor: `${currentTheme.primary}30` }}
+                            >
+                              <Globe size={24} style={{ color: currentTheme.primary }} />
+                            </div>
+                            <p style={{ color: currentTheme.primary }}>Project Preview</p>
+                          </div>
+                        </div>
+                      </div>
                       
                       <div 
                         className="absolute top-0 right-0 w-24 h-24 rounded-full -translate-y-12 translate-x-12 opacity-10"
@@ -1160,7 +1164,7 @@ const Index = () => {
                           whileHover={{ scale: 1.1 }}
                           className="text-4xl sm:text-5xl mb-2 w-full h-full"
                         >
-                          <img src="/Trip.jpg" alt="Professional Experience" className="object-contain w-full h-full" />
+                          <Image src="/Trip.jpg" alt="Professional Experience" fill style={{ objectFit: "contain" }} />
                         </motion.div>
                       </div>
                     </div>
@@ -1241,7 +1245,7 @@ const Index = () => {
                               whileHover={{ scale: 1.1 }}
                               className="text-4xl sm:text-5xl mb-2 w-full h-full"
                             >
-                              <img src={achievement.image} alt={achievement.title} className="object-contain w-full h-full" />
+                              <Image src={achievement.image} alt={achievement.title} fill style={{ objectFit: "contain" }} />
                             </motion.div>
                           </div>
                         </div>
@@ -1283,7 +1287,7 @@ const Index = () => {
                 variants={fadeInUp}
                 className="text-3xl sm:text-4xl font-bold mb-8"
               >
-                Let's{" "}
+                Let&apos;s{" "}
                 <span 
                   className="bg-clip-text text-transparent"
                   style={{ 
@@ -1298,7 +1302,7 @@ const Index = () => {
                 variants={fadeInUp}
                 className="text-xl mb-8 sm:mb-12 opacity-80"
               >
-                I'm always open to discussing new opportunities, collaborations, or just having a chat about technology!
+                I&apos;m always open to discussing new opportunities, collaborations, or just having a chat about technology!
               </motion.p>
               
               <motion.div
