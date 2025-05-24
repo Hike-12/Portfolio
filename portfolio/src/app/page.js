@@ -117,48 +117,51 @@ const Index = () => {
 };
   
   // Initialize Three.js scene - Only run when component is mounted on client
-  useEffect(() => {
-    if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
-    
-    const isMobile = false;
-    
-    // Import Three.js dynamically to avoid SSR issues
-    import('three').then((THREE) => {
+  // Replace the Three.js useEffect (around line 118) with:
+useEffect(() => {
+  if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
+  
+  let animationId;
+  let scene, camera, renderer, particlesMesh;
+  
+  // Import Three.js dynamically to avoid SSR issues
+  import('three').then((THREE) => {
+    try {
       // Scene setup
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ 
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ 
         canvas: threeCanvasRef.current,
         alpha: true,
-        antialias: !isMobile, 
+        antialias: true,
+        precision: 'highp'
       });
       
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       
-      // Create particles
+      // Create particles - same high count for all devices
       const particlesGeometry = new THREE.BufferGeometry();
-      const particlesCount = isMobile ? 500 : 10000;
+      const particlesCount = 8000; // High performance count for all devices
       const posArray = new Float32Array(particlesCount * 3);
       const colors = new Float32Array(particlesCount * 3);
       
       // Set up particles with our theme colors
-      for (let i = 0; i < particlesCount * 3; i++) {
+      for (let i = 0; i < particlesCount * 3; i += 3) {
         // Position
         posArray[i] = (Math.random() - 0.5) * 10;
+        posArray[i + 1] = (Math.random() - 0.5) * 10;
+        posArray[i + 2] = (Math.random() - 0.5) * 10;
         
         // Colors - convert hex to RGB
-        if (i % 3 === 0) {
-          // Use the color palette based on theme
-          const colorOptions = darkMode ? 
-            ['#789DBC', '#564256', '#2A7D4F'] : 
-            ['#789DBC', '#FFE3E3', '#C9E9D2'];
-          
-          const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
-          colors[i] = color.r;
-          colors[i + 1] = color.g;
-          colors[i + 2] = color.b;
-        }
+        const colorOptions = darkMode ? 
+          ['#D4C9BE', '#789DBC', '#564256'] : 
+          ['#123458', '#789DBC', '#D4C9BE'];
+        
+        const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
+        colors[i] = color.r;
+        colors[i + 1] = color.g;
+        colors[i + 2] = color.b;
       }
       
       particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -172,7 +175,7 @@ const Index = () => {
         sizeAttenuation: true
       });
       
-      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
       scene.add(particlesMesh);
       
       // Camera position
@@ -189,46 +192,64 @@ const Index = () => {
       
       window.addEventListener('mousemove', handleMouseMove);
       
-      // Animation loop
+      // Animation loop - same performance for all devices
       const animate = () => {
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
         
-        // Rotate particles based on mouse position
-        const rotationSpeed = isMobile ? 0.0002 : 0.0005;
-      particlesMesh.rotation.x += rotationSpeed;
-      particlesMesh.rotation.y += rotationSpeed;
-      
-      // Reduced mouse effect on mobile
-      const mouseEffect = isMobile ? 0.0001 : 0.0003;
-      particlesMesh.rotation.x += mouseY * mouseEffect;
-      particlesMesh.rotation.y += mouseX * mouseEffect;
+        if (particlesMesh) {
+          // Rotate particles based on mouse position
+          const rotationSpeed = 0.0005; // Same speed for all devices
+          particlesMesh.rotation.x += rotationSpeed;
+          particlesMesh.rotation.y += rotationSpeed;
+          
+          // Mouse effect - same for all devices
+          const mouseEffect = 0.0003;
+          particlesMesh.rotation.x += mouseY * mouseEffect;
+          particlesMesh.rotation.y += mouseX * mouseEffect;
+        }
         
-        renderer.render(scene, camera);
+        if (renderer && scene && camera) {
+          renderer.render(scene, camera);
+        }
       };
       
       animate();
       
       // Handle resize
       const handleResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        if (camera && renderer) {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
       };
       
       window.addEventListener('resize', handleResize);
       
-      // Cleanup
+      // Cleanup function
       return () => {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('resize', handleResize);
         
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        
         // Dispose of resources
-        particlesGeometry.dispose();
-        particlesMaterial.dispose();
-        renderer.dispose();
+        if (particlesGeometry) particlesGeometry.dispose();
+        if (particlesMaterial) particlesMaterial.dispose();
+        if (renderer) {
+          renderer.dispose();
+          renderer.forceContextLoss();
+        }
       };
-    });
-  }, [darkMode, isMounted]);
+    } catch (error) {
+      console.warn('Three.js initialization failed:', error);
+    }
+  }).catch(error => {
+    console.warn('Failed to load Three.js:', error);
+  });
+}, [darkMode, isMounted]);
   
   // Scroll observer for navigation - Only run on client
   useEffect(() => {
