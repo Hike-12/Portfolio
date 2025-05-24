@@ -360,6 +360,7 @@ const scrollToSection = (sectionId) => {
     setIsSubmitting(true);
     
     try {
+      // Try API endpoint first
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -378,11 +379,46 @@ const scrollToSection = (sectionId) => {
           message: ''
         });
       } else {
-        const error = await response.json();
-        throw new Error(error.message || "Something went wrong");
+        throw new Error("API endpoint not available");
       }
     } catch (error) {
-      toast.error(error.message || "Failed to send message. Please try again.");
+      // Fallback to mailto for mobile compatibility
+      console.warn("API failed, using mailto fallback:", error);
+      
+      const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      const mailtoUrl = `mailto:aliqyaan12@gmail.com?subject=${subject}&body=${body}`;
+      
+      // Check if we can open mailto (works on most mobile devices)
+      try {
+        window.location.href = mailtoUrl;
+        toast.success("Opening email app with your message!");
+        
+        // Reset form after successful mailto
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            message: ''
+          });
+        }, 1000);
+      } catch (mailtoError) {
+        // Final fallback - copy to clipboard
+        const messageText = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
+        
+        if (navigator.clipboard) {
+          try {
+            await navigator.clipboard.writeText(messageText);
+            toast.info("Message copied to clipboard! Please email it to aliqyaan12@gmail.com");
+          } catch (clipboardError) {
+            toast.error("Please email your message directly to aliqyaan12@gmail.com");
+          }
+        } else {
+          toast.error("Please email your message directly to aliqyaan12@gmail.com");
+        }
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -1485,14 +1521,16 @@ const scrollToSection = (sectionId) => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full p-4 rounded-xl"
+                      className="w-full p-4 rounded-xl focus:outline-none focus:ring-2"
                       style={{ 
                         backgroundColor: currentTheme.background,
                         border: `1px solid ${currentTheme.cardBorder}`,
-                        color: currentTheme.foreground
+                        color: currentTheme.foreground,
+                        focusRingColor: currentTheme.primary
                       }}
                       placeholder="Your name"
                       required
+                      autoComplete="name"
                     />
                   </div>
                   
@@ -1506,14 +1544,16 @@ const scrollToSection = (sectionId) => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full p-4 rounded-xl"
+                      className="w-full p-4 rounded-xl focus:outline-none focus:ring-2"
                       style={{ 
                         backgroundColor: currentTheme.background,
                         border: `1px solid ${currentTheme.cardBorder}`,
-                        color: currentTheme.foreground
+                        color: currentTheme.foreground,
+                        focusRingColor: currentTheme.primary
                       }}
                       placeholder="Your email address"
                       required
+                      autoComplete="email"
                     />
                   </div>
                   
@@ -1527,11 +1567,12 @@ const scrollToSection = (sectionId) => {
                       value={formData.message}
                       onChange={handleInputChange}
                       rows="5"
-                      className="w-full p-4 rounded-xl resize-none"
+                      className="w-full p-4 rounded-xl resize-none focus:outline-none focus:ring-2"
                       style={{ 
                         backgroundColor: currentTheme.background,
                         border: `1px solid ${currentTheme.cardBorder}`,
-                        color: currentTheme.foreground
+                        color: currentTheme.foreground,
+                        focusRingColor: currentTheme.primary
                       }}
                       placeholder="Your message"
                       required
@@ -1541,11 +1582,11 @@ const scrollToSection = (sectionId) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center"
+                    className="w-full py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center disabled:cursor-not-allowed"
                     style={{ 
                       background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
                       opacity: isSubmitting ? 0.7 : 1,
-                      color: currentTheme.primaryText // Ensuring proper contrast
+                      color: currentTheme.primaryText
                     }}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Message'}
