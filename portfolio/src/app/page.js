@@ -1,8 +1,9 @@
 "use client";
 import React,{ useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit,ChevronDown } from 'lucide-react';
-import { toast } from "sonner";
+import { Github, Linkedin, Mail, Phone, Moon, Sun, ExternalLink, Code, Globe, BrainCircuit, ChevronDown, Instagram } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { 
   SiJavascript, SiPython, SiHtml5, SiCss3,
   SiReact, SiTailwindcss, SiThreedotjs, SiWebgl, 
@@ -295,7 +296,11 @@ const scrollToSection = (sectionId) => {
   const copyEmail = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText('aliqyaan12@gmail.com');
-      toast("Email copied to clipboard!");
+      console.log("Email copied to clipboard!");
+      toast.success("Email copied to clipboard!");
+    }else {
+      console.error("Clipboard API not supported");
+      toast.error("Failed to copy email. Please try manually.");
     }
   };
   
@@ -343,7 +348,8 @@ const scrollToSection = (sectionId) => {
       });
       
       if (response.ok) {
-        toast.success("Message sent successfully!");
+        console.log("Message sent successfully!");
+        toast.success("Message sent successfully! I'll get back to you soon.");
         // Reset form
         setFormData({
           name: '',
@@ -501,6 +507,7 @@ const scrollToSection = (sectionId) => {
   }
   
   return (
+    <>
     <div className="relative min-h-screen" style={{ backgroundColor: currentTheme.background, color: currentTheme.foreground }}>
       {/* Three.js Canvas */}
       <canvas 
@@ -816,7 +823,6 @@ const scrollToSection = (sectionId) => {
                         Contact
                       </h4>
                       <p>aliqyaan12@gmail.com</p>
-                      <p>+91 8122005252</p>
                     </div>
                   </div>
                 </motion.div>
@@ -1372,7 +1378,7 @@ const scrollToSection = (sectionId) => {
               
               <motion.div
                 variants={fadeInUp}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12"
               >
                 <div 
                   className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
@@ -1391,7 +1397,7 @@ const scrollToSection = (sectionId) => {
                     <span className="group-hover:text-current">aliqyaan12@gmail.com</span>
                   </button>
                 </div>
-                
+
                 <div 
                   className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
                   style={{ 
@@ -1399,14 +1405,36 @@ const scrollToSection = (sectionId) => {
                     border: `1px solid ${currentTheme.cardBorder}`
                   }}
                 >
-                  <Phone size={28} style={{ color: currentTheme.primary }} className="mb-4" />
-                  <h3 className="font-semibold mb-2">Phone</h3>
+                  <Instagram size={28} style={{ color: currentTheme.primary }} className="mb-4" />
+                  <h3 className="font-semibold mb-2">Instagram</h3>
                   <a 
-                    href="tel:+918122005252" 
+                    href="https://instagram.com/aliqyaan_12" 
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-sm hover:underline transition-colors"
                     style={{ color: currentTheme.primary }}
                   >
-                    +91 8122005252
+                    @aliqyaan_12
+                  </a>
+                </div>
+
+                <div 
+                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
+                  style={{ 
+                    backgroundColor: currentTheme.cardBg,
+                    border: `1px solid ${currentTheme.cardBorder}`
+                  }}
+                >
+                  <Linkedin size={28} style={{ color: currentTheme.primary }} className="mb-4" />
+                  <h3 className="font-semibold mb-2">LinkedIn</h3>
+                  <a 
+                    href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:underline transition-colors"
+                    style={{ color: currentTheme.primary }}
+                  >
+                    Connect with me
                   </a>
                 </div>
               </motion.div>
@@ -1513,10 +1541,23 @@ const scrollToSection = (sectionId) => {
                   className="px-8 py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
                   style={{ 
                     background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
-                    color: darkMode ? currentTheme.lightBgText : currentTheme.darkBgText // Dynamic contrast
+                    color: darkMode ? currentTheme.lightBgText : currentTheme.darkBgText
                   }}
                 >
                   <Mail size={18} className="mr-2" /> Email Me
+                </a>
+                
+                <a 
+                  href="https://instagram.com/aliqyaan_12" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center hover:bg-opacity-90"
+                  style={{ 
+                    borderColor: currentTheme.primary,
+                    color: currentTheme.primary
+                  }}
+                >
+                  <Instagram size={18} className="mr-2" /> Instagram
                 </a>
                 
                 <a 
@@ -1535,7 +1576,6 @@ const scrollToSection = (sectionId) => {
             </motion.div>
           </div>
         </section>
-        
         {/* Footer */}
         <footer 
           className="py-8 sm:py-10 px-3 sm:px-6 border-t"
@@ -1564,6 +1604,16 @@ const scrollToSection = (sectionId) => {
                 <Mail size={18} />
               </a>
               <a
+                href="https://instagram.com/aliqyaan_12"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full p-2 hover:bg-opacity-80 transition"
+                style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
+                aria-label="Instagram"
+              >
+                <Instagram size={18} />
+              </a>
+              <a
                 href="https://github.com/Hike-12"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1587,7 +1637,26 @@ const scrollToSection = (sectionId) => {
           </div>
         </footer>
       </main>
+      
     </div>
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={darkMode ? "dark" : "light"}
+        style={{
+          fontSize: '14px'
+        }}
+      />
+      
+      </>
   );
 };
 
