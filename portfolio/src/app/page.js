@@ -487,6 +487,15 @@ const scrollToSection = (sectionId) => {
     image: '/SolarSystem.png'
   },
   {
+    title: 'Workspaces',
+    description: 'A workspace management dashboard with collaborative features using websockets and webrtc.',
+    tech: ['Express.js', 'React', 'Tailwind CSS', 'Node.js'],
+    features: ['Webrtc','Websockets','Multi-layout UI', 'File Sharing'],
+    github: 'https://github.com/Hike-12/Workspaces',
+    link: 'https://focalpoint-gamma.vercel.app/',
+    image: '/Focal.png'
+  },
+  {
     title: 'Trippeer',
     description: 'A dynamic certificate generation platform with batch CSV uploads, live preview, and instant PDF generation.',
     tech: ['React', 'Node.js', 'MongoDB', 'PDFKit'],
@@ -531,15 +540,6 @@ const scrollToSection = (sectionId) => {
   link: 'https://augmint.vercel.app/',
   image: '/AR.png'
   },
-  {
-    title: 'Workspaces',
-    description: 'A workspace management dashboard with multiple layouts, drag-and-drop support, and productivity-focused UI.',
-    tech: ['Next.js', 'React', 'Tailwind CSS', 'Node.js'],
-    features: ['Multi-layout UI', 'Dashboard Management', 'Drag-and-Drop', 'Minimal Design'],
-    github: 'https://github.com/Hike-12/Workspaces',
-    link: 'https://focalpoint-gamma.vercel.app/',
-    image: '/Focal.png'
-  }
 ];
 
   
