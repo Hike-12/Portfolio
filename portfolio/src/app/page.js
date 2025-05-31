@@ -530,6 +530,15 @@ const scrollToSection = (sectionId) => {
   github: 'https://github.com/Hike-12/AR',
   link: 'https://augmint.vercel.app/',
   image: '/AR.png'
+  },
+  {
+    title: 'Workspaces',
+    description: 'A workspace management dashboard with multiple layouts, drag-and-drop support, and productivity-focused UI.',
+    tech: ['Next.js', 'React', 'Tailwind CSS', 'Node.js'],
+    features: ['Multi-layout UI', 'Dashboard Management', 'Drag-and-Drop', 'Minimal Design'],
+    github: 'https://github.com/Hike-12/Workspaces',
+    link: 'https://focalpoint-gamma.vercel.app/',
+    image: '/Focal.png'
   }
 ];
 
