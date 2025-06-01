@@ -497,9 +497,9 @@ const scrollToSection = (sectionId) => {
   },
   {
     title: 'Trippeer',
-    description: 'A dynamic certificate generation platform with batch CSV uploads, live preview, and instant PDF generation.',
-    tech: ['React', 'Node.js', 'MongoDB', 'PDFKit'],
-    features: ['Live Preview', 'Bulk Upload', 'PDF Export', 'Email Support'],
+    description: 'A comprehensive travel planning platform that helps users discover destinations and create personalized itineraries with smart recommendations.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Express.js'],
+    features: ['Destination Discovery', 'Itinerary Builder', 'Smart Recommendations', 'Travel Planning'],
     github: 'https://github.com/Hike-12/Certifiyo',
     link:'https://certifiyo.vercel.app/',
     image: '/Certifiyo.png'
@@ -629,7 +629,7 @@ const scrollToSection = (sectionId) => {
                   {item}
                   {activeSection === item && (
                     <motion.div
-                      layoutId="navIndicator"
+                      layoutId="desktopNavIndicator"
                       className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
                       style={{ backgroundColor: currentTheme.primary }}
                       transition={{ type: "spring", stiffness: 500, damping: 30 }}
