@@ -31,12 +31,12 @@ export const metadata = {
   description: 'Full Stack Developer & Computer Engineering Student',
   icons: {
     icon: [
-      { url: '/logo.ico' },
-      { url: '/logo.ico', sizes: '32x32', type: 'image/x-icon' },
-      { url: '/logo.ico', sizes: '16x16', type: 'image/x-icon' },
+      { url: '/logo.png' },
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: '/logo.ico',
-    apple: '/logo.ico',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
 }
 
@@ -44,9 +44,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/logo.ico" />
-        <link rel="shortcut icon" href="/logo.ico" />
-        <link rel="apple-touch-icon" href="/logo.ico" />
+        <link rel="icon" href="/logo.png" />
+        <link rel="shortcut icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} antialiased`}
