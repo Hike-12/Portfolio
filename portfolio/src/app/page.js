@@ -263,7 +263,7 @@ useEffect(() => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1], }
     );
 
     Object.values(sectionRefs).forEach(
@@ -474,7 +474,7 @@ const scrollToSection = (sectionId) => {
     tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
     features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
     link: "https://coffee-cup-gamma.vercel.app/",
-    github: 'https://github.com/Hike-12/Restraunt-Booking',
+    github: 'https://github.com/Hike-12/Restaurant-Booking',
     image: '/Restaurant.png',
   },
   {
