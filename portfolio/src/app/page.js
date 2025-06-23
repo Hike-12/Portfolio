@@ -478,6 +478,15 @@ const scrollToSection = (sectionId) => {
     image: '/Restaurant.png',
   },
   {
+    "title": "Notes App (Scribe)",
+    "description": "Real-time collaborative note-taking with rich text editing, live cursors, sharing, and PDF export. Built with React, Django, Yjs, and WebSockets.",
+    "tech": ["React", "Django", "Tailwind CSS", "Quill.js", "Yjs", "WebSocket"],
+    "features": ["Rich Text Editor","Real-time Collaboration","Auto-sync","Share Notes","PDF Export","Secure Authentication"],
+    "github": "https://github.com/Hike-12/Notes-App",
+    "link": "https://scribe-ruddy.vercel.app/",
+    "image": "/Scribe.png"
+  },
+  {
     title: 'Solar System 3D',
     description: 'Interactive 3D solar system with realistic textures and orbital mechanics.',
     tech: ['Three.js', 'WebGL', 'JavaScript', 'Realistic Textures'],
