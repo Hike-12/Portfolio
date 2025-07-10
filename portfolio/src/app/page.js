@@ -10,7 +10,7 @@ import {
   SiNodedotjs, SiExpress, SiDjango, SiFlask, SiFastapi,
   SiMongodb, SiMysql, SiPostgresql,
   SiGit, SiGithub, SiVercel, SiRender,
-  SiPandas, SiNumpy
+  SiPandas, SiNumpy,SiDocker
 } from 'react-icons/si';
 import { MdVrpano } from 'react-icons/md';
 import dynamic from 'next/dynamic';
@@ -77,6 +77,7 @@ const Index = () => {
     { name: 'Git & GitHub', category: 'Tool', icon: <SiGithub className="text-[#181717]" size={22} /> },
     { name: 'Vercel', category: 'Tool', icon: <SiVercel className="text-[#000000]" size={22} /> },
     { name: 'Render', category: 'Tool', icon: <SiRender className="text-[#46E3B7]" size={22} /> },
+    { name: 'Docker', category: 'Tool', icon: <SiDocker className="text-[#2496ED]" size={22} /> },
     
     // Libraries
     { name: 'Pandas', category: 'Library', icon: <SiPandas className="text-[#150458]" size={22} /> },
