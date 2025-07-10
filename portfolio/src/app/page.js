@@ -10,7 +10,7 @@ import {
   SiNodedotjs, SiExpress, SiDjango, SiFlask, SiFastapi,
   SiMongodb, SiMysql, SiPostgresql,
   SiGit, SiGithub, SiVercel, SiRender,
-  SiPandas, SiNumpy,SiDocker,SiMatplotlib
+  SiPandas, SiNumpy,SiDocker,SiChartdotjs
 } from 'react-icons/si';
 import { MdVrpano } from 'react-icons/md';
 import dynamic from 'next/dynamic';
@@ -82,7 +82,7 @@ const Index = () => {
     // Libraries
     { name: 'Pandas', category: 'Library', icon: <SiPandas className="text-[#150458]" size={22} /> },
     { name: 'NumPy', category: 'Library', icon: <SiNumpy className="text-[#013243]" size={22} /> },
-    { name: 'Matplotlib', category: 'Library', icon: <SiMatplotlib className="text-[#11557c]" size={22} /> },
+    { name: 'Matplotlib', category: 'Library', icon: <SiChartdotjs className="text-[#11557c]" size={22} /> },
   ];
   
   // Theme colors - Updated to ensure proper text contrast
