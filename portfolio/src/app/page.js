@@ -487,6 +487,15 @@ const scrollToSection = (sectionId) => {
     "image": "/Scribe.png"
   },
   {
+  title: "Healix",
+  description: "AI-powered medical assistant and patient management platform with AI symptom checker, appointment scheduling, e-prescriptions, patient records, and real-time chat.",
+  tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "OpenAI API", "Socket.io"],
+  features: ["AI Symptom Checker", "Doctor & Patient Dashboards", "Appointment Scheduling", "E-Prescriptions", "Medical Records", "Real-time Chat", "Authentication & Roles", "OpenAI Integration"],
+  github: "https://github.com/Hike-12/Healix",
+  link: "https://healix-med.vercel.app/",
+  image: "/Healix.png"
+},
+  {
     title: 'Solar System 3D',
     description: 'Interactive 3D solar system with realistic textures and orbital mechanics.',
     tech: ['Three.js', 'WebGL', 'JavaScript', 'Realistic Textures'],
