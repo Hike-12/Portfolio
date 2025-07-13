@@ -254,30 +254,30 @@ useEffect(() => {
 }, [darkMode, isMounted]);
   
   // Scroll observer for navigation - Only run on client
-  useEffect(() => {
-    if (!isMounted) return;
+useEffect(() => {
+  if (!isMounted) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1], }
-    );
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    },
+    { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }
+  );
 
+  Object.values(sectionRefs).forEach(
+    (ref) => ref.current && observer.observe(ref.current)
+  );
+
+  return () => {
     Object.values(sectionRefs).forEach(
-      (ref) => ref.current && observer.observe(ref.current)
+      (ref) => ref.current && observer.unobserve(ref.current)
     );
-
-    return () => {
-      Object.values(sectionRefs).forEach(
-        (ref) => ref.current && observer.unobserve(ref.current)
-      );
-    };
-  }, [isMounted]); // <-- Added sectionRefs
+  };
+}, [isMounted]);
   
   // Smooth scroll function
   // Replace the existing scrollToSection function with this improved version
@@ -1105,16 +1105,16 @@ const scrollToSection = (sectionId) => {
         </section>
         
         {/* Projects Section */}
-        <section 
-          id="projects" 
-          ref={sectionRefs.projects}
-          className="py-14 sm:py-20 px-3 sm:px-6"
-        >
+          <section 
+            id="projects" 
+            ref={sectionRefs.projects}
+            className="py-20 px-3 sm:px-6" // Increased pt-32 for mobile
+          >
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: true, amount: 0.05 }}
               variants={staggerContainer}
             >
               <motion.h2 
