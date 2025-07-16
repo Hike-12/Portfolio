@@ -524,7 +524,7 @@ const scrollToSection = (sectionId) => {
     link: 'https://habitz-three.vercel.app/',
     image: '/HabitTracker.png'
   },
-      {
+  {
     title: "Healix",
     description: "AI-powered medical assistant and patient management platform with AI symptom checker, appointment scheduling, e-prescriptions, patient records, and real-time chat.",
     tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "OpenAI API", "Socket.io"],
@@ -532,6 +532,15 @@ const scrollToSection = (sectionId) => {
     github: "https://github.com/Hike-12/Healix",
     link: "https://healix-med.vercel.app/",
     image: "/Healix.png"
+  },
+  {
+    title: 'E-Gurukul',
+    description: 'AI-powered multilingual educational platform for India. Features Lyzr AI tutoring, course generation from PDFs, and support for 20+ Indian languages with intelligent Q&A system.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Lyzr AI', 'Groq API'],
+    features: ['Lyzr AI Tutor', 'Multi-language Support', 'PDF Course Generation', 'Real-time Translation'],
+    link: 'https://egurukul.vercel.app/',
+    github: 'https://github.com/Hike-12/BharatAI',
+    image: '/BharatAI.png'
   },
   {
   title: 'InfluenceIQ',
