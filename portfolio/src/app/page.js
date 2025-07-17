@@ -473,7 +473,7 @@ const scrollToSection = (sectionId) => {
   {
     title: 'Restaurant Booking System',
     description: 'A comprehensive booking system with VR restaurant preview, QR code check-ins, and chatbot integration.',
-    tech: ['React', 'Node.js', 'MongoDB', 'WebVR', 'QR Codes'],
+    tech: ['React', 'Django', 'SqlLite', 'WebVR', 'QR Codes'],
     features: ['VR Preview', 'Chatbot', 'Real-time Booking', 'Event Management'],
     link: "https://coffee-cup-gamma.vercel.app/",
     github: 'https://github.com/Hike-12/Restaurant-Booking',
