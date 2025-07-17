@@ -257,15 +257,44 @@ useEffect(() => {
 useEffect(() => {
   if (!isMounted) return;
 
+  // Track both visible sections and their ratios
+  const visibleSections = {};
+  
   const observer = new IntersectionObserver(
     (entries) => {
+      // Update our tracking of visible sections
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+        // Store the intersection ratio for all sections (whether entering or leaving)
+        visibleSections[entry.target.id] = entry.intersectionRatio;
+        
+        // Special case for projects section
+        if (entry.target.id === 'projects' && entry.isIntersecting && entry.intersectionRatio > 0.05) {
+          setActiveSection('projects');
+          return;
         }
       });
+      
+      // Find the most visible section
+      let maxRatio = 0;
+      let maxSection = null;
+      
+      // Check all sections we're tracking
+      Object.entries(visibleSections).forEach(([section, ratio]) => {
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          maxSection = section;
+        }
+      });
+      
+      // Set the active section if we found one with sufficient visibility
+      if (maxSection && maxRatio > 0.05) {
+        setActiveSection(maxSection);
+      }
     },
-    { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }
+    { 
+      threshold: [0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8], // More threshold points
+      rootMargin: '-80px 0px -40px 0px' // Better balanced margins
+    }
   );
 
   Object.values(sectionRefs).forEach(
@@ -1117,7 +1146,7 @@ const scrollToSection = (sectionId) => {
           <section 
             id="projects" 
             ref={sectionRefs.projects}
-            className="py-20 px-3 sm:px-6" // Increased pt-32 for mobile
+            className="pt-24 pb-20 px-3 sm:px-6" // Increased pt-32 for mobile
           >
           <div className="max-w-6xl mx-auto">
             <motion.div
