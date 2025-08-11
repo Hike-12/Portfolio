@@ -535,15 +535,15 @@ const scrollToSection = (sectionId) => {
     link: 'https://focalpoint-gamma.vercel.app/',
     image: '/Focal.png'
   },
-  {
-    title: 'Trippeer',
-    description: 'A comprehensive travel planning platform that helps users discover destinations and create personalized itineraries with smart recommendations.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Express.js'],
-    features: ['Destination Discovery', 'Itinerary Builder', 'Smart Recommendations', 'Travel Planning'],
-    github: 'https://github.com/Hike-12/Certifiyo',
-    link:'https://certifiyo.vercel.app/',
-    image: '/Certifiyo.png'
-  },
+  // {
+  //   title: 'Trippeer',
+  //   description: 'A comprehensive travel planning platform that helps users discover destinations and create personalized itineraries with smart recommendations.',
+  //   tech: ['React', 'Node.js', 'MongoDB', 'Express.js'],
+  //   features: ['Destination Discovery', 'Itinerary Builder', 'Smart Recommendations', 'Travel Planning'],
+  //   github: 'https://github.com/Hike-12/Certifiyo',
+  //   link:'https://certifiyo.vercel.app/',
+  //   image: '/Certifiyo.png'
+  // },
   {
     title: 'Habitz – Habit Tracker',
     description: 'A gamified, AI-powered habit tracker with social accountability, challenges, and real-time visualizations.',
@@ -553,33 +553,33 @@ const scrollToSection = (sectionId) => {
     link: 'https://habitz-three.vercel.app/',
     image: '/HabitTracker.png'
   },
-  {
-    title: "Healix",
-    description: "AI-powered medical assistant and patient management platform with AI symptom checker, appointment scheduling, e-prescriptions, patient records, and real-time chat.",
-    tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "OpenAI API", "Socket.io"],
-    features: ["AI Symptom Checker", "Doctor & Patient Dashboards", "Appointment Scheduling", "E-Prescriptions", "Medical Records", "Real-time Chat", "Authentication & Roles", "OpenAI Integration"],
-    github: "https://github.com/Hike-12/Healix",
-    link: "https://healix-med.vercel.app/",
-    image: "/Healix.png"
-  },
-  {
-    title: 'E-Gurukul',
-    description: 'AI-powered multilingual educational platform for India. Features Lyzr AI tutoring, course generation from PDFs, and support for 20+ Indian languages with intelligent Q&A system.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Lyzr AI', 'Groq API'],
-    features: ['Lyzr AI Tutor', 'Multi-language Support', 'PDF Course Generation', 'Real-time Translation'],
-    link: 'https://egurukul.vercel.app/',
-    github: 'https://github.com/Hike-12/BharatAI',
-    image: '/BharatAI.png'
-  },
-  {
-  title: 'InfluenceIQ',
-  description: 'A platform built to track fake fame, recency bias, and fleeting trends in the influencer and entertainment space. Combines analytics and insights to highlight short-lived popularity.',
-  tech: ['MongoDB', 'Express.js', 'React', 'Node.js', 'FastAPI'],
-  features: ['Trend Analysis', 'Influencer Tracking', 'Recency Bias Metrics', 'Interactive Dashboard'],
-  github: 'https://github.com/Hike-12/Auraflix',
-  link: 'https://influenceiq-nine.vercel.app/',
-  image: '/Auraflix.png'
-},
+  // {
+  //   title: "Healix",
+  //   description: "AI-powered medical assistant and patient management platform with AI symptom checker, appointment scheduling, e-prescriptions, patient records, and real-time chat.",
+  //   tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "OpenAI API", "Socket.io"],
+  //   features: ["AI Symptom Checker", "Doctor & Patient Dashboards", "Appointment Scheduling", "E-Prescriptions", "Medical Records", "Real-time Chat", "Authentication & Roles", "OpenAI Integration"],
+  //   github: "https://github.com/Hike-12/Healix",
+  //   link: "https://healix-med.vercel.app/",
+  //   image: "/Healix.png"
+  // },
+  // {
+  //   title: 'E-Gurukul',
+  //   description: 'AI-powered multilingual educational platform for India. Features Lyzr AI tutoring, course generation from PDFs, and support for 20+ Indian languages with intelligent Q&A system.',
+  //   tech: ['React', 'Node.js', 'MongoDB', 'Express.js', 'Lyzr AI', 'Groq API'],
+  //   features: ['Lyzr AI Tutor', 'Multi-language Support', 'PDF Course Generation', 'Real-time Translation'],
+  //   link: 'https://egurukul.vercel.app/',
+  //   github: 'https://github.com/Hike-12/BharatAI',
+  //   image: '/BharatAI.png'
+  // },
+//   {
+//   title: 'InfluenceIQ',
+//   description: 'A platform built to track fake fame, recency bias, and fleeting trends in the influencer and entertainment space. Combines analytics and insights to highlight short-lived popularity.',
+//   tech: ['MongoDB', 'Express.js', 'React', 'Node.js', 'FastAPI'],
+//   features: ['Trend Analysis', 'Influencer Tracking', 'Recency Bias Metrics', 'Interactive Dashboard'],
+//   github: 'https://github.com/Hike-12/Auraflix',
+//   link: 'https://influenceiq-nine.vercel.app/',
+//   image: '/Auraflix.png'
+// },
 {
   title: 'Text To VR Image Converter',
   description: 'Web app that converts text prompts or uploaded images into immersive 360° VR experiences.',
