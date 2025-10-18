@@ -31,6 +31,8 @@ const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const threeCanvasRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
   const [forceUpdate, setForceUpdate] = useState(0); 
   const sectionRefs = {
     home: useRef(null),
@@ -845,14 +847,22 @@ const scrollToSection = (sectionId) => {
             className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg"
             style={{ borderColor: currentTheme.primary }}
           >
-            <Image 
-              src="/Me.jpg" 
-              alt="Aliqyaan Mahimwala" 
-              width={400} 
-              height={400}
-              className="w-full h-full object-cover"
-              priority
-            />
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                setModalImage('/Me.jpg');
+                setModalOpen(true);
+              }}
+            >
+              <Image 
+                src="/Me.jpg" 
+                alt="Aliqyaan Mahimwala" 
+                width={400} 
+                height={400}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
           </div>
         </motion.div>
       </div>
@@ -1188,18 +1198,23 @@ const scrollToSection = (sectionId) => {
                       {/* Image placeholder with gradient overlay */}
                       <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900">
                         {/* Use Next.js Image */}
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          style={{ objectFit: "cover", objectPosition: "center" }}
-                          onError={e => {
-                            e.target.style.display = 'none';
-                            e.target.parentNode.querySelector('.fallback-gradient').style.display = 'flex';
-                          }}
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          priority={index === 0}
-                        />
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setModalOpen(true) || setModalImage(project.image)}
+                        >
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            style={{ objectFit: "cover", objectPosition: "center" }}
+                            onError={e => {
+                              e.target.style.display = 'none';
+                              e.target.parentNode.querySelector('.fallback-gradient').style.display = 'flex';
+                            }}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            priority={index === 0}
+                          />
+                        </div>
                         <div
                           className="fallback-gradient absolute inset-0 flex items-center justify-center"
                           style={{
@@ -1356,12 +1371,15 @@ const scrollToSection = (sectionId) => {
                       }}
                     >
                       <div className="flex flex-col items-center justify-center w-full h-full">
-                        <motion.div 
-                          whileHover={{ scale: 1.1 }}
-                          className="text-4xl sm:text-5xl mb-2 w-full h-full"
-                        >
-                          <Image src="/Trip.jpg" alt="Professional Experience" fill style={{ objectFit: "contain" }} />
-                        </motion.div>
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setModalImage('/Trip.jpg');
+                              setModalOpen(true);
+                            }}
+                          >
+                            <Image src="/Trip.jpg" alt="Professional Experience" fill style={{ objectFit: "contain" }} />
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -1437,12 +1455,15 @@ const scrollToSection = (sectionId) => {
                           }}
                         >
                           <div className="flex flex-col items-center justify-center w-full h-full">
-                            <motion.div 
-                              whileHover={{ scale: 1.1 }}
-                              className="text-4xl sm:text-5xl mb-2 w-full h-full"
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setModalImage(achievement.image);
+                                setModalOpen(true);
+                              }}
                             >
                               <Image src={achievement.image} alt={achievement.title} fill style={{ objectFit: "contain" }} />
-                            </motion.div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1785,7 +1806,31 @@ const scrollToSection = (sectionId) => {
           fontSize: '14px'
         }}
       />
-      
+
+      {modalOpen && modalImage && (
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
+          onClick={() => setModalOpen(false)}
+          style={{ cursor: 'zoom-out' }}
+        >
+          <div className="relative max-w-3xl w-full flex items-center justify-center">
+            <img
+              src={modalImage}
+              alt="Expanded project"
+              className="rounded-2xl shadow-2xl max-h-[80vh] max-w-full"
+              style={{ objectFit: 'contain' }}
+              onClick={e => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-2 right-2 text-white bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-80 transition"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}   
       </>
   );
 };
