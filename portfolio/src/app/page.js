@@ -764,13 +764,29 @@ const scrollToSection = (sectionId) => {
       image: '/Aura.jpg'
     },
     {
-      title: 'Qualified - SIH Internal Round',
-      date: 'July 2024',
-      description: 'Developed an AI-enhanced educational platform that qualified for the Smart India Hackathon internal round. The project featured interactive learning modules with VR integration and automated assessment capabilities.',
-      image: '/SIH.jpg'
+      title: 'Domain Winner Sunhacks',
+      date: 'August 2025',
+      description: 'Developed a generative AI platform that enables students to create personalized learning plans and study materials. The solution also features an AI-powered viva simulator to help students prepare for oral exams with realistic, adaptive questioning.',
+      image: '/Sunhacks.png'
     }
   ];
 
+  // Experience data (now an array)
+  const experience = [
+    {
+      title: 'Frontend Development Intern',
+      company: 'Trip Value',
+      date: 'January 2025 - March 2025',
+      image: '/Trip.jpg',
+      bullets: [
+        'Developed dynamic and responsive frontend features using React, enhancing user experience and interface interactivity.',
+        'Contributed to backend development with Node.js and Express, working on API integration and server-side logic.',
+        'Collaborated with the development team to debug, test, and optimize both frontend and backend components.',
+        'Gained hands-on experience in full-stack development, version control (Git), and RESTful API design.'
+      ]
+    }
+  ];
+  
   // If not mounted yet (during SSR), return a minimal loading state
   if (!isMounted) {
     return (
@@ -1558,84 +1574,69 @@ const scrollToSection = (sectionId) => {
                 </span>
               </motion.h2>
               
-              <motion.div
-                variants={fadeInUp}
-              >
-                <div 
-                  className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
-                  style={{ 
-                    backgroundColor: currentTheme.cardBg,
-                    border: `1px solid ${currentTheme.cardBorder}`
-                  }}
+              {/* Map over experience array */}
+              {experience.map((exp, idx) => (
+                <motion.div
+                  key={exp.title}
+                  variants={fadeInUp}
                 >
-                  {/* Image placeholder for professional experience */}
-                  <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
-                    <div 
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{ 
-                        border: `1px solid ${currentTheme.cardBorder}`
-                      }}
-                    >
-                      <div className="flex flex-col items-center justify-center w-full h-full">
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                              setModalImage('/Trip.jpg');
-                              setModalOpen(true);
-                            }}
-                          >
-                            <Image src="/Trip.jpg" alt="Professional Experience" fill style={{ objectFit: "contain" }} />
+                  <div 
+                    className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
+                    style={{ 
+                      backgroundColor: currentTheme.cardBg,
+                      border: `1px solid ${currentTheme.cardBorder}`
+                    }}
+                  >
+                    {/* Image placeholder for professional experience */}
+                    <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
+                      <div 
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{ 
+                          border: `1px solid ${currentTheme.cardBorder}`
+                        }}
+                      >
+                        <div className="flex flex-col items-center justify-center w-full h-full">
+                          <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setModalImage(exp.image);
+                                setModalOpen(true);
+                              }}
+                            >
+                            <Image src={exp.image} alt="Professional Experience" fill style={{ objectFit: "contain" }} />
                           </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
-                    <div>
-                      <h3 
-                        className="text-2xl font-bold mb-1"
-                        style={{ color: currentTheme.primary }}
-                      >
-                        Frontend Development Intern
-                      </h3>
-                      <p className="text-xl opacity-80">Trip Value</p>
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
+                      <div>
+                        <h3 
+                          className="text-2xl font-bold mb-1"
+                          style={{ color: currentTheme.primary }}
+                        >
+                          {exp.title}
+                        </h3>
+                        <p className="text-xl opacity-80">{exp.company}</p>
+                      </div>
+                      <div className="mt-2 md:mt-0 opacity-70">
+                        {exp.date}
+                      </div>
                     </div>
-                    <div className="mt-2 md:mt-0 opacity-70">
-                      January 2025 - March 2025
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 sm:space-y-6">
-                    <div className="flex items-start">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
-                        style={{ backgroundColor: currentTheme.primary }}
-                      ></div>
-                      <p>Developed dynamic and responsive frontend features using React, enhancing user experience and interface interactivity.</p>
-                    </div>
-                    <div className="flex items-start">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
-                        style={{ backgroundColor: currentTheme.primary }}
-                      ></div>
-                      <p>Contributed to backend development with Node.js and Express, working on API integration and server-side logic.</p>
-                    </div>
-                    <div className="flex items-start">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
-                        style={{ backgroundColor: currentTheme.primary }}
-                      ></div>
-                      <p>Collaborated with the development team to debug, test, and optimize both frontend and backend components.</p>
-                    </div>
-                    <div className="flex items-start">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
-                        style={{ backgroundColor: currentTheme.primary }}
-                      ></div>
-                      <p>Gained hands-on experience in full-stack development, version control (Git), and RESTful API design.</p>
+                    
+                    <div className="space-y-4 sm:space-y-6">
+                      {exp.bullets.map((bullet, i) => (
+                        <div className="flex items-start" key={i}>
+                          <div 
+                            className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
+                            style={{ backgroundColor: currentTheme.primary }}
+                          ></div>
+                          <p>{bullet}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              ))}
               
               <motion.div
                 variants={fadeInUp}
@@ -1733,7 +1734,7 @@ const scrollToSection = (sectionId) => {
                 className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12"
               >
                 <div 
-                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
+                  className="p-6 sm:p-8 rounded-2xl flex flex-col items-center"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
@@ -1751,7 +1752,7 @@ const scrollToSection = (sectionId) => {
                 </div>
 
                 <div 
-                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
+                  className="p-6 sm:p-8 rounded-2xl flex flex-col items-center"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
@@ -1771,7 +1772,7 @@ const scrollToSection = (sectionId) => {
                 </div>
 
                 <div 
-                  className="p-6 sm:p-8 rounded-3xl flex flex-col items-center"
+                  className="p-6 sm:p-8 rounded-2xl flex flex-col items-center"
                   style={{ 
                     backgroundColor: currentTheme.cardBg,
                     border: `1px solid ${currentTheme.cardBorder}`
