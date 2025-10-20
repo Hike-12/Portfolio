@@ -47,6 +47,72 @@ const Index = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const [signaturePaths, setSignaturePaths] = useState([]);
+  const signatureRefs = useRef([]);
+  const [signatureLengths, setSignatureLengths] = useState([]);
+  const [signatureKey, setSignatureKey] = useState(0);
+
+  useEffect(() => {
+    fetch("/Aliqyaan.svg")
+      .then(res => res.text())
+      .then(svg => {
+        // Extract all <path ... d="..."/>
+        const matches = [...svg.matchAll(/<path[^>]*d="([^"]+)"[^>]*>/gi)];
+        // Remove .reverse() if you want natural SVG order
+        setSignaturePaths(matches.map(m => m[1]).reverse());
+      });
+  }, []);
+
+  useEffect(() => {
+    if (signaturePaths.length) {
+      const newLengths = signatureRefs.current.slice(0, signaturePaths.length).map(ref =>
+        ref ? ref.getTotalLength() : 0
+      );
+      setSignatureLengths(newLengths);
+    }
+  }, [signaturePaths]);
+
+  useEffect(() => {
+  if (!signaturePaths.length) return;
+  // Total animation time for all paths
+  const totalDuration = 3 + (signaturePaths.length - 1) * (3 / (signaturePaths.length || 1));
+  const timeout = setTimeout(() => {
+    setSignatureKey(k => k + 1); // Change key to force re-render
+  }, totalDuration * 1000 + 500); // +500ms pause before replay
+
+  return () => clearTimeout(timeout);
+}, [signaturePaths, signatureKey]);
+const [signatureTransform, setSignatureTransform] = useState("");
+
+useEffect(() => {
+  if (!signaturePaths.length || !signatureRefs.current[0]) return;
+
+  // Get the bounding box of all paths combined
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  signatureRefs.current.forEach(ref => {
+    if (ref) {
+      const bbox = ref.getBBox();
+      minX = Math.min(minX, bbox.x);
+      minY = Math.min(minY, bbox.y);
+      maxX = Math.max(maxX, bbox.x + bbox.width);
+      maxY = Math.max(maxY, bbox.y + bbox.height);
+    }
+  });
+
+  // Your SVG viewBox
+  const vbX = -1.04, vbY = 12.4, vbW = 91.2, vbH = 43.76;
+
+  // Calculate scale and translation to fit the bounding box inside the viewBox
+  const scale = Math.min(
+    vbW / (maxX - minX),
+    vbH / (maxY - minY)
+  );
+  const tx = vbX - minX * scale + (vbW - (maxX - minX) * scale) / 2;
+  const ty = vbY - minY * scale + (vbH - (maxY - minY) * scale) / 2;
+
+  setSignatureTransform(`translate(${tx},${ty}) scale(${scale})`);
+}, [signaturePaths, signatureKey]);
   
   // Consolidated skills array - easy to add or remove skills with official icons
   const skills = [
@@ -839,32 +905,32 @@ const scrollToSection = (sectionId) => {
         </div>
         
         {/* Photo - Center on mobile, right side on desktop */}
-        <motion.div
-          variants={fadeInUp}
-          className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0"
-        >
-          <div 
-            className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg"
-            style={{ borderColor: currentTheme.primary }}
-          >
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                setModalImage('/Me.jpg');
-                setModalOpen(true);
-              }}
-            >
-              <Image 
-                src="/Me.jpg" 
-                alt="Aliqyaan Mahimwala" 
-                width={400} 
-                height={400}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </motion.div>
+<motion.div
+  variants={fadeInUp}
+  className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0 flex flex-col items-center"
+>
+  <div 
+    className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg flex items-center justify-center"
+    style={{ borderColor: currentTheme.primary }}
+  >
+    <div
+      className="cursor-pointer"
+      onClick={() => {
+        setModalImage('/Me.jpg');
+        setModalOpen(true);
+      }}
+    >
+      <Image 
+        src="/Me.jpg" 
+        alt="Aliqyaan Mahimwala" 
+        width={400} 
+        height={400}
+        className="w-full h-full object-cover"
+        priority
+      />
+    </div>
+  </div>
+</motion.div>
       </div>
       
       <motion.div
@@ -1737,9 +1803,45 @@ const scrollToSection = (sectionId) => {
         >
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3 mb-2 md:mb-0">
-              <span className="font-semibold text-base sm:text-lg" style={{ color: currentTheme.primary }}>
-                Aliqyaan Mahimwala
-              </span>
+                {/* Signature centered under photo */}
+<div className="pt-2 flex flex-col items-center w-full">
+  <svg
+    key={signatureKey}
+    width="100%"
+    height="auto"
+    viewBox="-1.04 12.4 91.2 43.76"
+    fill="none"
+    aria-hidden="true"
+    className="max-w-28 sm:max-w-36 md:max-w-40" // smaller than before
+    style={{ display: "block", background: "none" }}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <g transform={signatureTransform}>
+      {signaturePaths.map((d, i) => (
+        <path
+          key={i}
+          ref={el => (signatureRefs.current[i] = el)}
+          d={d}
+          stroke={darkMode ? "#D4C9BE" : "#123458"}
+          strokeWidth={0.9 / (signatureTransform ? Number(signatureTransform.match(/scale\(([^)]+)\)/)?.[1] || 1) : 1)} // thinner
+          fill="none"
+          style={{
+            strokeDasharray: signatureLengths[i] || 0,
+            strokeDashoffset: signatureLengths[i] || 0,
+            animation: `draw-signature 3s cubic-bezier(0.77,0,0.18,1) ${i * (3 / (signaturePaths.length || 1))}s forwards`,
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+          }}
+        />
+      ))}
+    </g>
+  </svg>
+  <style>{`
+    @keyframes draw-signature {
+      to { stroke-dashoffset: 0; }
+    }
+  `}</style>
+</div>
               <span className="hidden sm:inline-block text-xs opacity-60">|</span>
               <span className="text-xs sm:text-sm opacity-70">
                 © 2025 All rights reserved.
