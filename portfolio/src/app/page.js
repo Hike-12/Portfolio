@@ -33,6 +33,7 @@ const Index = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
+  const [showIntro, setShowIntro] = useState(true);
   const [forceUpdate, setForceUpdate] = useState(0); 
   const sectionRefs = {
     home: useRef(null),
@@ -113,6 +114,12 @@ useEffect(() => {
 
   setSignatureTransform(`translate(${tx},${ty}) scale(${scale})`);
 }, [signaturePaths, signatureKey]);
+
+useEffect(() => {
+  if (!isMounted) return;
+  const timer = setTimeout(() => setShowIntro(false), 4000); // 2.6s or match your SVG animation duration
+  return () => clearTimeout(timer);
+}, [isMounted]);
   
   // Consolidated skills array - easy to add or remove skills with official icons
   const skills = [
@@ -780,6 +787,56 @@ const scrollToSection = (sectionId) => {
   
   return (
     <>
+      <AnimatePresence>
+    {showIntro && (
+      <motion.div
+        key="intro"
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1.2 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[rgba(0,0,0,0.98)]"
+        style={{ background: darkMode ? "#030303" : "#F1EFEC" }}
+      >
+        <svg
+          key={signatureKey}
+          width="80vw"
+          height="auto"
+          viewBox="-1.04 12.4 91.2 43.76"
+          fill="none"
+          aria-hidden="true"
+          className="max-w-[500px]"
+          style={{ display: "block", background: "none" }}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <g transform={signatureTransform}>
+            {signaturePaths.map((d, i) => (
+              <path
+                key={i}
+                ref={el => (signatureRefs.current[i] = el)}
+                d={d}
+                stroke={darkMode ? "#D4C9BE" : "#123458"}
+                strokeWidth={1.2 / (signatureTransform ? Number(signatureTransform.match(/scale\(([^)]+)\)/)?.[1] || 1) : 1)}
+                fill="none"
+                style={{
+                  strokeDasharray: signatureLengths[i] || 0,
+                  strokeDashoffset: signatureLengths[i] || 0,
+                  animation: `draw-signature 2.2s cubic-bezier(0.77,0,0.18,1) ${i * (2.2 / (signaturePaths.length || 1))}s forwards`,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                }}
+              />
+            ))}
+          </g>
+        </svg>
+        <style>{`
+          @keyframes draw-signature {
+            to { stroke-dashoffset: 0; }
+          }
+        `}</style>
+      </motion.div>
+    )}
+  </AnimatePresence>
     <div className="relative min-h-screen" style={{ backgroundColor: currentTheme.background, color: currentTheme.foreground }}>
       {/* Three.js Canvas */}
       <canvas 
