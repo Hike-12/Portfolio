@@ -320,6 +320,85 @@ useEffect(() => {
     console.warn('Failed to load Three.js:', error);
   });
 }, [darkMode, isMounted]);
+
+useEffect(() => {
+  if (!isMounted) return;
+
+  const canvas = document.getElementById('shooting-stars-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+
+  // Shooting star properties
+  const stars = [];
+  const maxStars = 8; // Keep it subtle
+
+  function spawnStar() {
+    const angle = Math.random() * Math.PI / 4 + Math.PI / 8; // ~22° to ~67°
+    const speed = Math.random() * 8 + 6;
+    const x = Math.random() * width * 0.8 + width * 0.1;
+    const y = Math.random() * height * 0.2;
+    stars.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      len: Math.random() * 80 + 80,
+      life: 0,
+      alpha: 1
+    });
+  }
+
+  let lastSpawn = 0;
+  function animate(ts) {
+    ctx.clearRect(0, 0, width, height);
+
+    // Spawn new star every 1.5-3s
+    if (stars.length < maxStars && ts - lastSpawn > 2000 + Math.random() * 2000) {
+      spawnStar();
+      lastSpawn = ts;
+    }
+
+    for (let i = stars.length - 1; i >= 0; i--) {
+      const s = stars[i];
+      ctx.save();
+      ctx.globalAlpha = s.alpha;
+      ctx.strokeStyle = darkMode ? "#fff" : "#123458";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x - s.vx * 8, s.y - s.vy * 8);
+      ctx.stroke();
+      ctx.restore();
+
+      s.x += s.vx;
+      s.y += s.vy;
+      s.life += 1;
+      s.alpha -= 0.012;
+
+      if (s.life > s.len || s.alpha <= 0) {
+        stars.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+  animate(0);
+
+  return () => {
+    window.removeEventListener('resize', resize);
+  };
+}, [darkMode,isMounted]);
   
   // Scroll observer for navigation - Only run on client
 useEffect(() => {
@@ -706,6 +785,10 @@ const scrollToSection = (sectionId) => {
       <canvas 
         ref={threeCanvasRef} 
         className="fixed inset-0 w-full h-full z-0 opacity-40 pointer-events-none"
+      />
+      <canvas
+        id="shooting-stars-canvas"
+        className="fixed inset-0 w-full h-full z-0 pointer-events-none"
       />
       
       {/* Navigation */}
