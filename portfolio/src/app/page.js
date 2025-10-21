@@ -13,8 +13,16 @@ import {
   SiPandas, SiNumpy, SiDocker, SiChartdotjs
 } from 'react-icons/si';
 import { MdVrpano } from 'react-icons/md';
+import { FiRefreshCw } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { Canvas } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
+
+function AliqyaanModel() {
+  const { scene } = useGLTF('/aliqyaan.glb');
+  return <primitive object={scene} scale={4} rotation={[8.2, 4.8, -4.8]} />;
+}
 
 const Index = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -27,6 +35,7 @@ const Index = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [forceUpdate, setForceUpdate] = useState(0);
   const [showPdfModal, setShowPdfModal] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -1071,32 +1080,54 @@ const Index = () => {
                 </div>
 
                 {/* Photo - Center on mobile, right side on desktop */}
-        <motion.div
-          variants={fadeInUp}
-          className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0 flex flex-col items-center"
+<motion.div
+  variants={fadeInUp}
+  className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0 flex flex-col items-center"
+>
+  <div
+    className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg flex items-center justify-center relative"
+    style={{ borderColor: currentTheme.primary }}
+  >
+    <div className="absolute top-2 right-2 z-10">
+      <button
+        onClick={() => setIsFlipped(f => !f)}
+        className="bg-white bg-opacity-80 rounded-full p-2 shadow hover:bg-opacity-100 transition"
+        aria-label="Flip"
+        style={{ border: `1px solid ${currentTheme.primary}` }}
+      >
+        <FiRefreshCw size={22} color={currentTheme.primary} />
+      </button>
+    </div>
+    <div
+      className="cursor-pointer w-full h-full flex items-center justify-center"
+      onClick={() => {
+        setModalImage('/Me.jpg');
+        setModalOpen(true);
+        setIsFlipped(false);
+      }}
+    >
+      {!isFlipped ? (
+        <Image
+          src="/Me.jpg"
+          alt="Aliqyaan Mahimwala"
+          width={400}
+          height={400}
+          className="w-full h-full object-cover"
+          priority
+        />
+      ) : (
+        <Canvas
+          style={{ borderRadius: '1rem', background: '#222', width: '100%', height: '100%' }}
+          camera={{ position: [0, 0, 5], fov: 50 }}
         >
-          <div
-            className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg flex items-center justify-center"
-            style={{ borderColor: currentTheme.primary }}
-          >
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                setModalImage('/Me.jpg');
-                setModalOpen(true);
-              }}
-            >
-              <Image
-                src="/Me.jpg"
-                alt="Aliqyaan Mahimwala"
-                width={400}
-                height={400}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </motion.div>
+          <ambientLight intensity={0.7} />
+          <directionalLight position={[2, 2, 2]} intensity={1} />
+          <AliqyaanModel />
+        </Canvas>
+      )}
+    </div>
+  </div>
+</motion.div>
               </div>
 
               <motion.div
@@ -2061,31 +2092,52 @@ const Index = () => {
         }}
       />
 
-      {modalOpen && modalImage && (
-        <div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
-          onClick={() => setModalOpen(false)}
-          style={{ cursor: 'zoom-out' }}
-        >
-          <div className="relative max-w-3xl w-full flex items-center justify-center">
-            <Image
-              src={modalImage}
-              alt="Expanded project"
-              width={900}
-              height={600}
-              className="rounded-2xl shadow-2xl max-h-[80vh] max-w-full object-contain"
-              onClick={e => e.stopPropagation()}
-            />
-            <button
-              onClick={() => setModalOpen(false)}
-              className="absolute top-2 right-2 text-white bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-80 transition"
-              aria-label="Close"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+{modalOpen && modalImage && (
+  <div
+    className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
+    onClick={() => { setModalOpen(false); setIsFlipped(false); }}
+    style={{ cursor: 'zoom-out' }}
+  >
+    <div className="relative max-w-3xl w-full flex items-center justify-center">
+      <div className="w-full h-[500px] flex items-center justify-center">
+        {!isFlipped ? (
+          <Image
+            src={modalImage}
+            alt="Expanded project"
+            width={900}
+            height={600}
+            className="rounded-2xl shadow-2xl max-h-[80vh] max-w-full object-contain"
+            onClick={e => e.stopPropagation()}
+          />
+        ) : (
+          <Canvas
+            style={{ borderRadius: '1rem', background: '#222', width: '100%', height: '100%' }}
+            camera={{ position: [0, 0, 5], fov: 50 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <ambientLight intensity={0.7} />
+            <directionalLight position={[2, 2, 2]} intensity={1} />
+            <AliqyaanModel />
+          </Canvas>
+        )}
+      </div>
+      <button
+        onClick={() => setModalOpen(false)}
+        className="absolute top-2 right-2 text-white bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-80 transition"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+      <button
+        onClick={e => { e.stopPropagation(); setIsFlipped(f => !f); }}
+        className="absolute bottom-4 right-4 bg-white text-black rounded-full p-2 shadow hover:bg-gray-200 transition"
+        aria-label="Flip"
+      >
+        {isFlipped ? 'Show Photo' : 'Show 3D'}
+      </button>
+    </div>
+  </div>
+)}
       {showPdfModal && (
   <div
     className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
