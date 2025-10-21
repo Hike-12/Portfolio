@@ -26,6 +26,7 @@ const Index = () => {
   const [modalImage, setModalImage] = useState(null);
   const [showIntro, setShowIntro] = useState(true);
   const [forceUpdate, setForceUpdate] = useState(0);
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -877,6 +878,16 @@ const Index = () => {
                   )}
                 </button>
               ))}
+                <button
+    onClick={() => setShowPdfModal(true)}
+    className="capitalize transition-all duration-300 hover:font-medium relative py-1 hover:text-opacity-100"
+    style={{
+      color: currentTheme.primary,
+      opacity: 1
+    }}
+  >
+    Resume
+  </button>
             </div>
             {/* Mobile Navigation Toggle & Theme Toggle */}
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -2075,6 +2086,32 @@ const Index = () => {
           </div>
         </div>
       )}
+      {showPdfModal && (
+  <div
+    className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
+    onClick={() => setShowPdfModal(false)}
+    style={{ cursor: 'zoom-out' }}
+  >
+    <div className="relative max-w-3xl w-full flex items-center justify-center bg-white rounded-2xl shadow-2xl">
+      <iframe
+        src="/Aliqyaan-Mahimwala-Resume.pdf"
+        title="Aliqyaan Resume"
+        width="800"
+        height="600"
+        className="rounded-2xl"
+        style={{ maxWidth: '90vw', maxHeight: '80vh', border: 'none' }}
+        onClick={e => e.stopPropagation()}
+      />
+      <button
+        onClick={() => setShowPdfModal(false)}
+        className="absolute top-2 right-2 text-black bg-white bg-opacity-80 rounded-full p-2 hover:bg-opacity-100 transition"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+)}
     </>
   );
 };
