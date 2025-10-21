@@ -779,7 +779,7 @@ const Index = () => {
           key={signatureKey}
           width="80vw"
           height="auto"
-          viewBox="-1.04 12.4 91.2 43.76"
+          viewBox="-1.04 12.4 91.2 48"
           fill="none"
           aria-hidden="true"
           className="max-w-[500px]"
@@ -982,6 +982,10 @@ const Index = () => {
                   <motion.h1
                     variants={fadeInUp}
                     className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4"
+                    style={{
+                      lineHeight: 1.15, // Add this line
+                      paddingBottom: '0.2em', // Add this line for extra space below
+                    }}
                   >
                     <span
                       className={darkMode ? "inline-block bg-clip-text text-transparent animate-shine" : "inline-block"}
