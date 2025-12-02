@@ -751,7 +751,7 @@ const Index = () => {
       title: 'FullStack Development Intern',
       company: 'Rayeva',
       date: 'August 2025 - November 2025',
-      image: '/Rayeva.jpg',
+      image: '/Rayeva.png',
       bullets: [
         'Built and deployed core e-commerce features (catalog, checkout, onboarding) with React, TailwindCSS, Node.js, and PostgreSQL.',
         'Helped onboard 10+ sustainable brands by creating scalable seller dashboards.',
