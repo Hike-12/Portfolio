@@ -746,6 +746,20 @@ const Index = () => {
         'Gained hands-on experience in full-stack development, version control (Git), and RESTful API design.'
       ]
     }
+    ,
+    {
+      title: 'FullStack Development Intern',
+      company: 'Rayeva',
+      date: 'August 2025 - November 2025',
+      image: '/Rayeva.jpg',
+      bullets: [
+        'Built and deployed core e-commerce features (catalog, checkout, onboarding) with React, TailwindCSS, Node.js, and PostgreSQL.',
+        'Helped onboard 10+ sustainable brands by creating scalable seller dashboards.',
+        'Developed AI-powered onboarding tools, reducing setup time by ~30%.',
+        'Integrated backend APIs for order management and sustainability tracking.',
+        'Launched an impact reporting system displaying the footprint of 100+ purchases.'
+      ]
+    }
   ];
 
   // If not mounted yet (during SSR), return a minimal loading state
