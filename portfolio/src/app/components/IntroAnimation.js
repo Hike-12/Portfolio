@@ -58,11 +58,24 @@ const IntroAnimation = () => {
     setSignatureTransform(`translate(${tx},${ty}) scale(${scale})`);
   }, [signaturePaths, signatureKey]);
 
+  // Auto-hide after 4 seconds
   useEffect(() => {
     if (!isMounted) return;
     const timer = setTimeout(() => setShowIntro(false), 4000);
     return () => clearTimeout(timer);
   }, [isMounted]);
+
+  // Skip on click or Enter
+  useEffect(() => {
+    if (!showIntro) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        setShowIntro(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showIntro]);
 
   return (
     <AnimatePresence>
@@ -73,8 +86,9 @@ const IntroAnimation = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[rgba(0,0,0,0.98)]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[rgba(0,0,0,0.98)]"
           style={{ background: darkMode ? "#030303" : "#F1EFEC" }}
+          onClick={() => setShowIntro(false)}
         >
           <svg
             key={signatureKey}
@@ -107,6 +121,9 @@ const IntroAnimation = () => {
               ))}
             </g>
           </svg>
+          <div className="mt-8 text-center text-base sm:text-lg font-medium opacity-80" style={{ color: darkMode ? '#F1EFEC' : '#123458' }}>
+            Click or press <span className="font-bold">Enter</span> to skip
+          </div>
           <style>{`
             @keyframes draw-signature {
               to { stroke-dashoffset: 0; }
