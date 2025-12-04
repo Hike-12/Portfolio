@@ -241,6 +241,13 @@ const Navbar = ({ onShowPdfModal }) => {
                   {item}
                 </button>
               ))}
+              <button
+                onClick={() => { onShowPdfModal(true); setMenuOpen(false); }}
+                className="capitalize text-left py-2 transition-colors"
+                style={{ color: currentTheme.primary }}
+              >
+                Resume
+              </button>
             </div>
           </motion.div>
         )}
