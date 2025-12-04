@@ -90,16 +90,19 @@ const IntroAnimation = () => {
           style={{ background: darkMode ? "#030303" : "#F1EFEC" }}
           onClick={() => setShowIntro(false)}
         >
-          <svg
+          <motion.svg
             key={signatureKey}
-            width="80vw"
+            width="70vw"
             height="auto"
             viewBox="-1.04 12.4 91.2 48"
             fill="none"
             aria-hidden="true"
-            className="max-w-[500px]"
+            className="max-w-[420px]"
             style={{ display: "block", background: "none" }}
             preserveAspectRatio="xMidYMid meet"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <g transform={signatureTransform}>
               {signaturePaths.map((d, i) => (
@@ -108,22 +111,25 @@ const IntroAnimation = () => {
                   ref={el => (signatureRefs.current[i] = el)}
                   d={d}
                   stroke={darkMode ? "#D4C9BE" : "#123458"}
-                  strokeWidth={1.2 / (signatureTransform ? Number(signatureTransform.match(/scale\(([^)]+)\)/)?.[1] || 1) : 1)}
+                  strokeWidth={0.8 / (signatureTransform ? Number(signatureTransform.match(/scale\(([^)]+)\)/)?.[1] || 1) : 1)}
                   fill="none"
                   style={{
                     strokeDasharray: signatureLengths[i] || 0,
                     strokeDashoffset: signatureLengths[i] || 0,
-                    animation: `draw-signature 2.2s cubic-bezier(0.77,0,0.18,1) ${i * (2.2 / (signaturePaths.length || 1))}s forwards`,
+                    animation: `draw-signature 1.8s cubic-bezier(0.4, 0, 0.2, 1) ${i * (1.2 / (signaturePaths.length || 1))}s forwards`,
                     strokeLinecap: "round",
                     strokeLinejoin: "round",
                   }}
                 />
               ))}
             </g>
-          </svg>
-          <div className="mt-8 text-center text-base sm:text-lg font-medium opacity-80" style={{ color: darkMode ? '#F1EFEC' : '#123458' }}>
-            Click or press <span className="font-bold">Enter</span> to skip
-          </div>
+          </motion.svg>
+          <motion.div 
+            className="mt-10 text-center text-sm sm:text-base font-light tracking-wide"
+            style={{ color: darkMode ? '#F1EFEC' : '#123458' }}
+          >
+            Click anywhere or press <span className="font-medium">Enter</span> to skip
+          </motion.div>
           <style>{`
             @keyframes draw-signature {
               to { stroke-dashoffset: 0; }
