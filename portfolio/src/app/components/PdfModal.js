@@ -12,7 +12,7 @@ const PdfModal = ({ isOpen, onClose }) => {
     >
       <div className="relative max-w-3xl w-full flex items-center justify-center bg-white rounded-2xl shadow-2xl">
         <iframe
-          src="/Aliqyaan-Mahimwala-Resume.pdf"
+          src="/Resume.pdf"
           title="Aliqyaan Resume"
           width="800"
           height="600"
