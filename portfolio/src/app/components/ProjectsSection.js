@@ -62,6 +62,15 @@ const projects = [
     image: '/Focal.png'
   },
   {
+    title: 'Particles to Dust',
+    description: 'A cool landing page made with Three.js and React Three Fiber, featuring a dynamic particles-to-dust effect.',
+    tech: ['React', 'JavaScript', 'Tailwind CSS', 'Three.js', 'React Three Fiber'],
+    features: ['3D Particles', 'Three.js Animation', 'Responsive Design', 'Landing Page'],
+    link: 'https://particles-to-dust.vercel.app/',
+    github: 'https://github.com/Hike-12/particles',
+    image: '/Dust.png',
+  },
+  {
     title: 'Habitz – Habit Tracker',
     description: 'A gamified, AI-powered habit tracker with social accountability, challenges, and real-time visualizations.',
     tech: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Groq AI'],
