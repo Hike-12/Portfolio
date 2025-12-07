@@ -101,18 +101,19 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
           </motion.h2>
 
           {/* Map over experience array */}
-          {experience.map((exp, idx) => (
-            <motion.div
-              key={exp.title}
-              variants={fadeInUp}
-            >
-              <div
-                className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
-                style={{
-                  backgroundColor: currentTheme.cardBg,
-                  border: `1px solid ${currentTheme.cardBorder}`
-                }}
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
+            {experience.map((exp, idx) => (
+              <motion.div
+                key={exp.title}
+                variants={fadeInUp}
               >
+                <div
+                  className="p-6 sm:p-8 rounded-3xl relative overflow-hidden h-full"
+                  style={{
+                    backgroundColor: currentTheme.cardBg,
+                    border: `1px solid ${currentTheme.cardBorder}`
+                  }}
+                >
                 {/* Image placeholder for professional experience */}
                 <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
                   <motion.div
@@ -163,6 +164,7 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
               </div>
             </motion.div>
           ))}
+          </div>
 
           <motion.div
             variants={fadeInUp}
