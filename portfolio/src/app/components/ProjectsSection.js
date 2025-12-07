@@ -59,7 +59,7 @@ const projects = [
     features: ['Webrtc', 'Websockets', 'Multi-layout UI', 'File Sharing'],
     github: 'https://github.com/Hike-12/Workspaces',
     link: 'https://focalpoint-gamma.vercel.app/',
-    image: '/Focal.png'
+    image: '/Work.png'
   },
   {
     title: 'Particles to Dust',
