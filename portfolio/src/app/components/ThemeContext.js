@@ -44,12 +44,30 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     setIsMounted(true);
+    // Add data-style attribute for view transitions
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-style', 'horizontal');
+    }
   }, []);
 
   const currentTheme = darkMode ? theme.dark : theme.light;
 
   const toggleTheme = () => {
-    setDarkMode(!darkMode);
+    // Check if View Transitions API is supported
+    if (typeof document !== 'undefined' && document.startViewTransition) {
+      // Update data-theme attribute before transition
+      const newTheme = !darkMode ? 'dark' : 'light';
+      
+      document.startViewTransition(() => {
+        document.documentElement.setAttribute('data-theme', newTheme);
+        setDarkMode(!darkMode);
+      });
+    } else {
+      // Fallback for browsers that don't support View Transitions
+      const newTheme = !darkMode ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      setDarkMode(!darkMode);
+    }
   };
 
   const value = {

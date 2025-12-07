@@ -31,3 +31,26 @@ body {
   font-family: 'Nunito', Arial, Helvetica, sans-serif;
   font-weight: 400;
 }
+
+/* View Transition API for Dark/Light Mode Toggle - horizontal left-to-right reveal */
+[data-style="horizontal"]::view-transition-group(root) {
+  animation-duration: 4s; /* Increase duration here */
+}
+
+[data-style="horizontal"]::view-transition-old(root) {
+  animation: none;
+}
+
+[data-style="horizontal"]::view-transition-new(root) {
+  animation: horizontal-reveal-rtl 4s ease-in-out; /* Match duration here */
+  clip-path: inset(0 0 0 100%);
+}
+
+@keyframes horizontal-reveal-rtl {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
