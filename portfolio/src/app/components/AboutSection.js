@@ -144,15 +144,22 @@ const AboutSection = ({ sectionRef }) => {
 
                 <div className="space-y-4 sm:space-y-6">
                   {focusAreas.map((item) => (
-                    <div
+                    <motion.div
                       key={item.title}
-                      className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer hover:scale-105 hover:bg-opacity-90 transition-all duration-300"
+                      whileHover={{ scale: 1.02, x: 4 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className="p-5 rounded-xl border flex items-start gap-4 cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         borderColor: currentTheme.cardBorder,
+                        '--tw-ring-color': currentTheme.primary
                       }}
+                      tabIndex={0}
+                      role="article"
+                      aria-label={`${item.title}: ${item.description}`}
                     >
                       <div
-                        className="p-3 rounded-lg flex items-center justify-center"
+                        className="p-3 rounded-lg flex items-center justify-center min-w-[48px] min-h-[48px]"
                         style={{
                           backgroundColor: `${currentTheme.primary}15`,
                           color: currentTheme.primary
@@ -167,7 +174,7 @@ const AboutSection = ({ sectionRef }) => {
                         <h4 className="font-bold mb-1" style={{ color: 'inherit' }}>{item.title}</h4>
                         <p className="text-sm opacity-80" style={{ color: 'inherit' }}>{item.description}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>

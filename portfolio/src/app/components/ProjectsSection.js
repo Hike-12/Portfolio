@@ -135,15 +135,16 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
               <motion.div
                 key={project.title}
                 variants={fadeInUp}
-                whileHover={{ y: -10 }}
-                className="overflow-hidden"
+                whileHover={{ y: -8, boxShadow: "0 20px 40px -12px rgba(0,0,0,0.15)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="overflow-hidden rounded-3xl"
+                style={{
+                  backgroundColor: currentTheme.cardBg,
+                  border: `1px solid ${currentTheme.cardBorder}`
+                }}
               >
                 <div
-                  className="h-full p-6 rounded-3xl relative overflow-hidden"
-                  style={{
-                    backgroundColor: currentTheme.cardBg,
-                    border: `1px solid ${currentTheme.cardBorder}`
-                  }}
+                  className="h-full p-6 relative overflow-hidden"
                 >
                   {/* Image placeholder with gradient overlay */}
                   <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900">
@@ -232,34 +233,44 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
 
                   <div className="mt-auto flex flex-wrap gap-3">
                     {project.github && (
-                      <a
+                      <motion.a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-2 rounded-full inline-flex items-center hover:bg-opacity-90 transition-all"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="min-h-[44px] px-6 py-2 rounded-full inline-flex items-center transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                         style={{
                           backgroundColor: currentTheme.cardBg,
                           border: `1px solid ${currentTheme.primary}`,
-                          color: currentTheme.primary
+                          color: currentTheme.primary,
+                          '--tw-ring-color': currentTheme.primary
                         }}
+                        aria-label={`View ${project.title} source code on GitHub`}
                       >
-                        <Github size={16} className="mr-2" /> View Code
-                      </a>
+                        <Github size={16} className="mr-2" aria-hidden="true" /> View Code
+                      </motion.a>
                     )}
 
                     {project.link && (
-                      <a
+                      <motion.a
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-2 rounded-full inline-flex items-center"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="min-h-[44px] px-6 py-2 rounded-full inline-flex items-center transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                         style={{
                           backgroundColor: currentTheme.primary,
-                          color: currentTheme.primaryText
+                          color: currentTheme.primaryText,
+                          '--tw-ring-color': currentTheme.primary
                         }}
+                        aria-label={`View ${project.title} live demo`}
                       >
-                        <ExternalLink size={16} className="mr-2" /> Live Demo
-                      </a>
+                        <ExternalLink size={16} className="mr-2" aria-hidden="true" /> Live Demo
+                      </motion.a>
                     )}
                   </div>
                 </div>

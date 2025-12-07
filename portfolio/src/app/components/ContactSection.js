@@ -306,18 +306,22 @@ const ContactSection = ({ sectionRef }) => {
                 ></textarea>
               </div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center disabled:cursor-not-allowed"
+                whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
+                whileTap={{ scale: isSubmitting ? 1 : 0.99 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="w-full min-h-[44px] py-4 rounded-xl font-medium transition-shadow duration-300 flex items-center justify-center disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 style={{
                   background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
                   opacity: isSubmitting ? 0.7 : 1,
-                  color: currentTheme.primaryText
+                  color: currentTheme.primaryText,
+                  '--tw-ring-color': currentTheme.primary
                 }}
               >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
+              </motion.button>
             </div>
           </motion.form>
 
@@ -325,42 +329,57 @@ const ContactSection = ({ sectionRef }) => {
             variants={fadeInUp}
             className="flex flex-wrap justify-center gap-4 sm:gap-6"
           >
-            <a
+            <motion.a
               href="mailto:aliqyaan12@gmail.com"
-              className="px-8 py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center"
               style={{
                 background: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`,
-                color: darkMode ? currentTheme.lightBgText : currentTheme.darkBgText
+                color: darkMode ? currentTheme.lightBgText : currentTheme.darkBgText,
+                '--tw-ring-color': currentTheme.primary
               }}
+              aria-label="Send email to Aliqyaan"
             >
-              <Mail size={18} className="mr-2" /> Email Me
-            </a>
+              <Mail size={18} className="mr-2" aria-hidden="true" /> Email Me
+            </motion.a>
 
-            <a
+            <motion.a
               href="https://instagram.com/aliqyaan_12"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center hover:bg-opacity-90"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center"
               style={{
                 borderColor: currentTheme.primary,
-                color: currentTheme.primary
+                color: currentTheme.primary,
+                '--tw-ring-color': currentTheme.primary
               }}
+              aria-label="Visit Instagram profile"
             >
-              <Instagram size={18} className="mr-2" /> Instagram
-            </a>
+              <Instagram size={18} className="mr-2" aria-hidden="true" /> Instagram
+            </motion.a>
 
-            <a
+            <motion.a
               href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center hover:bg-opacity-90"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center"
               style={{
                 borderColor: currentTheme.primary,
-                color: currentTheme.primary
+                color: currentTheme.primary,
+                '--tw-ring-color': currentTheme.primary
               }}
+              aria-label="Visit LinkedIn profile"
             >
-              <Linkedin size={18} className="mr-2" /> LinkedIn
-            </a>
+              <Linkedin size={18} className="mr-2" aria-hidden="true" /> LinkedIn
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>

@@ -115,21 +115,24 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
               >
                 {/* Image placeholder for professional experience */}
                 <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center cursor-pointer"
                     style={{
                       border: `1px solid ${currentTheme.cardBorder}`
                     }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    onClick={() => onImageClick(exp.image)}
+                    onKeyDown={(e) => e.key === 'Enter' && onImageClick(exp.image)}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View ${exp.company} experience image`}
                   >
                     <div className="flex flex-col items-center justify-center w-full h-full">
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => onImageClick(exp.image)}
-                      >
-                        <Image src={exp.image} alt="Professional Experience" fill style={{ objectFit: "contain" }} />
-                      </div>
+                      <Image src={exp.image} alt={`${exp.company} experience`} fill style={{ objectFit: "contain" }} />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
                   <div>
@@ -178,21 +181,24 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
                 >
                   {/* Image placeholder */}
                   <div className="mb-4 sm:mb-6 relative h-40 w-full rounded-xl overflow-hidden">
-                    <div
-                      className="absolute inset-0 flex items-center justify-center"
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center cursor-pointer"
                       style={{
                         border: `1px solid ${currentTheme.cardBorder}`
                       }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      onClick={() => onImageClick(achievement.image)}
+                      onKeyDown={(e) => e.key === 'Enter' && onImageClick(achievement.image)}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View ${achievement.title} image`}
                     >
                       <div className="flex flex-col items-center justify-center w-full h-full">
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => onImageClick(achievement.image)}
-                        >
-                          <Image src={achievement.image} alt={achievement.title} fill style={{ objectFit: "contain" }} />
-                        </div>
+                        <Image src={achievement.image} alt={achievement.title} fill style={{ objectFit: "contain" }} />
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
 
                   <h4

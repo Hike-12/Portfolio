@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Mail, Instagram, Github, Linkedin } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 
@@ -111,45 +112,57 @@ const Footer = () => {
             © 2025 All rights reserved.
           </span>
         </div>
-        <div className="flex gap-4">
-          <a
+        <div className="flex gap-3">
+          <motion.a
             href="mailto:aliqyaan12@gmail.com"
-            className="rounded-full p-2 hover:bg-opacity-80 transition"
-            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
-            aria-label="Email"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="rounded-full p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
+            aria-label="Send email to Aliqyaan"
           >
-            <Mail size={18} />
-          </a>
-          <a
+            <Mail size={20} />
+          </motion.a>
+          <motion.a
             href="https://instagram.com/aliqyaan_12"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full p-2 hover:bg-opacity-80 transition"
-            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
-            aria-label="Instagram"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="rounded-full p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
+            aria-label="Visit Aliqyaan on Instagram"
           >
-            <Instagram size={18} />
-          </a>
-          <a
+            <Instagram size={20} />
+          </motion.a>
+          <motion.a
             href="https://github.com/Hike-12"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full p-2 hover:bg-opacity-80 transition"
-            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
-            aria-label="GitHub"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="rounded-full p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
+            aria-label="Visit Aliqyaan on GitHub"
           >
-            <Github size={18} />
-          </a>
-          <a
+            <Github size={20} />
+          </motion.a>
+          <motion.a
             href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full p-2 hover:bg-opacity-80 transition"
-            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary }}
-            aria-label="LinkedIn"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="rounded-full p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-opacity-80 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
+            aria-label="Visit Aliqyaan on LinkedIn"
           >
-            <Linkedin size={18} />
-          </a>
+            <Linkedin size={20} />
+          </motion.a>
         </div>
       </div>
     </footer>

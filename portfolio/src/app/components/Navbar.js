@@ -145,16 +145,22 @@ const Navbar = ({ onShowPdfModal }) => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-3 lg:space-x-8">
+          <div className="hidden md:flex space-x-3 lg:space-x-8 items-center">
             {navItems.map((item) => (
-              <button
+              <motion.button
                 key={item}
                 onClick={() => scrollToSection(item)}
-                className="capitalize transition-all duration-300 hover:font-medium relative py-1 hover:text-opacity-100"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
                 style={{
                   color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
-                  opacity: activeSection === item ? 1 : 0.8
+                  opacity: activeSection === item ? 1 : 0.8,
+                  '--tw-ring-color': currentTheme.primary
                 }}
+                aria-label={`Navigate to ${item} section`}
+                aria-current={activeSection === item ? 'true' : undefined}
               >
                 {item}
                 {activeSection === item && (
@@ -165,40 +171,52 @@ const Navbar = ({ onShowPdfModal }) => {
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
                 )}
-              </button>
+              </motion.button>
             ))}
-            <button
+            <motion.button
               onClick={() => onShowPdfModal(true)}
-              className="capitalize transition-all duration-300 hover:font-medium relative py-1 hover:text-opacity-100"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
               style={{
                 color: currentTheme.primary,
-                opacity: 1
+                opacity: 1,
+                '--tw-ring-color': currentTheme.primary
               }}
+              aria-label="View resume"
             >
               Resume
-            </button>
+            </motion.button>
           </div>
 
           {/* Mobile Navigation Toggle & Theme Toggle */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <button
+            <motion.button
               onClick={toggleTheme}
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-              style={{ backgroundColor: currentTheme.cardBg }}
-              aria-label="Toggle dark mode"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="w-11 h-11 rounded-full flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ backgroundColor: currentTheme.cardBg, '--tw-ring-color': currentTheme.primary }}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {darkMode ? (
                 <Sun size={20} color={currentTheme.primary} />
               ) : (
                 <Moon size={20} color={currentTheme.primary} />
               )}
-            </button>
+            </motion.button>
 
-            <button
-              className="md:hidden w-10 h-10 rounded-full flex flex-col items-center justify-center space-y-1.5"
+            <motion.button
+              className="md:hidden w-11 h-11 rounded-full flex flex-col items-center justify-center space-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               onClick={() => setMenuOpen(!menuOpen)}
-              style={{ backgroundColor: currentTheme.cardBg }}
-              aria-label="Toggle menu"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              style={{ backgroundColor: currentTheme.cardBg, '--tw-ring-color': currentTheme.primary }}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
             >
               <motion.div
                 animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 6 : 0 }}
@@ -215,7 +233,7 @@ const Navbar = ({ onShowPdfModal }) => {
                 className="w-5 h-0.5 rounded-full"
                 style={{ backgroundColor: currentTheme.primary }}
               />
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
@@ -229,25 +247,39 @@ const Navbar = ({ onShowPdfModal }) => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden overflow-hidden"
             style={{ backgroundColor: currentTheme.cardBg }}
+            role="navigation"
+            aria-label="Mobile navigation"
           >
-            <div className="px-4 py-4 flex flex-col space-y-3">
+            <div className="px-4 py-4 flex flex-col space-y-2">
               {navItems.map((item) => (
-                <button
+                <motion.button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className="capitalize text-left py-2 transition-colors"
-                  style={{ color: activeSection === item ? currentTheme.primary : currentTheme.foreground }}
+                  whileHover={{ scale: 1.02, x: 4 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="capitalize text-left py-3 px-2 min-h-[44px] transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
+                  style={{ 
+                    color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
+                    '--tw-ring-color': currentTheme.primary
+                  }}
+                  aria-label={`Navigate to ${item} section`}
+                  aria-current={activeSection === item ? 'true' : undefined}
                 >
                   {item}
-                </button>
+                </motion.button>
               ))}
-              <button
+              <motion.button
                 onClick={() => { onShowPdfModal(true); setMenuOpen(false); }}
-                className="capitalize text-left py-2 transition-colors"
-                style={{ color: currentTheme.primary }}
+                whileHover={{ scale: 1.02, x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="capitalize text-left py-3 px-2 min-h-[44px] transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
+                style={{ color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
+                aria-label="View resume"
               >
                 Resume
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         )}

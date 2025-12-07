@@ -141,29 +141,38 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
                 variants={fadeInUp}
                 className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6"
               >
-                <button
+                <motion.button
                   onClick={() => scrollToSection('contact')}
-                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full hover:shadow-lg transform transition-all duration-300 hover:scale-105"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{
                     backgroundColor: currentTheme.primary,
-                    color: currentTheme.primaryText
+                    color: currentTheme.primaryText,
+                    '--tw-ring-color': currentTheme.primary
                   }}
                 >
                   Get In Touch
-                </button>
+                </motion.button>
 
-                <a
+                <motion.a
                   href="https://github.com/Hike-12"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-4 sm:px-8 sm:py-6 rounded-full border-2 hover:shadow-lg transform transition-all duration-300 hover:scale-105 inline-flex items-center"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center"
                   style={{
                     borderColor: currentTheme.primary,
-                    color: currentTheme.primary
+                    color: currentTheme.primary,
+                    '--tw-ring-color': currentTheme.primary
                   }}
+                  aria-label="View GitHub Profile"
                 >
-                  <Github size={18} className="mr-2" /> GitHub
-                </a>
+                  <Github size={18} className="mr-2" aria-hidden="true" /> GitHub
+                </motion.a>
               </motion.div>
             </div>
 
