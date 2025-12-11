@@ -56,7 +56,7 @@ const achievements = [
     title: '1st Runner Up Google GenAi Hackathon',
     date: 'November 2025',
     description: 'Developed an AI-powered tool to detect and minimize the spread of misinformation, utilizing google\'s apis to analyze content credibility. Our solution was recognized for its innovative approach to combating fake news and promoting accurate information dissemination.',
-    image: '/Genai.png'
+    image: '/Genai.jpg'
   },
   {
     title: 'Domain Winner Sunhacks',
