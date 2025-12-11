@@ -53,17 +53,23 @@ const experience = [
 
 const achievements = [
   {
-    title: 'First Place - AuraFlix Hackathon',
-    date: 'September 2024',
-    description: 'Led a team of four developers to create a machine learning-powered video streaming platform that won first place among 30+ competing teams. Our solution featured personalized content recommendations and innovative accessibility features.',
-    image: '/Aura.jpg'
+    title: '1st Runner Up Google GenAi Hackathon',
+    date: 'November 2025',
+    description: 'Developed an AI-powered tool to detect and minimize the spread of misinformation, utilizing google\'s apis to analyze content credibility. Our solution was recognized for its innovative approach to combating fake news and promoting accurate information dissemination.',
+    image: '/Genai.png'
   },
   {
     title: 'Domain Winner Sunhacks',
     date: 'August 2025',
     description: 'Developed a generative AI platform that enables students to create personalized learning plans and study materials. The solution also features an AI-powered viva simulator to help students prepare for oral exams with realistic, adaptive questioning.',
     image: '/Sunhacks.png'
-  }
+  },
+  {
+    title: 'First Place - AuraFlix Hackathon',
+    date: 'September 2024',
+    description: 'Led a team of four developers to create a machine learning-powered video streaming platform that won first place among 30+ competing teams. Our solution featured personalized content recommendations and innovative accessibility features.',
+    image: '/Aura.jpg'
+  },
 ];
 
 const ExperienceSection = ({ sectionRef, onImageClick }) => {
