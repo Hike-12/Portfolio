@@ -78,14 +78,17 @@ const AboutSection = ({ sectionRef }) => {
               className="space-y-4 sm:space-y-6"
             >
               <p className="text-base sm:text-lg leading-relaxed">
-                  Hey! I&apos;m Aliqyaan Mahimwala — a 20-year-old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I&apos;m a full-stack web developer who loves building clean, smooth, and user-friendly web apps that just work.
+                Hey! I am Aliqyaan Mahimwala, a 20 year old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I am a full stack web developer who enjoys building clean, smooth, and user friendly web apps that people actually like using.
               </p>
+
               <p className="text-base sm:text-lg leading-relaxed">
-                  I usually work with modern tools and frameworks, and Django&apos;s my go-to on the backend. Whether it&apos;s writing backend logic, fine-tuning the UI, or figuring out a tricky bug, I enjoy the process of making things better — one line of code at a time.
+                I work with modern tools and frameworks, with Django being my go to choice on the backend. From writing solid backend logic to polishing the UI or chasing down a tricky bug, I genuinely enjoy improving things step by step and learning along the way.
               </p>
+
               <p className="text-base sm:text-lg leading-relaxed">
-                Always learning, always building — trying to keep things neat, functional, and maybe a little fun too.
+                I am always building, always learning, and focused on keeping things simple, functional, and thoughtfully crafted.
               </p>
+
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
                 <div
