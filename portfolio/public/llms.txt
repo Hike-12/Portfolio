@@ -1,0 +1,37 @@
+# Aliqyaan Mahimwala — Portfolio
+
+> Full Stack Developer & Computer Engineering Student
+
+## About
+
+Aliqyaan Mahimwala is a 20-year-old Computer Engineering student at Fr. Conceicao Rodrigues College of Engineering (Fr. CRCE) in Bandra, Mumbai. He is a full stack web developer who specializes in building clean, smooth, and user-friendly web applications.
+
+## Areas of Expertise
+
+- **Full-Stack Development**: Creating seamless user experiences with modern frameworks including React, Next.js, and Django.
+- **Interactive 3D & VR**: Building immersive digital experiences with Three.js and WebVR technologies.
+- **AI Integration**: Incorporating intelligent features to enhance application capabilities.
+
+## Technical Skills
+
+- **Frontend**: React, Next.js, HTML, CSS, JavaScript, TypeScript, Tailwind CSS, Framer Motion, Three.js
+- **Backend**: Django, Node.js, Express, Python
+- **Databases**: PostgreSQL, MongoDB, Supabase
+- **Tools & DevOps**: Git, GitHub, Vercel, Docker
+- **AI/ML**: Integration of AI models and APIs
+
+## Education
+
+- B.E. Computer Engineering at Fr. CRCE, Bandra, Mumbai
+- CGPA: 9.5
+
+## Contact
+
+- Email: aliqyaan12@gmail.com
+- GitHub: https://github.com/Hike-12
+- LinkedIn: https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/
+- Instagram: https://instagram.com/aliqyaan_12
+
+## Website
+
+- URL: https://aliqyaan.vercel.app

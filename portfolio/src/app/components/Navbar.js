@@ -24,7 +24,7 @@ const Navbar = ({ onShowPdfModal }) => {
   const { darkMode, currentTheme, toggleTheme, isMounted } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const sectionRefs = useRef({
     home: null,
     about: null,
@@ -145,7 +145,7 @@ const Navbar = ({ onShowPdfModal }) => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-3 lg:space-x-8 items-center">
+          <nav aria-label="Main navigation" className="hidden md:flex space-x-3 lg:space-x-8 items-center">
             {navItems.map((item) => (
               <motion.button
                 key={item}
@@ -188,7 +188,7 @@ const Navbar = ({ onShowPdfModal }) => {
             >
               Resume
             </motion.button>
-          </div>
+          </nav>
 
           {/* Mobile Navigation Toggle & Theme Toggle */}
           <div className="flex items-center space-x-2 sm:space-x-4">
@@ -259,7 +259,7 @@ const Navbar = ({ onShowPdfModal }) => {
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   className="capitalize text-left py-3 px-2 min-h-[44px] transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
-                  style={{ 
+                  style={{
                     color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
                     '--tw-ring-color': currentTheme.primary
                   }}
@@ -284,7 +284,7 @@ const Navbar = ({ onShowPdfModal }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </motion.header >
   );
 };
 
