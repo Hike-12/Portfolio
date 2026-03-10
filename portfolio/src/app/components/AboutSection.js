@@ -105,7 +105,7 @@ const AboutSection = ({ sectionRef }) => {
                     Education
                   </h4>
                   <p>B.E. Computer Engineering</p>
-                  <p>CGPA: 9.5</p>
+                  <p>CGPA: 9.6</p>
                 </div>
 
                 <div

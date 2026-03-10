@@ -201,7 +201,7 @@ const Index = () => {
             <li>AI Integration: Incorporating intelligent features to enhance application capabilities</li>
           </ul>
           <h2>Education</h2>
-          <p>B.E. Computer Engineering — CGPA: 9.5</p>
+          <p>B.E. Computer Engineering — CGPA: 9.6</p>
           <h2>Contact</h2>
           <p>Email: aliqyaan12@gmail.com</p>
           <p>GitHub: https://github.com/Hike-12</p>
