@@ -71,6 +71,7 @@ const SkillsSection = ({ sectionRef }) => {
       style={{
         backgroundColor: darkMode ? 'rgba(36, 36, 71, 0.3)' : 'rgba(254, 249, 242, 0.5)'
       }}
+      aria-label="Technical skills"
     >
       <div className="max-w-6xl mx-auto">
         <motion.div

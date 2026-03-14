@@ -73,12 +73,11 @@ const Footer = () => {
             <svg
               key={signatureKey}
               width="100%"
-              height="auto"
               viewBox="-1.04 12.4 91.2 43.76"
               fill="none"
               aria-hidden="true"
               className="max-w-28 sm:max-w-36 md:max-w-40"
-              style={{ display: "block", background: "none" }}
+              style={{ display: "block", background: "none", height: "auto" }}
               preserveAspectRatio="xMidYMid meet"
             >
               <g transform={signatureTransform}>
@@ -122,7 +121,7 @@ const Footer = () => {
             style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
             aria-label="Send email to Aliqyaan"
           >
-            <Mail size={20} />
+            <Mail size={20} aria-hidden="true" />
           </motion.a>
           <motion.a
             href="https://instagram.com/aliqyaan_12"
@@ -135,7 +134,7 @@ const Footer = () => {
             style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
             aria-label="Visit Aliqyaan on Instagram"
           >
-            <Instagram size={20} />
+            <Instagram size={20} aria-hidden="true" />
           </motion.a>
           <motion.a
             href="https://github.com/Hike-12"
@@ -148,7 +147,7 @@ const Footer = () => {
             style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
             aria-label="Visit Aliqyaan on GitHub"
           >
-            <Github size={20} />
+            <Github size={20} aria-hidden="true" />
           </motion.a>
           <motion.a
             href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
@@ -161,7 +160,7 @@ const Footer = () => {
             style={{ backgroundColor: `${currentTheme.primary}15`, color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
             aria-label="Visit Aliqyaan on LinkedIn"
           >
-            <Linkedin size={20} />
+            <Linkedin size={20} aria-hidden="true" />
           </motion.a>
         </div>
       </div>

@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import dynamic from 'next/dynamic';
 import {
   ThemeProvider,
   useTheme,
@@ -15,10 +16,11 @@ import {
   ProjectsSection,
   ExperienceSection,
   ContactSection,
-  Footer,
-  ImageModal,
-  PdfModal
+  Footer
 } from './components';
+
+const ImageModal = dynamic(() => import('./components/ImageModal'));
+const PdfModal = dynamic(() => import('./components/PdfModal'));
 
 const PortfolioContent = () => {
   const { darkMode, currentTheme, isMounted } = useTheme();
@@ -64,7 +66,7 @@ const PortfolioContent = () => {
 
         <Navbar onShowPdfModal={setShowPdfModal} />
 
-        <main className="relative z-10" role="main">
+        <main id="main-content" className="relative z-10" tabIndex={-1} aria-label="Portfolio content">
           <HeroSection
             sectionRef={sectionRefs.home}
             onImageClick={handleImageClick}

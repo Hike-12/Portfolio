@@ -129,6 +129,7 @@ const ContactSection = ({ sectionRef }) => {
       id="contact"
       ref={sectionRef}
       className="py-14 sm:py-20 px-3 sm:px-6"
+      aria-label="Contact information and form"
     >
       <div className="max-w-4xl mx-auto">
         <motion.div
@@ -253,10 +254,11 @@ const ContactSection = ({ sectionRef }) => {
                     backgroundColor: currentTheme.background,
                     border: `1px solid ${currentTheme.cardBorder}`,
                     color: currentTheme.foreground,
-                    focusRingColor: currentTheme.primary
+                    '--focus-ring-color': currentTheme.primary
                   }}
                   placeholder="Your name"
                   required
+                  aria-required="true"
                   autoComplete="name"
                 />
               </div>
@@ -276,10 +278,11 @@ const ContactSection = ({ sectionRef }) => {
                     backgroundColor: currentTheme.background,
                     border: `1px solid ${currentTheme.cardBorder}`,
                     color: currentTheme.foreground,
-                    focusRingColor: currentTheme.primary
+                    '--focus-ring-color': currentTheme.primary
                   }}
                   placeholder="Your email address"
                   required
+                  aria-required="true"
                   autoComplete="email"
                 />
               </div>
@@ -299,10 +302,11 @@ const ContactSection = ({ sectionRef }) => {
                     backgroundColor: currentTheme.background,
                     border: `1px solid ${currentTheme.cardBorder}`,
                     color: currentTheme.foreground,
-                    focusRingColor: currentTheme.primary
+                    '--focus-ring-color': currentTheme.primary
                   }}
                   placeholder="Your message"
                   required
+                  aria-required="true"
                 ></textarea>
               </div>
 

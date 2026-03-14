@@ -107,6 +107,7 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
       id="projects"
       ref={sectionRef}
       className="pt-24 pb-20 px-3 sm:px-6"
+      aria-label="Projects"
     >
       <div className="max-w-6xl mx-auto">
         <motion.div
@@ -148,13 +149,15 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
                 >
                   {/* Image placeholder with gradient overlay */}
                   <div className="mb-6 relative h-48 w-full rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900">
-                    <div
-                      className="cursor-pointer"
+                    <button
+                      className="w-full h-full cursor-pointer bg-transparent border-none p-0 block focus-visible:ring-2 focus-visible:ring-offset-2 rounded-xl"
                       onClick={() => onImageClick(project.image)}
+                      aria-label={`View ${project.title} screenshot`}
+                      style={{ '--tw-ring-color': currentTheme.primary }}
                     >
                       <Image
                         src={project.image}
-                        alt={project.title}
+                        alt={`Screenshot of ${project.title}`}
                         fill
                         style={{ objectFit: "cover", objectPosition: "center" }}
                         onError={e => {
@@ -164,7 +167,7 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
                         sizes="(max-width: 768px) 100vw, 50vw"
                         priority={index === 0}
                       />
-                    </div>
+                    </button>
                     <div
                       className="fallback-gradient absolute inset-0 flex items-center justify-center"
                       style={{

@@ -194,6 +194,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} ${plusJakartaSans.variable} ${figtree.variable} antialiased`}
       >
+        {/* Accessibility: Skip to main content link */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"

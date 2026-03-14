@@ -19,18 +19,99 @@
   }
 }
 
+/* ===== SMOOTH SCROLL ===== */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-figtree), 'Figtree', Arial, Helvetica, sans-serif;
   font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-jakarta), 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
 }
 
-/* View Transition API for Dark/Light Mode Toggle - horizontal left-to-right reveal */
+/* ===== ACCESSIBILITY: Skip Link ===== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 10000;
+  padding: 12px 24px;
+  background-color: #123458;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ===== ACCESSIBILITY: Visually Hidden ===== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== ACCESSIBILITY: Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== ACCESSIBILITY: Focus Visible (global fallback) ===== */
+:focus-visible {
+  outline: 2px solid #123458;
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] :focus-visible,
+:root:not([data-theme="light"]) :focus-visible {
+  outline-color: #D4C9BE;
+}
+
+/* ===== FORM INPUT FOCUS (theme-aware ring) ===== */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--focus-ring-color, #123458);
+}
+
+/* ===== SELECTION ===== */
+::selection {
+  background-color: rgba(18, 52, 88, 0.25);
+  color: inherit;
+}
+
+[data-theme="dark"] ::selection {
+  background-color: rgba(212, 201, 190, 0.25);
+}
+
+/* ===== VIEW TRANSITION API ===== */
 [data-style="horizontal"]::view-transition-group(root) {
-  animation-duration: 4s; /* Increase duration here */
+  animation-duration: 4s;
 }
 
 [data-style="horizontal"]::view-transition-old(root) {
@@ -38,7 +119,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 [data-style="horizontal"]::view-transition-new(root) {
-  animation: horizontal-reveal-rtl 4s ease-in-out; /* Match duration here */
+  animation: horizontal-reveal-rtl 4s ease-in-out;
   clip-path: inset(0 0 0 100%);
 }
 
@@ -49,4 +130,36 @@ h1, h2, h3, h4, h5, h6 {
   to {
     clip-path: inset(0 0 0 0);
   }
+}
+
+/* ===== SUBTLE CARD HOVER GLOW ===== */
+.card-hover-glow {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card-hover-glow:hover {
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== SMOOTH IMAGE LOADING ===== */
+img {
+  transition: opacity 0.3s ease;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 201, 190, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 201, 190, 0.5);
 }

@@ -59,6 +59,7 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
       id="home"
       ref={sectionRef}
       className="min-h-screen flex items-center justify-center px-3 sm:px-6 pt-24"
+      aria-label="Introduction"
     >
       <div className="max-w-3xl sm:max-w-5xl mx-auto w-full">
         <motion.div
@@ -181,32 +182,37 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
               variants={fadeInUp}
               className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0 flex flex-col items-center"
             >
-              <div
-                className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden border-4 shadow-lg flex items-center justify-center relative"
-                style={{ borderColor: currentTheme.primary }}
-              >
+              <figure className="relative">
                 <div
-                  className="cursor-pointer w-full h-full flex items-center justify-center"
-                  onClick={() => onImageClick('/Me.jpg')}
+                  className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden rounded-2xl border-4 shadow-lg flex items-center justify-center relative"
+                  style={{ borderColor: currentTheme.primary }}
                 >
-                  <Image
-                    src="/Me.jpg"
-                    alt="Aliqyaan Mahimwala"
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
+                  <button
+                    className="cursor-pointer w-full h-full flex items-center justify-center bg-transparent border-none p-0 focus-visible:ring-2 focus-visible:ring-offset-2 rounded-xl"
+                    onClick={() => onImageClick('/Me.jpg')}
+                    aria-label="View full-size photo of Aliqyaan Mahimwala"
+                    style={{ '--tw-ring-color': currentTheme.primary }}
+                  >
+                    <Image
+                      src="/Me.jpg"
+                      alt="Portrait of Aliqyaan Mahimwala"
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover"
+                      priority
+                    />
+                  </button>
                 </div>
-              </div>
+              </figure>
             </motion.div>
           </div>
 
           <motion.div
             variants={fadeIn}
             className="pt-8 sm:pt-12"
+            aria-hidden="true"
           >
-            <div className="animate-bounce mx-auto w-6 sm:w-8 h-10 sm:h-12 flex justify-center">
+            <div className="animate-bounce mx-auto w-6 sm:w-8 h-10 sm:h-12 flex justify-center opacity-60">
               <ChevronDown
                 size={24}
                 className="sm:w-8 sm:h-8"

@@ -49,6 +49,7 @@ const AboutSection = ({ sectionRef }) => {
       id="about"
       ref={sectionRef}
       className="py-14 sm:py-20 px-3 sm:px-6"
+      aria-label="About me"
     >
       <div className="max-w-6xl mx-auto">
         <motion.div
@@ -126,7 +127,7 @@ const AboutSection = ({ sectionRef }) => {
               </div>
             </motion.div>
 
-            <div variants={fadeInUp}>
+            <motion.div variants={fadeInUp}>
               <div
                 className="p-6 sm:p-8 rounded-3xl relative overflow-hidden"
                 style={{
@@ -181,7 +182,7 @@ const AboutSection = ({ sectionRef }) => {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

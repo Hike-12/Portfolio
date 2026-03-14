@@ -6,12 +6,50 @@ const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
   const threeCanvasRef = useRef(null);
 
+  // Track dark mode across renders without triggering useEffect cleanup for animations
+  const darkModeRef = useRef(darkMode);
+  useEffect(() => {
+    darkModeRef.current = darkMode;
+  }, [darkMode]);
+
+  const updateThreeColorsRef = useRef(null);
+
+  // Trigger color changes smoothly without rebuilding WebGL Context
+  useEffect(() => {
+    if (updateThreeColorsRef.current) {
+      updateThreeColorsRef.current(darkMode);
+    }
+  }, [darkMode]);
+
   // Initialize Three.js scene
   useEffect(() => {
     if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
 
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     let animationId;
-    let scene, camera, renderer, particlesMesh;
+    let scene, camera, renderer, particlesMesh, particlesGeometry, particlesMaterial;
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const handleMouseMove = (event) => {
+      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    const handleResize = () => {
+      if (camera && renderer) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
 
     import('three').then((THREE) => {
       try {
@@ -27,7 +65,7 @@ const ThreeBackground = () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        const particlesGeometry = new THREE.BufferGeometry();
+        particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 8000;
         const posArray = new Float32Array(particlesCount * 3);
         const colors = new Float32Array(particlesCount * 3);
@@ -36,21 +74,31 @@ const ThreeBackground = () => {
           posArray[i] = (Math.random() - 0.5) * 10;
           posArray[i + 1] = (Math.random() - 0.5) * 10;
           posArray[i + 2] = (Math.random() - 0.5) * 10;
-
-          const colorOptions = darkMode ?
-            ['#D4C9BE', '#789DBC', '#564256'] :
-            ['#123458', '#789DBC', '#D4C9BE'];
-
-          const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
-          colors[i] = color.r;
-          colors[i + 1] = color.g;
-          colors[i + 2] = color.b;
         }
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        const particlesMaterial = new THREE.PointsMaterial({
+        updateThreeColorsRef.current = (isDark) => {
+          const colorOptions = isDark ?
+            ['#D4C9BE', '#789DBC', '#564256'] :
+            ['#123458', '#789DBC', '#D4C9BE'];
+
+          for (let i = 0; i < particlesCount * 3; i += 3) {
+            const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
+            colors[i] = color.r;
+            colors[i + 1] = color.g;
+            colors[i + 2] = color.b;
+          }
+          if (particlesGeometry && particlesGeometry.attributes.color) {
+            particlesGeometry.attributes.color.needsUpdate = true;
+          }
+        };
+
+        // Apply initial colors
+        updateThreeColorsRef.current(darkModeRef.current);
+
+        particlesMaterial = new THREE.PointsMaterial({
           size: 0.02,
           vertexColors: true,
           transparent: true,
@@ -62,16 +110,6 @@ const ThreeBackground = () => {
         scene.add(particlesMesh);
 
         camera.position.z = 4;
-
-        let mouseX = 0;
-        let mouseY = 0;
-
-        const handleMouseMove = (event) => {
-          mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-          mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
 
         const animate = () => {
           animationId = requestAnimationFrame(animate);
@@ -93,42 +131,38 @@ const ThreeBackground = () => {
 
         animate();
 
-        const handleResize = () => {
-          if (camera && renderer) {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-          }
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-          window.removeEventListener('mousemove', handleMouseMove);
-          window.removeEventListener('resize', handleResize);
-
-          if (animationId) {
-            cancelAnimationFrame(animationId);
-          }
-
-          if (particlesGeometry) particlesGeometry.dispose();
-          if (particlesMaterial) particlesMaterial.dispose();
-          if (renderer) {
-            renderer.dispose();
-            renderer.forceContextLoss();
-          }
-        };
       } catch (error) {
         console.warn('Three.js initialization failed:', error);
       }
     }).catch(error => {
       console.warn('Failed to load Three.js:', error);
     });
-  }, [darkMode, isMounted]);
+
+    // Valid synchronous cleanup function returned by useEffect
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+
+      if (particlesGeometry) particlesGeometry.dispose();
+      if (particlesMaterial) particlesMaterial.dispose();
+      if (renderer) {
+        renderer.dispose();
+        renderer.forceContextLoss();
+      }
+    };
+  }, [isMounted]); // Remove darkMode from dependencies
 
   // Shooting stars effect
   useEffect(() => {
     if (!isMounted) return;
+
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
     const canvas = document.getElementById('shooting-stars-canvas');
     if (!canvas) return;
@@ -165,6 +199,8 @@ const ThreeBackground = () => {
     }
 
     let lastSpawn = 0;
+    let animationId;
+    
     function animate(ts) {
       ctx.clearRect(0, 0, width, height);
 
@@ -177,7 +213,7 @@ const ThreeBackground = () => {
         const s = stars[i];
         ctx.save();
         ctx.globalAlpha = s.alpha;
-        ctx.strokeStyle = darkMode ? "#fff" : "#123458";
+        ctx.strokeStyle = darkModeRef.current ? "#fff" : "#123458";
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
@@ -195,14 +231,17 @@ const ThreeBackground = () => {
         }
       }
 
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     }
-    animate(0);
+    animationId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('resize', resize);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     };
-  }, [darkMode, isMounted]);
+  }, [isMounted]); // Remove darkMode from dependencies
 
   return (
     <>

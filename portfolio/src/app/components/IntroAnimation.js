@@ -12,6 +12,16 @@ const IntroAnimation = () => {
   const [signatureKey, setSignatureKey] = useState(0);
   const [signatureTransform, setSignatureTransform] = useState("");
 
+  // Respect prefers-reduced-motion
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        setShowIntro(false);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     fetch("/Aliqyaan.svg")
       .then(res => res.text())
@@ -65,11 +75,12 @@ const IntroAnimation = () => {
     return () => clearTimeout(timer);
   }, [isMounted]);
 
-  // Skip on click or Enter
+  // Skip on click, Enter, Space, or Escape
   useEffect(() => {
     if (!showIntro) return;
     const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+        e.preventDefault();
         setShowIntro(false);
       }
     };
@@ -86,19 +97,20 @@ const IntroAnimation = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2 }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[rgba(0,0,0,0.98)]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
           style={{ background: darkMode ? "#030303" : "#F1EFEC" }}
           onClick={() => setShowIntro(false)}
+          role="status"
+          aria-label="Loading portfolio — click or press any key to skip"
         >
           <motion.svg
             key={signatureKey}
             width="70vw"
-            height="auto"
             viewBox="-1.04 12.4 91.2 48"
             fill="none"
             aria-hidden="true"
             className="max-w-[420px]"
-            style={{ display: "block", background: "none" }}
+            style={{ display: "block", background: "none", height: "auto" }}
             preserveAspectRatio="xMidYMid meet"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
