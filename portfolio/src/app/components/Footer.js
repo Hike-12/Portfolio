@@ -108,7 +108,7 @@ const Footer = () => {
           </div>
           <span className="hidden sm:inline-block text-xs opacity-60">|</span>
           <span className="text-xs sm:text-sm opacity-70">
-            © 2025 All rights reserved.
+            © {new Date().getFullYear()} All rights reserved.
           </span>
         </div>
         <div className="flex gap-3">
@@ -163,6 +163,28 @@ const Footer = () => {
             <Linkedin size={20} aria-hidden="true" />
           </motion.a>
         </div>
+      </div>
+
+      {/* Quote at the very bottom */}
+      <div className="mt-12 sm:mt-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="relative inline-block px-4"
+        >
+          <p 
+            className="text-xs sm:text-sm tracking-[0.2em] uppercase font-medium italic mb-2"
+            style={{ color: currentTheme.primary, opacity: 0.5 }}
+          >
+            "The best way to predict the future is to create it."
+          </p>
+          <div 
+            className="h-px w-12 mx-auto"
+            style={{ backgroundColor: currentTheme.primary, opacity: 0.3 }}
+          />
+        </motion.div>
       </div>
     </footer>
   );
