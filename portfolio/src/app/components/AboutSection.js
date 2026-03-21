@@ -78,15 +78,15 @@ const AboutSection = ({ sectionRef }) => {
               variants={fadeInUp}
               className="space-y-4 sm:space-y-6"
             >
-              <p className="text-base sm:text-lg leading-relaxed">
+              <p className="text-base sm:text-lg leading-relaxed text-balance">
                 Hey! I am Aliqyaan Mahimwala, a 20 year old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I am a full stack web developer who enjoys building clean, smooth, and user friendly web apps that people actually like using.
               </p>
 
-              <p className="text-base sm:text-lg leading-relaxed">
+              <p className="text-base sm:text-lg leading-relaxed text-balance">
                 I work with modern tools and frameworks, with Django being my go to choice on the backend. From writing solid backend logic to polishing the UI or chasing down a tricky bug, I genuinely enjoy improving things step by step and learning along the way.
               </p>
 
-              <p className="text-base sm:text-lg leading-relaxed">
+              <p className="text-base sm:text-lg leading-relaxed text-balance">
                 I am always building, always learning, and focused on keeping things simple, functional, and thoughtfully crafted.
               </p>
 
@@ -142,7 +142,7 @@ const AboutSection = ({ sectionRef }) => {
                   }}
                 ></div>
 
-                <h3 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 tracking-tight" style={{ paddingBottom: '0.1em' }}>
                   Areas of Focus
                 </h3>
 

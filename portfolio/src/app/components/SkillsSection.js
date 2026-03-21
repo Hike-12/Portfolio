@@ -82,7 +82,8 @@ const SkillsSection = ({ sectionRef }) => {
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
+            className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16 tracking-tight"
+            style={{ paddingBottom: '0.2em' }}
           >
             Technical{" "}
             <span

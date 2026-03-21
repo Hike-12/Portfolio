@@ -141,7 +141,8 @@ const ContactSection = ({ sectionRef }) => {
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl sm:text-4xl font-bold mb-8"
+            className="text-3xl sm:text-4xl font-bold mb-8 tracking-tight"
+            style={{ paddingBottom: '0.1em' }}
           >
             Let&apos;s{" "}
             <span
@@ -156,7 +157,7 @@ const ContactSection = ({ sectionRef }) => {
 
           <motion.p
             variants={fadeInUp}
-            className="text-xl mb-8 sm:mb-12 opacity-80"
+            className="text-xl mb-8 sm:mb-12 opacity-80 leading-relaxed text-balance"
           >
             I&apos;m always open to discussing new opportunities, collaborations, or just having a chat about technology!
           </motion.p>
@@ -237,7 +238,7 @@ const ContactSection = ({ sectionRef }) => {
                 border: `1px solid ${currentTheme.cardBorder}`
               }}
             >
-              <h3 className="text-2xl font-bold mb-6 text-center">Send Me a Message</h3>
+              <h3 className="text-2xl font-bold mb-6 text-center tracking-tight" style={{ paddingBottom: '0.1em' }}>Send Me a Message</h3>
 
               <div className="mb-4 sm:mb-6">
                 <label htmlFor="name" className="block mb-2 font-medium">

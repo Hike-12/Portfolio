@@ -74,14 +74,14 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
             <div className="text-center md:text-left md:flex-1">
               <motion.h1
                 variants={fadeInUp}
-                className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-4"
+                className="text-3xl sm:text-5xl md:text-7xl font-bold mb-0 tracking-tight"
                 style={{
                   lineHeight: 1.15,
                   paddingBottom: '0.2em',
                 }}
               >
                 <span
-                  className={darkMode ? "inline-block bg-clip-text text-transparent animate-shine" : "inline-block"}
+                  className={darkMode ? "inline-block bg-clip-text text-transparent animate-shine pb-1" : "inline-block pb-1"}
                   style={
                     darkMode
                       ? {
@@ -100,7 +100,7 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
                   Aliqyaan
                 </span>{" "}
                 <span
-                  className={darkMode ? "inline-block bg-clip-text text-transparent animate-shine" : "inline-block"}
+                  className={darkMode ? "inline-block bg-clip-text text-transparent animate-shine pb-1" : "inline-block pb-1"}
                   style={
                     darkMode
                       ? {

@@ -195,9 +195,9 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
                     }}
                   ></div>
 
-                  <h3 className="text-2xl font-bold mb-4">{project.title}</h3>
+                  <h3 className="text-2xl font-bold mb-4 tracking-tight" style={{ paddingBottom: '0.1em' }}>{project.title}</h3>
 
-                  <p className="opacity-80 mb-6 leading-relaxed">
+                  <p className="opacity-80 mb-6 leading-relaxed text-balance">
                     {project.description}
                   </p>
 

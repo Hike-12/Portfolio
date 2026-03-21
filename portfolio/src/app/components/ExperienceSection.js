@@ -94,7 +94,8 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
+            className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16 tracking-tight"
+            style={{ paddingBottom: '0.1em' }}
           >
             Professional{" "}
             <span
@@ -145,8 +146,8 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
                   <div>
                     <h3
-                      className="text-2xl font-bold mb-1"
-                      style={{ color: currentTheme.primary }}
+                      className="text-2xl font-bold mb-1 tracking-tight"
+                      style={{ color: currentTheme.primary, paddingBottom: '0.05em' }}
                     >
                       {exp.title}
                     </h3>
@@ -164,7 +165,7 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
                         className="w-2 h-2 rounded-full mt-2 mr-4 flex-shrink-0"
                         style={{ backgroundColor: currentTheme.primary }}
                       ></div>
-                      <p>{bullet}</p>
+                      <p className="opacity-80 leading-relaxed text-balance">{bullet}</p>
                     </div>
                   ))}
                 </div>
@@ -177,7 +178,7 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
             variants={fadeInUp}
             className="mt-8 sm:mt-12"
           >
-            <h3 className="text-2xl font-bold text-center mb-6 sm:mb-8">Achievements</h3>
+            <h3 className="text-2xl font-bold text-center mb-6 sm:mb-8 tracking-tight" style={{ paddingBottom: '0.1em' }}>Achievements</h3>
             <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
               {achievements.map((achievement, index) => (
                 <div
@@ -217,7 +218,7 @@ const ExperienceSection = ({ sectionRef, onImageClick }) => {
                     {achievement.title}
                   </h4>
                   <p className="opacity-80 text-center mb-4">{achievement.date}</p>
-                  <p className="opacity-80 leading-relaxed">
+                  <p className="opacity-80 leading-relaxed text-balance">
                     {achievement.description}
                   </p>
                 </div>
