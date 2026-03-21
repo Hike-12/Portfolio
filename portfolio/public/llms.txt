@@ -34,4 +34,4 @@ Aliqyaan Mahimwala is a 20-year-old Computer Engineering student at Fr. Conceica
 
 ## Website
 
-- URL: https://aliqyaan.vercel.app
+- URL: https://aliqyaan-mahimwala.vercel.app

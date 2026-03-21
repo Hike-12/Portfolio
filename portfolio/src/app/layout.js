@@ -36,7 +36,7 @@ export const viewport = {
   initialScale: 1,
 }
 
-const SITE_URL = 'https://aliqyaan.vercel.app';
+const SITE_URL = 'https://aliqyaan-mahimwala.vercel.app';
 const SITE_TITLE = 'Aliqyaan Mahimwala | Full Stack Developer & Portfolio';
 const SITE_DESCRIPTION = 'Aliqyaan Mahimwala is a Full Stack Developer and Computer Engineering student specializing in modern web applications, interactive 3D experiences, and AI integration. Explore projects, skills, and get in touch.';
 

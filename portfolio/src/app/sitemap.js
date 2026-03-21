@@ -1,5 +1,5 @@
 export default function sitemap() {
-    const baseUrl = 'https://aliqyaan.vercel.app';
+    const baseUrl = 'https://aliqyaan-mahimwala.vercel.app';
 
     return [
         {
