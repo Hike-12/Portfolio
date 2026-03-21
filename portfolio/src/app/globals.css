@@ -110,6 +110,10 @@ textarea:focus-visible {
 }
 
 /* ===== VIEW TRANSITION API ===== */
+@view-transition {
+  navigation: auto;
+}
+
 [data-style="horizontal"]::view-transition-group(root) {
   animation-duration: 4s;
 }
