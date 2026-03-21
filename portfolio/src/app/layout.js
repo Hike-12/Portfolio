@@ -126,8 +126,8 @@ export const metadata = {
   category: 'technology',
 
   // Other
-  other: {
-    'google-site-verification': 'YOUR_GOOGLE_VERIFICATION_CODE',
+  verification: {
+    google: 'jG7YdOZ6p0WKMqwpAo-zIen_sTDVyGIcb46vHhpp_8w',
   },
 }
 
