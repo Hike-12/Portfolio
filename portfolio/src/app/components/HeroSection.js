@@ -189,12 +189,12 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
                 >
                   <button
                     className="cursor-pointer w-full h-full flex items-center justify-center bg-transparent border-none p-0 focus-visible:ring-2 focus-visible:ring-offset-2 rounded-xl"
-                    onClick={() => onImageClick('/Me.jpg')}
+                    onClick={() => onImageClick('/me2.webp')}
                     aria-label="View full-size photo of Aliqyaan Mahimwala"
                     style={{ '--tw-ring-color': currentTheme.primary }}
                   >
                     <Image
-                      src="/Me.jpg"
+                      src="/me2.webp"
                       alt="Portrait of Aliqyaan Mahimwala"
                       width={400}
                       height={400}
