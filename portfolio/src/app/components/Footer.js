@@ -178,7 +178,7 @@ const Footer = () => {
             className="text-xs sm:text-sm tracking-[0.2em] uppercase font-medium italic mb-2"
             style={{ color: currentTheme.primary, opacity: 0.5 }}
           >
-            "First, solve the problem. Then, write the code."
+            "Do it scared, Do it tired, Do it broke, Do it unsure, but do it anyways."
           </p>
           <div 
             className="h-px w-12 mx-auto"
