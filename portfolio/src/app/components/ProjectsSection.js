@@ -211,17 +211,23 @@ const ProjectsSection = ({ sectionRef, onImageClick }) => {
           variants={staggerContainer}
           className="flex flex-col gap-16"
         >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <motion.div variants={fadeInUp} className="max-w-2xl">
-              <h2 className="text-[64px] font-extrabold mb-4 tracking-tight leading-tight">
+          <div className="flex flex-col items-center justify-center text-center mb-10 sm:mb-16">
+            <motion.div variants={fadeInUp} className="max-w-2xl mx-auto">
+              <motion.h2
+                className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 tracking-tight"
+                style={{ paddingBottom: '0.1em' }}
+              >
                 Selected{" "}
                 <span
-                  style={{ color: currentTheme.primary }}
+                  className="bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: `linear-gradient(90deg, ${currentTheme.primary}, ${currentTheme.accent})`
+                  }}
                 >
                   Works
                 </span>
-              </h2>
-              <p className="text-[18px] opacity-70 leading-relaxed max-w-xl font-medium">
+              </motion.h2>
+              <p className="text-base sm:text-lg opacity-80 leading-relaxed max-w-xl font-medium mx-auto text-balance">
                 A collection of recent projects exploring web technologies, 3D experiences, and real-time collaboration.
               </p>
             </motion.div>
