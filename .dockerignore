@@ -1,0 +1,10 @@
+**/node_modules
+**/.next
+**/.agent
+**/.agent/**
+portfolio/.*
+portfolio/.*/**
+**/.git
+**/.vscode
+**/*.log
+portfolio/.env*
