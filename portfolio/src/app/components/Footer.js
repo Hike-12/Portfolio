@@ -178,7 +178,7 @@ const Footer = () => {
             className="text-xs sm:text-sm tracking-[0.2em] uppercase font-medium italic mb-2"
             style={{ color: currentTheme.primary, opacity: 0.5 }}
           >
-            "Do it scared, Do it tired, Do it broke, Do it unsure, but Do it Anyways."
+            "Do it Scared, Do it tired, Do it broke, Do it unsure, But Do it Anyways."
           </p>
           <div 
             className="h-px w-12 mx-auto"
