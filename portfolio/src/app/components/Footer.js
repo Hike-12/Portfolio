@@ -150,7 +150,7 @@ const Footer = () => {
             <Github size={20} aria-hidden="true" />
           </motion.a>
           <motion.a
-            href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
+            href="https://www.linkedin.com/in/aliqyaan-mahimwala/"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1 }}

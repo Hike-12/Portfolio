@@ -166,7 +166,7 @@ export default function RootLayout({ children }) {
     ],
     sameAs: [
       'https://github.com/Hike-12',
-      'https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/',
+      'https://www.linkedin.com/in/aliqyaan-mahimwala/',
       'https://instagram.com/aliqyaan_12',
     ],
   };

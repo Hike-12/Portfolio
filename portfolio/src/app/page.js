@@ -156,7 +156,7 @@ const Index = () => {
               <p>Email: aliqyaan12@gmail.com</p>
               <ul>
                 <li><a href="https://github.com/Hike-12">GitHub</a></li>
-                <li><a href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/">LinkedIn</a></li>
+                <li><a href="https://www.linkedin.com/in/aliqyaan-mahimwala/">LinkedIn</a></li>
                 <li><a href="https://instagram.com/aliqyaan_12">Instagram</a></li>
               </ul>
             </section>
@@ -207,7 +207,7 @@ const Index = () => {
           <h2>Contact</h2>
           <p>Email: aliqyaan12@gmail.com</p>
           <p>GitHub: https://github.com/Hike-12</p>
-          <p>LinkedIn: https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/</p>
+          <p>LinkedIn: https://www.linkedin.com/in/aliqyaan-mahimwala/</p>
         </article>
       </div>
 

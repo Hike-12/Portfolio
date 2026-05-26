@@ -214,7 +214,7 @@ const ContactSection = ({ sectionRef }) => {
               <Linkedin size={28} style={{ color: currentTheme.primary }} className="mb-4" />
               <h3 className="font-semibold mb-2">LinkedIn</h3>
               <a
-                href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
+                href="https://www.linkedin.com/in/aliqyaan-mahimwala/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm hover:underline transition-colors"
@@ -369,7 +369,7 @@ const ContactSection = ({ sectionRef }) => {
             </motion.a>
 
             <motion.a
-              href="https://www.linkedin.com/in/aliqyaan-mahimwala-362568292/"
+              href="https://www.linkedin.com/in/aliqyaan-mahimwala/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}
