@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 
 const theme = {
   light: {
@@ -47,6 +48,7 @@ export const ThemeProvider = ({ children }) => {
     // Add data-style attribute for view transitions
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('data-style', 'horizontal');
+      document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
     }
   }, []);
 
@@ -59,8 +61,10 @@ export const ThemeProvider = ({ children }) => {
       const newTheme = !darkMode ? 'dark' : 'light';
       
       document.startViewTransition(() => {
-        document.documentElement.setAttribute('data-theme', newTheme);
-        setDarkMode(!darkMode);
+        flushSync(() => {
+          document.documentElement.setAttribute('data-theme', newTheme);
+          setDarkMode(!darkMode);
+        });
       });
     } else {
       // Fallback for browsers that don't support View Transitions

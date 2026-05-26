@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTheme } from './ThemeContext';
 
 const ThreeBackground = () => {
@@ -8,14 +8,14 @@ const ThreeBackground = () => {
 
   // Track dark mode across renders without triggering useEffect cleanup for animations
   const darkModeRef = useRef(darkMode);
-  useEffect(() => {
+  useLayoutEffect(() => {
     darkModeRef.current = darkMode;
   }, [darkMode]);
 
   const updateThreeColorsRef = useRef(null);
 
   // Trigger color changes smoothly without rebuilding WebGL Context
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (updateThreeColorsRef.current) {
       updateThreeColorsRef.current(darkMode);
     }
@@ -59,7 +59,8 @@ const ThreeBackground = () => {
           canvas: threeCanvasRef.current,
           alpha: true,
           antialias: true,
-          precision: 'highp'
+          precision: 'highp',
+          preserveDrawingBuffer: true
         });
 
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -92,6 +93,9 @@ const ThreeBackground = () => {
           }
           if (particlesGeometry && particlesGeometry.attributes.color) {
             particlesGeometry.attributes.color.needsUpdate = true;
+          }
+          if (renderer && scene && camera) {
+            renderer.render(scene, camera);
           }
         };
 
