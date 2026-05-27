@@ -71,6 +71,16 @@ const projects = [
     image: '/Dust.png',
   },
   {
+    title: 'Budgetly',
+    description: 'A comprehensive personal finance application to seamlessly track expenses, manage budgets, and visualize your financial growth across web and mobile platforms.',
+    tech: ['Next.js', 'React Native', 'Node.js', 'MongoDB'],
+    features: ['Expense Tracking', 'Analytics', 'Budget Management'],
+    github: 'https://github.com/Hike-12/budget',
+    link: 'https://budget-tracker-hike.vercel.app/',
+    image: '/Budgetly.png',
+  },
+  /* 
+  {
     title: 'Habitz – Habit Tracker',
     description: 'A gamified, AI-powered habit tracker with social accountability, challenges, and real-time visualizations. Keep your streaks alive.',
     tech: ['React', 'Node.js', 'MongoDB', 'Groq AI'],
@@ -78,7 +88,8 @@ const projects = [
     github: 'https://github.com/Hike-12/HackHazard',
     link: 'https://habitz-three.vercel.app/',
     image: '/HabitTracker.png'
-  },
+  }, 
+  */
 ];
 
 const ProjectCard = ({ project, index, isWide, spanClasses, onImageClick, currentTheme }) => {
