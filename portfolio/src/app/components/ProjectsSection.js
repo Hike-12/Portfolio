@@ -73,7 +73,7 @@ const projects = [
   {
     title: 'Budgetly',
     description: 'A comprehensive personal finance application to seamlessly track expenses, manage budgets, and visualize your financial growth across web and mobile platforms.',
-    tech: ['Next.js', 'React Native', 'Node.js', 'MongoDB'],
+    tech: ['Next.js', 'React Native', 'MongoDB', 'Node.js'],
     features: ['Expense Tracking', 'Analytics', 'Budget Management'],
     github: 'https://github.com/Hike-12/budget',
     link: 'https://budget-tracker-hike.vercel.app/',
