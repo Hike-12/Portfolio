@@ -48,6 +48,19 @@ const experience = [
       'Integrated backend APIs for order management and sustainability tracking.',
       'Launched an impact reporting system displaying the footprint of 100+ purchases.'
     ]
+  },
+  {
+    title: 'Software Development Engineer Intern',
+    company: 'LearnLynk',
+    date: 'December 2025 - May 2026',
+    image: '/Learnlynk.png',
+    bullets: [
+      'Owned and delivered 10+ production features across admin, lead, and student-facing platforms.',
+      'Improved API and database performance through query optimization and backend refactoring.',
+      'Built secure multi-tenant workflows with role-based access control, permissions, and audit logging.',
+      'Streamlined document processing and operational workflows through automation and backend integrations.',
+      'Investigated and resolved production bugs while collaborating across frontend and backend systems.'
+    ]
   }
 ];
 
