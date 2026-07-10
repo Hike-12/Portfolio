@@ -68,9 +68,7 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
           variants={staggerContainer}
           className="space-y-8 sm:space-y-12"
         >
-          {/* Responsive Layout Container */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between md:space-x-8">
-            {/* Text Content */}
             <div className="text-center md:text-left md:flex-1">
               <motion.h1
                 variants={fadeInUp}
