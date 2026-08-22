@@ -6,6 +6,7 @@ const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
   const threeCanvasRef = useRef(null);
 
+  // Track dark mode across renders without triggering useEffect cleanup for animations
   const darkModeRef = useRef(darkMode);
   useLayoutEffect(() => {
     darkModeRef.current = darkMode;
@@ -13,20 +14,24 @@ const ThreeBackground = () => {
 
   const updateThreeColorsRef = useRef(null);
 
+  // Trigger color changes smoothly without rebuilding WebGL Context
   useLayoutEffect(() => {
     if (updateThreeColorsRef.current) {
       updateThreeColorsRef.current(darkMode);
     }
   }, [darkMode]);
 
+  // Initialize Three.js scene
   useEffect(() => {
     if (!isMounted || !threeCanvasRef.current || typeof window === 'undefined') return;
 
+    // Respect prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     let animationId;
     let scene, camera, renderer, particlesMesh, particlesGeometry, particlesMaterial;
+
     let mouseX = 0;
     let mouseY = 0;
 
@@ -49,8 +54,6 @@ const ThreeBackground = () => {
     import('three').then((THREE) => {
       try {
         scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(darkModeRef.current ? '#030303' : '#F1EFEC', 0.12);
-
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer({
           canvas: threeCanvasRef.current,
@@ -64,23 +67,14 @@ const ThreeBackground = () => {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 25000;
+        const particlesCount = 12000;
         const posArray = new Float32Array(particlesCount * 3);
         const colors = new Float32Array(particlesCount * 3);
 
-        for (let i = 0; i < particlesCount; i++) {
-          const i3 = i * 3;
-          const radius = Math.random() * 12;
-          const spinAngle = radius * 0.5;
-          const branchAngle = ((i % 5) * Math.PI * 2) / 5; 
-          
-          const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 2;
-          const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 1.5;
-          const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 2;
-
-          posArray[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-          posArray[i3 + 1] = randomY * (1 + radius * 0.1); 
-          posArray[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+        for (let i = 0; i < particlesCount * 3; i += 3) {
+          posArray[i] = (Math.random() - 0.5) * 10;
+          posArray[i + 1] = (Math.random() - 0.5) * 10;
+          posArray[i + 2] = (Math.random() - 0.5) * 10;
         }
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -88,17 +82,14 @@ const ThreeBackground = () => {
 
         updateThreeColorsRef.current = (isDark) => {
           const colorOptions = isDark ?
-            ['#ffffff', '#789DBC', '#e2d4f5', '#98bded'] :
-            ['#123458', '#0d2238', '#2a5a8a', '#447bb3'];
+            ['#D4C9BE', '#789DBC', '#564256'] :
+            ['#123458', '#789DBC', '#D4C9BE'];
 
           for (let i = 0; i < particlesCount * 3; i += 3) {
             const color = new THREE.Color(colorOptions[Math.floor(Math.random() * colorOptions.length)]);
             colors[i] = color.r;
             colors[i + 1] = color.g;
             colors[i + 2] = color.b;
-          }
-          if (scene && scene.fog) {
-            scene.fog.color.set(isDark ? '#030303' : '#F1EFEC');
           }
           if (particlesGeometry && particlesGeometry.attributes.color) {
             particlesGeometry.attributes.color.needsUpdate = true;
@@ -108,21 +99,18 @@ const ThreeBackground = () => {
           }
         };
 
+        // Apply initial colors
         updateThreeColorsRef.current(darkModeRef.current);
 
         particlesMaterial = new THREE.PointsMaterial({
-          size: 0.025,
+          size: 0.02,
           vertexColors: true,
           transparent: true,
-          opacity: 0.8, 
-          sizeAttenuation: true,
-          depthWrite: false, 
-          blending: THREE.AdditiveBlending 
+          opacity: 0.8,
+          sizeAttenuation: true
         });
 
         particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        particlesMesh.rotation.x = Math.PI * 0.1;
-        particlesMesh.rotation.z = Math.PI * 0.05;
         scene.add(particlesMesh);
 
         camera.position.z = 4;
@@ -154,6 +142,7 @@ const ThreeBackground = () => {
       console.warn('Failed to load Three.js:', error);
     });
 
+    // Valid synchronous cleanup function returned by useEffect
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
@@ -169,11 +158,13 @@ const ThreeBackground = () => {
         renderer.forceContextLoss();
       }
     };
-  }, [isMounted]);
+  }, [isMounted]); // Remove darkMode from dependencies
 
+  // Shooting stars effect
   useEffect(() => {
     if (!isMounted) return;
 
+    // Respect prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
@@ -254,25 +245,17 @@ const ThreeBackground = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, [isMounted]);
+  }, [isMounted]); // Remove darkMode from dependencies
 
   return (
     <>
       <canvas
         ref={threeCanvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none transition-all duration-700"
-        style={{
-          zIndex: 0,
-          opacity: 0.6
-        }}
+        className="fixed inset-0 w-full h-full z-0 opacity-40 pointer-events-none"
       />
       <canvas
         id="shooting-stars-canvas"
-        className="fixed inset-0 w-full h-full pointer-events-none transition-all duration-700"
-        style={{
-          zIndex: 1,
-          opacity: 0.5
-        }}
+        className="fixed inset-0 w-full h-full z-0 pointer-events-none"
       />
     </>
   );
