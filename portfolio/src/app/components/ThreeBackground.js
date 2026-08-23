@@ -98,7 +98,9 @@ const ThreeBackground = () => {
           }
           if (lineMaterial) {
             lineMaterial.color.set(isDark ? '#d4c9be' : '#789dbc');
-            lineMaterial.opacity = 0.125;
+            // Scale opacity based on pixel density so it doesn't vanish on Retina displays
+            const pixelRatio = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
+            lineMaterial.opacity = 0.125 * pixelRatio;
           }
           if (renderer && scene && camera) {
             renderer.render(scene, camera);
@@ -117,10 +119,11 @@ const ThreeBackground = () => {
         scene.add(particlesMesh);
 
         // Constellation lines setup
+        const initialPixelRatio = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
         lineMaterial = new THREE.LineBasicMaterial({
           color: 0xffffff,
           transparent: true,
-          opacity: 0.125,
+          opacity: 0.125 * initialPixelRatio,
           blending: THREE.AdditiveBlending,
           depthWrite: false
         });
