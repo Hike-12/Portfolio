@@ -31,6 +31,8 @@ const ThreeBackground = () => {
 
     let animationId;
     let scene, camera, renderer, particlesMesh, particlesGeometry, particlesMaterial;
+    let lineMaterial, lineGeometry, lineMesh;
+    let raycaster, mousePlane, mouseTarget;
 
     let mouseX = 0;
     let mouseY = 0;
@@ -94,13 +96,14 @@ const ThreeBackground = () => {
           if (particlesGeometry && particlesGeometry.attributes.color) {
             particlesGeometry.attributes.color.needsUpdate = true;
           }
+          if (lineMaterial) {
+            lineMaterial.color.set(isDark ? '#d4c9be' : '#789dbc');
+            lineMaterial.opacity = 0.125;
+          }
           if (renderer && scene && camera) {
             renderer.render(scene, camera);
           }
         };
-
-        // Apply initial colors
-        updateThreeColorsRef.current(darkModeRef.current);
 
         particlesMaterial = new THREE.PointsMaterial({
           size: 0.02,
@@ -112,6 +115,29 @@ const ThreeBackground = () => {
 
         particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
+
+        // Constellation lines setup
+        lineMaterial = new THREE.LineBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.125,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+        lineGeometry = new THREE.BufferGeometry();
+        const maxLines = 1500;
+        const linePositions = new Float32Array(maxLines * 6);
+        lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+        lineGeometry.setDrawRange(0, 0);
+        lineMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+        particlesMesh.add(lineMesh); // Share local space with particles
+
+        raycaster = new THREE.Raycaster();
+        mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        mouseTarget = new THREE.Vector3();
+        
+        // Apply initial colors
+        updateThreeColorsRef.current(darkModeRef.current);
 
         camera.position.z = 4;
 
@@ -126,6 +152,73 @@ const ThreeBackground = () => {
             const mouseEffect = 0.0003;
             particlesMesh.rotation.x += mouseY * mouseEffect;
             particlesMesh.rotation.y += mouseX * mouseEffect;
+
+            // Constellation Logic
+            const mouseVec = new THREE.Vector2(mouseX, mouseY);
+            raycaster.setFromCamera(mouseVec, camera);
+            raycaster.ray.intersectPlane(mousePlane, mouseTarget);
+            
+            // Convert target to local space of particlesMesh
+            particlesMesh.worldToLocal(mouseTarget);
+
+            const positions = particlesGeometry.attributes.position.array;
+            const activeIndices = [];
+            const radiusSq = 1.2 * 1.2; // 1.2 units radius around mouse
+
+            // 1. Find particles near mouse
+            for (let i = 0; i < 12000; i++) {
+              const px = positions[i * 3];
+              const py = positions[i * 3 + 1];
+              const pz = positions[i * 3 + 2];
+              
+              const dx = px - mouseTarget.x;
+              const dy = py - mouseTarget.y;
+              const dz = pz - mouseTarget.z;
+              
+              if (dx * dx + dy * dy + dz * dz < radiusSq) {
+                activeIndices.push(i);
+                if (activeIndices.length > 120) break; // performance limit
+              }
+            }
+
+            // 2. Connect close particles
+            let vertexCount = 0;
+            const connectDistSq = 0.6 * 0.6; // Connect if closer than 0.6 units
+            const linePositions = lineGeometry.attributes.position.array;
+
+            for (let i = 0; i < activeIndices.length; i++) {
+              const idxA = activeIndices[i];
+              const ax = positions[idxA * 3];
+              const ay = positions[idxA * 3 + 1];
+              const az = positions[idxA * 3 + 2];
+              
+              for (let j = i + 1; j < activeIndices.length; j++) {
+                const idxB = activeIndices[j];
+                const bx = positions[idxB * 3];
+                const by = positions[idxB * 3 + 1];
+                const bz = positions[idxB * 3 + 2];
+                
+                const dx = ax - bx;
+                const dy = ay - by;
+                const dz = az - bz;
+                
+                if (dx*dx + dy*dy + dz*dz < connectDistSq) {
+                  linePositions[vertexCount++] = ax;
+                  linePositions[vertexCount++] = ay;
+                  linePositions[vertexCount++] = az;
+                  
+                  linePositions[vertexCount++] = bx;
+                  linePositions[vertexCount++] = by;
+                  linePositions[vertexCount++] = bz;
+                  
+                  if (vertexCount >= 1500 * 6) break;
+                }
+              }
+              if (vertexCount >= 1500 * 6) break;
+            }
+
+            lineGeometry.setDrawRange(0, vertexCount / 3);
+            lineGeometry.attributes.position.needsUpdate = true;
           }
 
           if (renderer && scene && camera) {
@@ -153,6 +246,8 @@ const ThreeBackground = () => {
 
       if (particlesGeometry) particlesGeometry.dispose();
       if (particlesMaterial) particlesMaterial.dispose();
+      if (lineGeometry) lineGeometry.dispose();
+      if (lineMaterial) lineMaterial.dispose();
       if (renderer) {
         renderer.dispose();
         renderer.forceContextLoss();
