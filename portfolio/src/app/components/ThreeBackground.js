@@ -42,6 +42,13 @@ const ThreeBackground = () => {
       mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
+    const handleTouchMove = (event) => {
+      if (event.touches && event.touches.length > 0) {
+        mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+      }
+    };
+
     const handleResize = () => {
       if (camera && renderer) {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -51,6 +58,8 @@ const ThreeBackground = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouchMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('resize', handleResize);
 
     import('three').then((THREE) => {
@@ -97,7 +106,8 @@ const ThreeBackground = () => {
             particlesGeometry.attributes.color.needsUpdate = true;
           }
           if (lineMaterial) {
-            lineMaterial.color.set(isDark ? '#d4c9be' : '#789dbc');
+            // Use the dark blue for light mode, beige for dark mode
+            lineMaterial.color.set(isDark ? '#d4c9be' : '#123458');
             // Scale opacity based on pixel density so it doesn't vanish on Retina displays
             const pixelRatio = window.devicePixelRatio ? Math.min(window.devicePixelRatio, 2) : 1;
             lineMaterial.opacity = 0.125 * pixelRatio;
@@ -124,7 +134,6 @@ const ThreeBackground = () => {
           color: 0xffffff,
           transparent: true,
           opacity: 0.125 * initialPixelRatio,
-          blending: THREE.AdditiveBlending,
           depthWrite: false
         });
         lineGeometry = new THREE.BufferGeometry();
@@ -241,6 +250,8 @@ const ThreeBackground = () => {
     // Valid synchronous cleanup function returned by useEffect
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouchMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
 
       if (animationId) {
