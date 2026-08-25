@@ -13,6 +13,50 @@ const fadeInUp = {
   }
 };
 
+const MaskTextReveal = ({ text, className, delay = 0 }) => {
+  const words = text.split(" ");
+  
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.015, delayChildren: delay }
+    }
+  };
+
+  const child = {
+    hidden: {
+      y: "150%",
+      rotateZ: 5,
+    },
+    visible: {
+      y: "0%",
+      rotateZ: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.16, 1, 0.3, 1] // Smooth premium easing
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      variants={container}
+      className={className}
+    >
+      {words.map((word, index) => (
+        <span key={index} style={{ display: "inline-block", marginRight: "0.25em", marginBottom: "-0.2em" }}>
+          <span style={{ overflow: "hidden", display: "inline-block", paddingBottom: "0.15em", verticalAlign: "bottom" }}>
+            <motion.span variants={child} style={{ display: "inline-block", transformOrigin: "bottom left" }}>
+              {word}
+            </motion.span>
+          </span>
+        </span>
+      ))}
+    </motion.div>
+  );
+};
+
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -75,23 +119,28 @@ const AboutSection = ({ sectionRef }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
             <motion.div
-              variants={fadeInUp}
               className="space-y-4 sm:space-y-6"
             >
-              <p className="text-base sm:text-lg leading-relaxed text-balance">
-                Hey! I am Aliqyaan Mahimwala, a 20 year old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I am a full stack web developer who enjoys building clean, smooth, and user friendly web apps that people actually like using.
-              </p>
+              <MaskTextReveal 
+                text="Hey! I am Aliqyaan Mahimwala, a 20 year old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I am a full stack web developer who enjoys building clean, smooth, and user friendly web apps that people actually like using."
+                className="text-base sm:text-lg leading-relaxed text-balance"
+                delay={0.1}
+              />
 
-              <p className="text-base sm:text-lg leading-relaxed text-balance">
-                I work with modern tools and frameworks, with Django being my go to choice on the backend. From writing solid backend logic to polishing the UI or chasing down a tricky bug, I genuinely enjoy improving things step by step and learning along the way.
-              </p>
+              <MaskTextReveal 
+                text="I work with modern tools and frameworks, with Django being my go to choice on the backend. From writing solid backend logic to polishing the UI or chasing down a tricky bug, I genuinely enjoy improving things step by step and learning along the way."
+                className="text-base sm:text-lg leading-relaxed text-balance"
+                delay={0.4}
+              />
 
-              <p className="text-base sm:text-lg leading-relaxed text-balance">
-                I am always building, always learning, and focused on keeping things simple, functional, and thoughtfully crafted.
-              </p>
+              <MaskTextReveal 
+                text="I am always building, always learning, and focused on keeping things simple, functional, and thoughtfully crafted."
+                className="text-base sm:text-lg leading-relaxed text-balance"
+                delay={0.7}
+              />
 
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
+              <motion.div variants={fadeInUp} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
                 <div
                   className="p-4 sm:p-6 rounded-2xl"
                   style={{
@@ -124,7 +173,7 @@ const AboutSection = ({ sectionRef }) => {
                   </h4>
                   <p>aliqyaan12@gmail.com</p>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
