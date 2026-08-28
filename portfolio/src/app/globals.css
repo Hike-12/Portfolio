@@ -110,11 +110,14 @@ textarea:focus-visible {
 /* ===== SELECTION ===== */
 ::selection {
   background-color: rgba(18, 52, 88, 0.25);
-  color: inherit;
+  color: #123458;
+  text-shadow: 0 0 8px rgba(18, 52, 88, 0.6);
 }
 
 [data-theme="dark"] ::selection {
   background-color: rgba(212, 201, 190, 0.25);
+  color: #F1EFEC;
+  text-shadow: 0 0 8px rgba(212, 201, 190, 0.8);
 }
 
 /* ===== VIEW TRANSITION API ===== */
