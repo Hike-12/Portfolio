@@ -296,11 +296,15 @@ const ThreeBackground = () => {
     const stars = [];
     const maxStars = 8;
 
-    function spawnStar() {
-      const angle = Math.random() * Math.PI / 4 + Math.PI / 8;
+    function spawnStar(originX, originY) {
+      const isClick = originX !== undefined;
+      // If clicked, shoot in any direction. Otherwise, fall diagonally.
+      const angle = isClick ? (Math.random() * Math.PI * 2) : (Math.random() * Math.PI / 4 + Math.PI / 8);
       const speed = Math.random() * 8 + 6;
-      const x = Math.random() * width * 0.8 + width * 0.1;
-      const y = Math.random() * height * 0.2;
+      
+      const x = isClick ? originX : (Math.random() * width * 0.8 + width * 0.1);
+      const y = isClick ? originY : (Math.random() * height * 0.2);
+      
       stars.push({
         x, y,
         vx: Math.cos(angle) * speed,
@@ -310,6 +314,12 @@ const ThreeBackground = () => {
         alpha: 1
       });
     }
+
+    const handleStarClick = (e) => {
+      spawnStar(e.clientX, e.clientY);
+    };
+
+    window.addEventListener('click', handleStarClick);
 
     let lastSpawn = 0;
     let animationId;
@@ -350,6 +360,7 @@ const ThreeBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('click', handleStarClick);
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
