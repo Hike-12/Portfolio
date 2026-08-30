@@ -36,6 +36,8 @@ const ThreeBackground = () => {
 
     let mouseX = 0;
     let mouseY = 0;
+    let isMouseDown = false;
+    let holdTimer = 0;
 
     const handleMouseMove = (event) => {
       mouseX = (event.clientX / window.innerWidth) * 2 - 1;
@@ -49,6 +51,14 @@ const ThreeBackground = () => {
       }
     };
 
+    const handleMouseDown = () => { 
+      isMouseDown = true;
+      holdTimer = 0;
+    };
+    const handleMouseUp = () => { 
+      isMouseDown = false;
+    };
+
     const handleResize = () => {
       if (camera && renderer) {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -58,8 +68,11 @@ const ThreeBackground = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('touchstart', handleTouchMove, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleMouseDown, { passive: true });
+    window.addEventListener('touchend', handleMouseUp);
     window.addEventListener('resize', handleResize);
 
     import('three').then((THREE) => {
@@ -80,12 +93,22 @@ const ThreeBackground = () => {
         particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 12000;
         const posArray = new Float32Array(particlesCount * 3);
+        const originalPosArray = new Float32Array(particlesCount * 3);
+        const velocities = new Float32Array(particlesCount * 3);
         const colors = new Float32Array(particlesCount * 3);
 
         for (let i = 0; i < particlesCount * 3; i += 3) {
-          posArray[i] = (Math.random() - 0.5) * 10;
-          posArray[i + 1] = (Math.random() - 0.5) * 10;
-          posArray[i + 2] = (Math.random() - 0.5) * 10;
+          const x = (Math.random() - 0.5) * 10;
+          const y = (Math.random() - 0.5) * 10;
+          const z = (Math.random() - 0.5) * 10;
+          
+          posArray[i] = x;
+          posArray[i + 1] = y;
+          posArray[i + 2] = z;
+          
+          originalPosArray[i] = x;
+          originalPosArray[i + 1] = y;
+          originalPosArray[i + 2] = z;
         }
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -174,8 +197,97 @@ const ThreeBackground = () => {
             particlesMesh.worldToLocal(mouseTarget);
 
             const positions = particlesGeometry.attributes.position.array;
+            let needsUpdate = false;
+
+            if (isMouseDown) {
+              holdTimer++;
+            }
+
+            // Only trigger black hole if they hold for at least 0.5 seconds (30 frames)
+            if (isMouseDown && holdTimer > 30) {
+              for (let i = 0; i < 12000; i++) {
+                const i3 = i * 3;
+                const px = positions[i3];
+                const py = positions[i3 + 1];
+                const pz = positions[i3 + 2];
+                
+                const dx = mouseTarget.x - px;
+                const dy = mouseTarget.y - py;
+                const dz = mouseTarget.z - pz;
+                
+                const distSq = dx*dx + dy*dy + dz*dz;
+                // Weaker force for a slower, cinematic 2-second suck-in
+                const force = Math.min(1.0 / (distSq + 1.0), 0.3);
+                
+                // Gravity pull
+                velocities[i3] += dx * force * 0.015;
+                velocities[i3+1] += dy * force * 0.015;
+                velocities[i3+2] += dz * force * 0.015;
+                
+                // Swirl force (cross product)
+                velocities[i3] += dy * force * 0.05;
+                velocities[i3+1] -= dx * force * 0.05;
+                
+                // Gentler friction to allow graceful spiraling
+                velocities[i3] *= 0.94;
+                velocities[i3+1] *= 0.94;
+                velocities[i3+2] *= 0.94;
+                
+                positions[i3] += velocities[i3];
+                positions[i3+1] += velocities[i3+1];
+                positions[i3+2] += velocities[i3+2];
+              }
+              needsUpdate = true;
+            } else {
+              for (let i = 0; i < 12000; i++) {
+                const i3 = i * 3;
+                
+                const ox = originalPosArray[i3];
+                const oy = originalPosArray[i3+1];
+                const oz = originalPosArray[i3+2];
+                
+                const px = positions[i3];
+                const py = positions[i3+1];
+                const pz = positions[i3+2];
+                
+                const dx = ox - px;
+                const dy = oy - py;
+                const dz = oz - pz;
+                
+                if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01 || Math.abs(dz) > 0.01 || 
+                    Math.abs(velocities[i3]) > 0.01 || Math.abs(velocities[i3+1]) > 0.01) {
+                  
+                  // Softer spring for a more cinematic explosion
+                  velocities[i3] += dx * 0.015;
+                  velocities[i3+1] += dy * 0.015;
+                  velocities[i3+2] += dz * 0.015;
+                  
+                  velocities[i3] *= 0.92;
+                  velocities[i3+1] *= 0.92;
+                  velocities[i3+2] *= 0.92;
+                  
+                  positions[i3] += velocities[i3];
+                  positions[i3+1] += velocities[i3+1];
+                  positions[i3+2] += velocities[i3+2];
+                  
+                  needsUpdate = true;
+                } else {
+                  positions[i3] = ox;
+                  positions[i3+1] = oy;
+                  positions[i3+2] = oz;
+                  velocities[i3] = 0;
+                  velocities[i3+1] = 0;
+                  velocities[i3+2] = 0;
+                }
+              }
+            }
+
+            if (needsUpdate) {
+              particlesGeometry.attributes.position.needsUpdate = true;
+            }
+
             const activeIndices = [];
-            const radiusSq = 1.2 * 1.2; // 1.2 units radius around mouse
+            const radiusSq = 1.2 * 1.2;
 
             // 1. Find particles near mouse
             for (let i = 0; i < 12000; i++) {
@@ -195,7 +307,7 @@ const ThreeBackground = () => {
 
             // 2. Connect close particles
             let vertexCount = 0;
-            const connectDistSq = 0.6 * 0.6; // Connect if closer than 0.6 units
+            const connectDistSq = 0.6 * 0.6; 
             const linePositions = lineGeometry.attributes.position.array;
 
             for (let i = 0; i < activeIndices.length; i++) {
@@ -250,8 +362,11 @@ const ThreeBackground = () => {
     // Valid synchronous cleanup function returned by useEffect
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('touchstart', handleTouchMove);
-      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleMouseDown);
+      window.removeEventListener('touchend', handleMouseUp);
       window.removeEventListener('resize', handleResize);
 
       if (animationId) {
