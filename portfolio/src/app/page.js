@@ -70,8 +70,9 @@ const PortfolioContent = () => {
     );
     
     console.log(
-      '%cGithub: https://github.com/Hike-12',
-      'color: #123458; font-size: 12px; background: #D4C9BE; padding: 4px 8px; border-radius: 4px; margin-top: 8px;'
+      '%c GitHub %c https://github.com/Hike-12',
+      'background: #123458; color: #F1EFEC; padding: 3px 6px; border-radius: 4px; font-weight: bold; font-size: 12px; border: 1px solid #789DBC;',
+      'color: #789DBC; font-size: 13px; margin-left: 6px; text-decoration: underline;'
     );
   }, [isMounted]);
 
