@@ -43,6 +43,38 @@ const PortfolioContent = () => {
     setModalOpen(true);
   };
 
+  React.useEffect(() => {
+    if (!isMounted) return;
+    
+    // Ensure we only print this once
+    if (window.__consoleEasterEggPrinted) return;
+    window.__consoleEasterEggPrinted = true;
+
+    const asciiArt = `
+    ___    __    ____   ____ __  __ ___     ___    _   __
+   /   |  / /   /  _/  / __ \\\\ \\/ //   |   /   |  / | / /
+  / /| | / /    / /   / / / / \\  // /| |  / /| | /  |/ / 
+ / ___ |/ /____/ /   / /_/ /  / // ___ | / ___ |/ /|  /  
+/_/  |_/_____/___|   \\____/  /_//_/  |_|/_/  |_/_/ |_/   
+    `;
+
+    console.log(
+      `%c${asciiArt}`,
+      'color: #789DBC; font-weight: bold; font-family: monospace;'
+    );
+    
+    console.log(
+      `%cHi there! I see you're inspecting the code. 👀\n\nI'm Aliqyaan, a Full Stack Developer who loves building clean, interactive web experiences.\n\nIf you're looking to hire or just want to chat about code (or Three.js!), drop me a line:\n%caliqyaan12@gmail.com`,
+      'color: #D4C9BE; font-size: 14px; font-family: sans-serif; line-height: 1.5;',
+      'color: #789DBC; font-size: 14px; font-weight: bold; text-decoration: underline;'
+    );
+    
+    console.log(
+      '%cGithub: https://github.com/Hike-12',
+      'color: #123458; font-size: 12px; background: #D4C9BE; padding: 4px 8px; border-radius: 4px; margin-top: 8px;'
+    );
+  }, [isMounted]);
+
   // If not mounted yet (during SSR), return a minimal loading state
   if (!isMounted) {
     return (
