@@ -93,21 +93,36 @@ const Navbar = ({ onShowPdfModal }) => {
     if (element) {
       setMenuOpen(false);
 
-      setTimeout(() => {
-        const header = document.querySelector('header');
-        const headerHeight = header ? header.offsetHeight : 80;
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - 20;
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.offsetHeight : 80;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - 20;
 
-        if ('scrollBehavior' in document.documentElement.style) {
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+      const startPosition = window.pageYOffset;
+      const distance = offsetPosition - startPosition;
+      let startTime = null;
+      const duration = 1000; // 1 second for a slightly slower, premium glide
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        
+        // easeInOutQuart for an ultra-smooth cinematic stop
+        const progress = timeElapsed / duration;
+        const ease = progress < 0.5 
+          ? 8 * progress * progress * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 4) / 2;
+
+        window.scrollTo(0, startPosition + (distance * ease));
+        
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
         } else {
           window.scrollTo(0, offsetPosition);
         }
-      }, 300);
+      }
+      
+      requestAnimationFrame(animation);
     }
   };
 

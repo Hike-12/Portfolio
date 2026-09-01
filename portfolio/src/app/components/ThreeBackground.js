@@ -176,13 +176,26 @@ const ThreeBackground = () => {
 
         camera.position.z = 4;
 
+        let lastScrollY = window.scrollY;
+        let scrollMomentum = 0;
+
         const animate = () => {
           animationId = requestAnimationFrame(animate);
 
           if (particlesMesh) {
-            const rotationSpeed = 0.0005;
+            const currentScrollY = window.scrollY;
+            const deltaY = Math.abs(currentScrollY - lastScrollY);
+            lastScrollY = currentScrollY;
+
+            // Flywheel momentum: absorb chunky scroll ticks and smoothly decay
+            scrollMomentum += deltaY;
+            scrollMomentum *= 0.92; // 0.92 gives a buttery smooth slow-down
+
+            // Base speed is 0.0005. Cap max bonus speed at 0.005 (10x speed)
+            const rotationSpeed = 0.0005 + Math.min(scrollMomentum * 0.00004, 0.005);
+
             particlesMesh.rotation.x += rotationSpeed;
-            particlesMesh.rotation.y += rotationSpeed;
+            particlesMesh.rotation.y += rotationSpeed * 1.5;
 
             const mouseEffect = 0.0003;
             particlesMesh.rotation.x += mouseY * mouseEffect;
