@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Globe, BrainCircuit } from 'lucide-react';
 import { useTheme } from './ThemeContext';
+import EmailCopyButton from './EmailCopyButton';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -171,7 +172,7 @@ const AboutSection = ({ sectionRef }) => {
                   >
                     Contact
                   </h4>
-                  <p>aliqyaan12@gmail.com</p>
+                  <EmailCopyButton currentTheme={currentTheme} color={currentTheme.accent} justify="start" className="mt-1" />
                 </div>
               </motion.div>
             </motion.div>

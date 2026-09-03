@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Instagram, Linkedin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Instagram, Linkedin, Check } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTheme } from './ThemeContext';
+import EmailCopyButton from './EmailCopyButton';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -175,13 +176,7 @@ const ContactSection = ({ sectionRef }) => {
             >
               <Mail size={28} style={{ color: currentTheme.primary }} className="mb-4" />
               <h3 className="font-semibold mb-2">Email</h3>
-              <button
-                onClick={copyEmail}
-                className="text-sm hover:underline transition-colors group"
-                style={{ color: currentTheme.primary }}
-              >
-                <span className="group-hover:text-current">aliqyaan12@gmail.com</span>
-              </button>
+              <EmailCopyButton currentTheme={currentTheme} />
             </div>
 
             <div
