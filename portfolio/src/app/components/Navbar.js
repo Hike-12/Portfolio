@@ -168,7 +168,7 @@ const Navbar = ({ onShowPdfModal }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
+                className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
                 style={{
                   color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
                   opacity: activeSection === item ? 1 : 0.8,
@@ -193,7 +193,7 @@ const Navbar = ({ onShowPdfModal }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
+              className="capitalize transition-all duration-300 hover:font-medium relative py-2 px-2 min-h-[44px] flex items-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md"
               style={{
                 color: currentTheme.primary,
                 opacity: 1,
@@ -212,7 +212,7 @@ const Navbar = ({ onShowPdfModal }) => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-11 h-11 rounded-full flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ backgroundColor: currentTheme.cardBg, '--tw-ring-color': currentTheme.primary }}
               aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
@@ -224,7 +224,7 @@ const Navbar = ({ onShowPdfModal }) => {
             </motion.button>
 
             <motion.button
-              className="md:hidden w-11 h-11 rounded-full flex flex-col items-center justify-center space-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="md:hidden w-11 h-11 rounded-full flex flex-col items-center justify-center cursor-pointer space-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               onClick={() => setMenuOpen(!menuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -273,7 +273,7 @@ const Navbar = ({ onShowPdfModal }) => {
                   whileHover={{ scale: 1.02, x: 4 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="capitalize text-left py-3 px-2 min-h-[44px] transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
+                  className="capitalize text-left py-3 px-2 min-h-[44px] cursor-pointer transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
                   style={{
                     color: activeSection === item ? currentTheme.primary : currentTheme.foreground,
                     '--tw-ring-color': currentTheme.primary
@@ -289,7 +289,7 @@ const Navbar = ({ onShowPdfModal }) => {
                 whileHover={{ scale: 1.02, x: 4 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="capitalize text-left py-3 px-2 min-h-[44px] transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
+                className="capitalize text-left py-3 px-2 min-h-[44px] cursor-pointer transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2"
                 style={{ color: currentTheme.primary, '--tw-ring-color': currentTheme.primary }}
                 aria-label="View resume"
               >
