@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { useEasterEggs } from './EasterEggContext';
 
 const EmailCopyButton = ({ currentTheme, justify = 'center', className = '', color }) => {
   const [copied, setCopied] = useState(false);
   const [particles, setParticles] = useState([]);
+  const { unlockEgg } = useEasterEggs();
 
   const textColor = color || currentTheme.primary;
 
@@ -13,6 +15,8 @@ const EmailCopyButton = ({ currentTheme, justify = 'center', className = '', col
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText('aliqyaan12@gmail.com');
     }
+    
+    unlockEgg('copy_email');
     
     // Generate stardust particles
     const newParticles = Array.from({ length: 18 }).map((_, i) => {

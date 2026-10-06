@@ -16,7 +16,10 @@ import {
   ProjectsSection,
   ExperienceSection,
   ContactSection,
-  Footer
+  Footer,
+  EasterEggProvider,
+  EasterEggWidget,
+  useEasterEggs
 } from './components';
 
 const ImageModal = dynamic(() => import('./components/ImageModal'));
@@ -24,6 +27,7 @@ const PdfModal = dynamic(() => import('./components/PdfModal'));
 
 const PortfolioContent = () => {
   const { darkMode, currentTheme, isMounted } = useTheme();
+  const { unlockEgg } = useEasterEggs();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -74,7 +78,13 @@ const PortfolioContent = () => {
       'background: #123458; color: #F1EFEC; padding: 3px 6px; border-radius: 4px; font-weight: bold; font-size: 12px; border: 1px solid #789DBC;',
       'color: #789DBC; font-size: 13px; margin-left: 6px; text-decoration: underline;'
     );
-  }, [isMounted]);
+    
+    // Unlock console easter egg! (We do it here because they opened the page, but technically we can't detect when DevTools opens perfectly, so this is awarded just for being active/smart enough to look or as a freebie)
+    // Actually, maybe we only award it if they run a specific function? No, `window.innerWidth - window.outerWidth` hack exists, but just awarding it for being mounted is fine or we can leave it as a freebie if they click it.
+    setTimeout(() => {
+      unlockEgg('console_scout');
+    }, 5000); // Give them 5 seconds to settle in before awarding it
+  }, [isMounted, unlockEgg]);
 
   // If not mounted yet (during SSR), return a minimal loading state
   if (!isMounted) {
@@ -151,6 +161,8 @@ const PortfolioContent = () => {
         isOpen={showPdfModal}
         onClose={() => setShowPdfModal(false)}
       />
+
+      <EasterEggWidget />
     </>
   );
 };
@@ -244,7 +256,9 @@ const Index = () => {
         </article>
       </div>
 
-      <PortfolioContent />
+      <EasterEggProvider>
+        <PortfolioContent />
+      </EasterEggProvider>
     </ThemeProvider>
   );
 };

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from './ThemeContext';
+import { useEasterEggs } from './EasterEggContext';
 
 const navItems = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
 
@@ -22,6 +23,7 @@ const navVariants = {
 
 const Navbar = ({ onShowPdfModal }) => {
   const { darkMode, currentTheme, toggleTheme, isMounted } = useTheme();
+  const { unlockEgg } = useEasterEggs();
   const [activeSection, setActiveSection] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
   
@@ -35,6 +37,7 @@ const Navbar = ({ onShowPdfModal }) => {
       if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
       clickCountRef.current = 0;
       toggleTheme('center-out');
+      unlockEgg('supernova');
       if (e && e.currentTarget) e.currentTarget.blur();
       return;
     }

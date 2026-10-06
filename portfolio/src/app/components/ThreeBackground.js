@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTheme } from './ThemeContext';
+import { useEasterEggs } from './EasterEggContext';
 
 const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
+  const { unlockEgg } = useEasterEggs();
   const threeCanvasRef = useRef(null);
 
   // Track dark mode across renders without triggering useEffect cleanup for animations
@@ -218,6 +220,8 @@ const ThreeBackground = () => {
 
             // Only trigger black hole if they hold for at least 0.5 seconds (30 frames)
             if (isMouseDown && holdTimer > 30) {
+              if (holdTimer === 31) unlockEgg('black_hole');
+              
               for (let i = 0; i < 12000; i++) {
                 const i3 = i * 3;
                 const px = positions[i3];
@@ -445,6 +449,7 @@ const ThreeBackground = () => {
 
     const handleStarClick = (e) => {
       spawnStar(e.clientX, e.clientY);
+      unlockEgg('shooting_star');
     };
 
     window.addEventListener('click', handleStarClick);

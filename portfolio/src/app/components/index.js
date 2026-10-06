@@ -9,5 +9,7 @@ export { default as ProjectsSection } from './ProjectsSection';
 export { default as ExperienceSection } from './ExperienceSection';
 export { default as ContactSection } from './ContactSection';
 export { default as Footer } from './Footer';
+export { EasterEggProvider, useEasterEggs } from './EasterEggContext';
+export { default as EasterEggWidget } from './EasterEggWidget';
 export { default as ImageModal } from './ImageModal';
 export { default as PdfModal } from './PdfModal';

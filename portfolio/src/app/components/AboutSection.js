@@ -140,6 +140,12 @@ const AboutSection = ({ sectionRef }) => {
                 delay={0.7}
               />
 
+              <MaskTextReveal 
+                text="I love building micro-interactions. There are 5 hidden Easter eggs across this portfolio. See if you can find them all! ✨"
+                className="text-base sm:text-lg leading-relaxed text-balance font-medium mt-2"
+                delay={1.0}
+              />
+
 
               <motion.div variants={fadeInUp} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
                 <div
