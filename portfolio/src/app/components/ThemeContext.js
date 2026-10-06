@@ -54,12 +54,14 @@ export const ThemeProvider = ({ children }) => {
 
   const currentTheme = darkMode ? theme.dark : theme.light;
 
-  const toggleTheme = () => {
-    // Check if View Transitions API is supported
+  const toggleTheme = (style = 'horizontal') => {
+    const newTheme = !darkMode ? 'dark' : 'light';
+
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-style', style);
+    }
+
     if (typeof document !== 'undefined' && document.startViewTransition) {
-      // Update data-theme attribute before transition
-      const newTheme = !darkMode ? 'dark' : 'light';
-      
       document.startViewTransition(() => {
         flushSync(() => {
           document.documentElement.setAttribute('data-theme', newTheme);
@@ -67,8 +69,6 @@ export const ThemeProvider = ({ children }) => {
         });
       });
     } else {
-      // Fallback for browsers that don't support View Transitions
-      const newTheme = !darkMode ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', newTheme);
       setDarkMode(!darkMode);
     }

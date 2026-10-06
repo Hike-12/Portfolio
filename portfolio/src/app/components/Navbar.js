@@ -24,6 +24,28 @@ const Navbar = ({ onShowPdfModal }) => {
   const { darkMode, currentTheme, toggleTheme, isMounted } = useTheme();
   const [activeSection, setActiveSection] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef(null);
+
+  const handleThemeToggle = (e) => {
+    clickCountRef.current += 1;
+    
+    if (clickCountRef.current === 2) {
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+      clickCountRef.current = 0;
+      toggleTheme('center-out');
+      if (e && e.currentTarget) e.currentTarget.blur();
+      return;
+    }
+
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+    clickTimerRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+      toggleTheme('horizontal');
+      if (e && e.currentTarget) e.currentTarget.blur();
+    }, 250); 
+  };
 
   const sectionRefs = useRef({
     home: null,
@@ -127,16 +149,17 @@ const Navbar = ({ onShowPdfModal }) => {
   };
 
   return (
-    <motion.header
-      variants={navVariants}
-      initial="hidden"
-      animate="visible"
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
-      style={{
-        backgroundColor: `${currentTheme.background}80`,
-        borderBottom: `1px solid ${currentTheme.cardBorder}`
-      }}
-    >
+    <>
+      <motion.header
+        variants={navVariants}
+        initial="hidden"
+        animate="visible"
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+        style={{
+          backgroundColor: `${currentTheme.background}80`,
+          borderBottom: `1px solid ${currentTheme.cardBorder}`
+        }}
+      >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex justify-between items-center">
           <motion.div
@@ -208,18 +231,18 @@ const Navbar = ({ onShowPdfModal }) => {
           {/* Mobile Navigation Toggle & Theme Toggle */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <motion.button
-              onClick={toggleTheme}
+              onClick={handleThemeToggle}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="relative w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 select-none"
               style={{ backgroundColor: currentTheme.cardBg, '--tw-ring-color': currentTheme.primary }}
               aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {darkMode ? (
-                <Sun size={20} color={currentTheme.primary} />
+                <Sun size={20} color={currentTheme.primary} className="relative z-10" />
               ) : (
-                <Moon size={20} color={currentTheme.primary} />
+                <Moon size={20} color={currentTheme.primary} className="relative z-10" />
               )}
             </motion.button>
 
@@ -299,7 +322,8 @@ const Navbar = ({ onShowPdfModal }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header >
+    </motion.header>
+    </>
   );
 };
 

@@ -155,6 +155,36 @@ textarea:focus-visible {
   }
 }
 
+[data-style="center-out"]::view-transition-group(root) {
+  animation-duration: 4s;
+}
+
+[data-style="center-out"]::view-transition-old(root),
+[data-style="center-out"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  display: block;
+}
+
+[data-style="center-out"]::view-transition-old(root) {
+  animation: none !important;
+  opacity: 1 !important;
+  z-index: 1;
+}
+
+[data-style="center-out"]::view-transition-new(root) {
+  animation: center-out-reveal 4s ease-in-out both !important;
+  z-index: 9999;
+}
+
+@keyframes center-out-reveal {
+  from {
+    clip-path: circle(0% at 50% 50%);
+  }
+  to {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
+
 /* ===== SUBTLE CARD HOVER GLOW ===== */
 .card-hover-glow {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
