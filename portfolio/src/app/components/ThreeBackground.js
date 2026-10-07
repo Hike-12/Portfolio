@@ -40,6 +40,12 @@ const ThreeBackground = () => {
     let mouseY = 0;
     let isMouseDown = false;
     let holdTimer = 0;
+    
+    // Shockwave tracking
+    let lastMouseWorldTarget;
+    let shockwaveStrength = 0;
+    let shockwaveOrigin;
+    let shockwaveDir;
 
     const handleMouseMove = (event) => {
       mouseX = (event.clientX / window.innerWidth) * 2 - 1;
@@ -173,6 +179,10 @@ const ThreeBackground = () => {
         mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
         mouseTarget = new THREE.Vector3();
         
+        lastMouseWorldTarget = new THREE.Vector3();
+        shockwaveOrigin = new THREE.Vector3();
+        shockwaveDir = new THREE.Vector3();
+        
         // Apply initial colors
         updateThreeColorsRef.current(darkModeRef.current);
 
@@ -210,6 +220,22 @@ const ThreeBackground = () => {
             
             // Convert target to local space of particlesMesh
             particlesMesh.worldToLocal(mouseTarget);
+
+            // Compute mouse velocity for the Kinetic Flare
+            const mdx = mouseTarget.x - lastMouseWorldTarget.x;
+            const mdy = mouseTarget.y - lastMouseWorldTarget.y;
+            const mdz = mouseTarget.z - lastMouseWorldTarget.z;
+            const mouseSpeedSq = mdx*mdx + mdy*mdy + mdz*mdz;
+            
+            // Check for a rapid flick / slash (> 0.05 velocity sq)
+            if (mouseSpeedSq > 0.05 && !isMouseDown) { 
+               const speed = Math.sqrt(mouseSpeedSq);
+               // Trigger the flare and cap max force
+               shockwaveStrength = Math.min(speed * 8.0, 12.0); // Make the initial hit much harder
+               shockwaveOrigin.copy(mouseTarget);
+               shockwaveDir.set(mdx, mdy, mdz).normalize();
+            }
+            lastMouseWorldTarget.copy(mouseTarget);
 
             const positions = particlesGeometry.attributes.position.array;
             let needsUpdate = false;
@@ -256,6 +282,10 @@ const ThreeBackground = () => {
               }
               needsUpdate = true;
             } else {
+              if (shockwaveStrength > 0.01) {
+                shockwaveStrength *= 0.85; // Faster decay for the slicing force, so it's a sharp burst
+              }
+
               for (let i = 0; i < 12000; i++) {
                 const i3 = i * 3;
                 
@@ -266,22 +296,54 @@ const ThreeBackground = () => {
                 const px = positions[i3];
                 const py = positions[i3+1];
                 const pz = positions[i3+2];
+
+                // 1. Kinetic Flare Force (blasting particles away from mouse flick)
+                if (shockwaveStrength > 0.05) {
+                  const s_dx = px - shockwaveOrigin.x;
+                  const s_dy = py - shockwaveOrigin.y;
+                  const s_dz = pz - shockwaveOrigin.z;
+                  const s_distSq = s_dx*s_dx + s_dy*s_dy + s_dz*s_dz;
+                  
+                  if (s_distSq > 0.01 && s_distSq < 4.0) { // Larger interaction bubble
+                    const s_dist = Math.sqrt(s_distSq);
+                    const normX = s_dx / s_dist;
+                    const normY = s_dy / s_dist;
+                    const normZ = s_dz / s_dist;
+                    
+                    // The outward radial blast
+                    const blast = (4.0 - s_distSq) * shockwaveStrength * 0.15;
+                    
+                    // The swirling fluid wake (cross product of radial vector and slice direction)
+                    // (cross product: X = y1*z2 - z1*y2, Y = z1*x2 - x1*z2, Z = x1*y2 - y1*x2)
+                    const swirlX = (normY * shockwaveDir.z - normZ * shockwaveDir.y);
+                    const swirlY = (normZ * shockwaveDir.x - normX * shockwaveDir.z);
+                    const swirlZ = (normX * shockwaveDir.y - normY * shockwaveDir.x);
+                    
+                    const swirlForce = blast * 1.5;
+
+                    velocities[i3] += normX * blast + swirlX * swirlForce;
+                    velocities[i3+1] += normY * blast + swirlY * swirlForce;
+                    velocities[i3+2] += normZ * blast + swirlZ * swirlForce;
+                  }
+                }
                 
+                // 2. Spring Restore Force (pulling particles back to origin smoothly without bouncing)
                 const dx = ox - px;
                 const dy = oy - py;
                 const dz = oz - pz;
                 
                 if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01 || Math.abs(dz) > 0.01 || 
-                    Math.abs(velocities[i3]) > 0.01 || Math.abs(velocities[i3+1]) > 0.01) {
+                    Math.abs(velocities[i3]) > 0.01 || Math.abs(velocities[i3+1]) > 0.01 || shockwaveStrength > 0.05) {
                   
-                  // Softer spring for a more cinematic explosion
-                  velocities[i3] += dx * 0.015;
-                  velocities[i3+1] += dy * 0.015;
-                  velocities[i3+2] += dz * 0.015;
+                  // Extremely soft spring so they float back like zero gravity
+                  velocities[i3] += dx * 0.003;
+                  velocities[i3+1] += dy * 0.003;
+                  velocities[i3+2] += dz * 0.003;
                   
-                  velocities[i3] *= 0.92;
-                  velocities[i3+1] *= 0.92;
-                  velocities[i3+2] *= 0.92;
+                  // High friction so they don't bounce (overdamped fluid feel)
+                  velocities[i3] *= 0.82; 
+                  velocities[i3+1] *= 0.82;
+                  velocities[i3+2] *= 0.82;
                   
                   positions[i3] += velocities[i3];
                   positions[i3+1] += velocities[i3+1];
