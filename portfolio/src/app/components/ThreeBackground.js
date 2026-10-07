@@ -3,6 +3,9 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTheme } from './ThemeContext';
 import { useEasterEggs } from './EasterEggContext';
 
+// Communication bridge between 3D canvas and 2D particle canvas
+let triggerAnnihilationFn = null;
+
 const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
   const { unlockEgg } = useEasterEggs();
@@ -248,6 +251,8 @@ const ThreeBackground = () => {
             if (isMouseDown && holdTimer > 30) {
               if (holdTimer === 31) unlockEgg('black_hole');
               
+              let annihilationTriggered = false;
+              
               for (let i = 0; i < 12000; i++) {
                 const i3 = i * 3;
                 const px = positions[i3];
@@ -259,6 +264,21 @@ const ThreeBackground = () => {
                 const dz = mouseTarget.z - pz;
                 
                 const distSq = dx*dx + dy*dy + dz*dz;
+
+                // Antimatter Annihilation Trigger
+                // If a particle gets critically close to the singularity, 15% chance per frame to annihilate
+                if (distSq < 0.05 && !annihilationTriggered && Math.random() < 0.15) {
+                  annihilationTriggered = true;
+                  
+                  if (triggerAnnihilationFn) {
+                    // We already know the 2D cursor position from mouseX and mouseY!
+                    const screenX = (mouseX * 0.5 + 0.5) * window.innerWidth;
+                    const screenY = (-mouseY * 0.5 + 0.5) * window.innerHeight;
+                    
+                    triggerAnnihilationFn(screenX, screenY);
+                  }
+                }
+
                 // Weaker force for a slower, cinematic 2-second suck-in
                 const force = Math.min(1.0 / (distSq + 1.0), 0.3);
                 
@@ -488,7 +508,36 @@ const ThreeBackground = () => {
     window.addEventListener('resize', resize);
 
     const stars = [];
+    const flashes = [];
     const maxStars = 8;
+
+    triggerAnnihilationFn = (originX, originY) => {
+      // 1. A subtle, glowing ethereal pop
+      flashes.push({ 
+        x: originX, 
+        y: originY, 
+        radius: 0, 
+        maxRadius: 30 + Math.random() * 20, // Much smaller, organic sizes
+        alpha: 0.6 + Math.random() * 0.3 // Not fully opaque
+      });
+      
+      // 2. The two opposing high-speed photon streaks (finer, more delicate)
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 12 + Math.random() * 6; // Fast but not jarring
+      
+      stars.push({
+        x: originX, y: originY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        len: 40 + Math.random() * 30, life: 0, alpha: 0.8, isPhoton: true
+      });
+      stars.push({
+        x: originX, y: originY,
+        vx: Math.cos(angle + Math.PI) * speed,
+        vy: Math.sin(angle + Math.PI) * speed,
+        len: 40 + Math.random() * 30, life: 0, alpha: 0.8, isPhoton: true
+      });
+    };
 
     function spawnStar(originX, originY) {
       const isClick = originX !== undefined;
@@ -505,7 +554,8 @@ const ThreeBackground = () => {
         vy: Math.sin(angle) * speed,
         len: Math.random() * 80 + 80,
         life: 0,
-        alpha: 1
+        alpha: 1,
+        isPhoton: false
       });
     }
 
@@ -527,22 +577,52 @@ const ThreeBackground = () => {
         lastSpawn = ts;
       }
 
+      // Render flashes (soft radial glows)
+      for (let i = flashes.length - 1; i >= 0; i--) {
+        const f = flashes[i];
+        if (f.radius > 0.1) {
+          ctx.save();
+          const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.radius);
+          const color = darkModeRef.current ? '255, 255, 255' : '18, 52, 88'; // #ffffff or #123458
+          
+          gradient.addColorStop(0, `rgba(${color}, ${f.alpha})`);
+          gradient.addColorStop(0.4, `rgba(${color}, ${f.alpha * 0.5})`);
+          gradient.addColorStop(1, `rgba(${color}, 0)`);
+
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        f.radius += (f.maxRadius - f.radius) * 0.15; // Smooth easing
+        f.alpha -= 0.03;
+
+        if (f.alpha <= 0) {
+          flashes.splice(i, 1);
+        }
+      }
+
+      // Render stars & photons
       for (let i = stars.length - 1; i >= 0; i--) {
         const s = stars[i];
         ctx.save();
         ctx.globalAlpha = s.alpha;
         ctx.strokeStyle = darkModeRef.current ? "#fff" : "#123458";
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = s.isPhoton ? 1.5 : 1.2;
+        ctx.lineCap = "round";
+        
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
-        ctx.lineTo(s.x - s.vx * 8, s.y - s.vy * 8);
+        ctx.lineTo(s.x - s.vx * (s.isPhoton ? 2 : 8), s.y - s.vy * (s.isPhoton ? 2 : 8));
         ctx.stroke();
         ctx.restore();
 
         s.x += s.vx;
         s.y += s.vy;
         s.life += 1;
-        s.alpha -= 0.012;
+        s.alpha -= s.isPhoton ? 0.03 : 0.012;
 
         if (s.life > s.len || s.alpha <= 0) {
           stars.splice(i, 1);
@@ -559,8 +639,9 @@ const ThreeBackground = () => {
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
+      triggerAnnihilationFn = null;
     };
-  }, [isMounted]); // Remove darkMode from dependencies
+  }, [isMounted, unlockEgg]); // Remove darkMode from dependencies
 
   return (
     <>

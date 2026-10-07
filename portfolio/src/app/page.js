@@ -68,9 +68,10 @@ const PortfolioContent = () => {
     );
     
     console.log(
-      `%cHi there! I see you're inspecting the code. 👀\n\nI'm Aliqyaan, a Full Stack Developer who loves building clean, interactive web experiences.\n\nIf you're looking to hire or just want to chat about code (or Three.js!), drop me a line:\n%caliqyaan12@gmail.com`,
+      `%cHi there! I see you're inspecting the code. 👀\n\nI'm Aliqyaan, a Full Stack Developer who loves building clean, interactive web experiences.\n\nType %cclaimAchievement()%c to unlock the Console Scout secret!`,
       'color: #D4C9BE; font-size: 14px; font-family: sans-serif; line-height: 1.5;',
-      'color: #789DBC; font-size: 14px; font-weight: bold; text-decoration: underline;'
+      'color: #789DBC; font-size: 14px; font-weight: bold; background: #123458; padding: 2px 6px; border-radius: 4px;',
+      'color: #D4C9BE; font-size: 14px; font-family: sans-serif; line-height: 1.5;'
     );
     
     console.log(
@@ -79,11 +80,11 @@ const PortfolioContent = () => {
       'color: #789DBC; font-size: 13px; margin-left: 6px; text-decoration: underline;'
     );
     
-    // Unlock console easter egg! (We do it here because they opened the page, but technically we can't detect when DevTools opens perfectly, so this is awarded just for being active/smart enough to look or as a freebie)
-    // Actually, maybe we only award it if they run a specific function? No, `window.innerWidth - window.outerWidth` hack exists, but just awarding it for being mounted is fine or we can leave it as a freebie if they click it.
-    setTimeout(() => {
+    // Attach a global function to the window so they actually have to use the console!
+    window.claimAchievement = () => {
       unlockEgg('console_scout');
-    }, 5000); // Give them 5 seconds to settle in before awarding it
+      return "🏆 Achievement Unlocked: Console Scout!";
+    };
   }, [isMounted, unlockEgg]);
 
   // If not mounted yet (during SSR), return a minimal loading state
