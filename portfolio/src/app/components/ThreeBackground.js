@@ -15,23 +15,16 @@ const ThreeBackground = () => {
   const { unlockEgg, unlockedEggs } = useEasterEggs();
   const threeCanvasRef = useRef(null);
 
-  const unlockedEggsRef = useRef(unlockedEggs);
-  
-  useLayoutEffect(() => {
-    // Only trigger the celebration if they just unlocked the 5th egg during this session
-    if (unlockedEggs.length === 5 && unlockedEggsRef.current.length === 4) {
-      if (typeof window !== 'undefined' && window.triggerMassiveMeteorShower) {
-        window.triggerMassiveMeteorShower();
-      }
-    }
-    unlockedEggsRef.current = unlockedEggs;
-  }, [unlockedEggs]);
-
   // Track dark mode across renders without triggering useEffect cleanup for animations
   const darkModeRef = useRef(darkMode);
   useLayoutEffect(() => {
     darkModeRef.current = darkMode;
   }, [darkMode]);
+
+  const unlockEggRef = useRef(unlockEgg);
+  useLayoutEffect(() => {
+    unlockEggRef.current = unlockEgg;
+  }, [unlockEgg]);
 
   const updateThreeColorsRef = useRef(null);
 
@@ -615,8 +608,14 @@ const ThreeBackground = () => {
     };
 
     const handleStarClick = (e) => {
+      // Don't spawn star if clicking on buttons or links or inside forms/widgets
+      if (e.target && (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('.fixed'))) {
+        return;
+      }
       spawnStar(e.clientX, e.clientY);
-      unlockEgg('shooting_star');
+      if (unlockEggRef.current) {
+        unlockEggRef.current('shooting_star');
+      }
     };
 
     window.addEventListener('click', handleStarClick);
@@ -679,7 +678,7 @@ const ThreeBackground = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, [isMounted, unlockEgg]); // Remove darkMode from dependencies
+  }, [isMounted]); // Stable dependencies: only runs once on mount
 
   return (
     <>

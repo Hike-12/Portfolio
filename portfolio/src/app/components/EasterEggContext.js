@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const EasterEggContext = createContext();
 
@@ -26,7 +26,7 @@ export const EasterEggProvider = ({ children }) => {
     }
   }, []);
 
-  const unlockEgg = (eggId) => {
+  const unlockEgg = useCallback((eggId) => {
     setUnlockedEggs((prev) => {
       if (prev.includes(eggId)) return prev;
       
@@ -36,9 +36,14 @@ export const EasterEggProvider = ({ children }) => {
       setJustUnlocked(eggId);
       setTimeout(() => setJustUnlocked(null), 3000);
       
+      // Automatically trigger the finale the moment the 5th egg is unlocked
+      if (newEggs.length === 5 && typeof window !== 'undefined' && window.triggerMassiveMeteorShower) {
+        window.triggerMassiveMeteorShower();
+      }
+      
       return newEggs;
     });
-  };
+  }, []);
 
   return (
     <EasterEggContext.Provider value={{ unlockedEggs, unlockEgg, justUnlocked, isMounted }}>
