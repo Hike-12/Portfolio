@@ -92,10 +92,12 @@ const EasterEggWidget = () => {
                   </h3>
                   {unlockedEggs.length === SECRETS.length ? (
                     <p className="text-sm font-semibold mt-1" style={{ color: currentTheme.primary }}>
-                      Universe Unlocked (Click to replay)
+                      Universe Unlocked (Click here to replay the cosmic finale)
                     </p>
                   ) : (
-                    <p className="text-sm opacity-70 mt-1">Find all the hidden interactions</p>
+                    <p className="text-sm opacity-70 mt-1">
+                      Find all 5 hidden interactions to unlock a cosmic finale (replayable anytime)
+                    </p>
                   )}
                 </div>
                 <button
