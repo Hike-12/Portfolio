@@ -7,7 +7,7 @@ import { useTheme } from './ThemeContext';
 
 const SECRETS = [
   { id: 'console_scout', title: 'Console Scout', lockedHint: 'Inspect element like a developer (F12)' },
-  { id: 'black_hole', title: 'Event Horizon', lockedHint: 'Patience bends space-time (Hold click > 0.5s in space)' },
+  { id: 'black_hole', title: 'White Hole', lockedHint: 'Patience bends space-time (Hold click > 0.5s). Hold Shift to invert gravity.' },
   { id: 'supernova', title: 'Supernova', lockedHint: 'Double the click, double the light (Theme toggle)' },
   { id: 'copy_email', title: 'Stardust Exchange', lockedHint: 'Reach out and copy (Email)' },
   { id: 'shooting_star', title: 'Meteor Shower', lockedHint: 'Tap the cosmos (Click in space)' },

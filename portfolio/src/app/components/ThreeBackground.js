@@ -3,8 +3,12 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTheme } from './ThemeContext';
 import { useEasterEggs } from './EasterEggContext';
 
-// Communication bridge between 3D canvas and 2D particle canvas
-let triggerAnnihilationFn = null;
+// Track Shift key for Gravity Inversion (White Hole)
+let isShiftDown = false;
+if (typeof window !== 'undefined') {
+  window.addEventListener('keydown', (e) => { if (e.key === 'Shift') isShiftDown = true; });
+  window.addEventListener('keyup', (e) => { if (e.key === 'Shift') isShiftDown = false; });
+}
 
 const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
@@ -247,11 +251,9 @@ const ThreeBackground = () => {
               holdTimer++;
             }
 
-            // Only trigger black hole if they hold for at least 0.5 seconds (30 frames)
+            // Only trigger black hole/white hole if they hold for at least 0.5 seconds (30 frames)
             if (isMouseDown && holdTimer > 30) {
               if (holdTimer === 31) unlockEgg('black_hole');
-              
-              let annihilationTriggered = false;
               
               for (let i = 0; i < 12000; i++) {
                 const i3 = i * 3;
@@ -265,40 +267,77 @@ const ThreeBackground = () => {
                 
                 const distSq = dx*dx + dy*dy + dz*dz;
 
-                // Antimatter Annihilation Trigger
-                // If a particle gets critically close to the singularity, 15% chance per frame to annihilate
-                if (distSq < 0.05 && !annihilationTriggered && Math.random() < 0.15) {
-                  annihilationTriggered = true;
+                if (isShiftDown) {
+                  // === THE WHITE HOLE (Zero-Gravity Fluid / Bioluminescence) ===
+                  const force = Math.min(1.0 / (distSq + 0.5), 0.5); 
                   
-                  if (triggerAnnihilationFn) {
-                    // We already know the 2D cursor position from mouseX and mouseY!
-                    const screenX = (mouseX * 0.5 + 0.5) * window.innerWidth;
-                    const screenY = (-mouseY * 0.5 + 0.5) * window.innerHeight;
-                    
-                    triggerAnnihilationFn(screenX, screenY);
-                  }
-                }
+                  // 1. Gentle Anti-Gravity (softly pushes particles away from the core)
+                  velocities[i3] -= dx * force * 0.004;
+                  velocities[i3+1] -= dy * force * 0.004;
+                  velocities[i3+2] -= dz * force * 0.004;
 
-                // Weaker force for a slower, cinematic 2-second suck-in
-                const force = Math.min(1.0 / (distSq + 1.0), 0.3);
-                
-                // Gravity pull
-                velocities[i3] += dx * force * 0.015;
-                velocities[i3+1] += dy * force * 0.015;
-                velocities[i3+2] += dz * force * 0.015;
-                
-                // Swirl force (cross product)
-                velocities[i3] += dy * force * 0.05;
-                velocities[i3+1] -= dx * force * 0.05;
-                
-                // Gentler friction to allow graceful spiraling
-                velocities[i3] *= 0.94;
-                velocities[i3+1] *= 0.94;
-                velocities[i3+2] *= 0.94;
-                
-                positions[i3] += velocities[i3];
-                positions[i3+1] += velocities[i3+1];
-                positions[i3+2] += velocities[i3+2];
+                  // 2. Trigonometric Vector Flow Field (Creates beautiful, organic fluid turbulence)
+                  // This makes the particles dance and weave like magical embers instead of moving in straight lines
+                  const time = holdTimer * 0.05;
+                  const noiseX = Math.sin(py * 1.2 + time) * Math.cos(pz * 1.2);
+                  const noiseY = Math.cos(pz * 1.2 + time) * Math.sin(px * 1.2);
+                  const noiseZ = Math.sin(px * 1.2 + time) * Math.cos(py * 1.2);
+                  
+                  velocities[i3] += noiseX * 0.015;
+                  velocities[i3+1] += noiseY * 0.015;
+                  velocities[i3+2] += noiseZ * 0.015;
+
+                  // 3. Ethereal Friction (Float effortlessly)
+                  velocities[i3] *= 0.98;
+                  velocities[i3+1] *= 0.98;
+                  velocities[i3+2] *= 0.98;
+                  
+                  // 4. Time Dilation (Update positions at 40% speed for cinematic slow motion)
+                  positions[i3] += velocities[i3] * 0.4;
+                  positions[i3+1] += velocities[i3+1] * 0.4;
+                  positions[i3+2] += velocities[i3+2] * 0.4;
+                } else {
+                  // === THE BLACK HOLE (Event Horizon) ===
+                  // Weaker force for a slower, cinematic 2-second suck-in
+                  const force = Math.min(1.0 / (distSq + 1.0), 0.3);
+                  
+                  // Gravity pull
+                  velocities[i3] += dx * force * 0.015;
+                  velocities[i3+1] += dy * force * 0.015;
+                  velocities[i3+2] += dz * force * 0.015;
+                  
+                  // Swirl force (cross product)
+                  velocities[i3] += dy * force * 0.05;
+                  velocities[i3+1] -= dx * force * 0.05;
+                  
+                  // Apply shockwave
+                  if (shockwaveStrength > 0.05) {
+                    const s_dx = px - shockwaveOrigin.x;
+                    const s_dy = py - shockwaveOrigin.y;
+                    const s_dz = pz - shockwaveOrigin.z;
+                    const s_distSq = s_dx*s_dx + s_dy*s_dy + s_dz*s_dz;
+                    
+                    if (s_distSq > 0.01 && s_distSq < 1.0) { // Small tight pop radius
+                      const blast = (1.0 - s_distSq) * shockwaveStrength * 0.2;
+                      velocities[i3] += (s_dx / Math.sqrt(s_distSq)) * blast;
+                      velocities[i3+1] += (s_dy / Math.sqrt(s_distSq)) * blast;
+                      velocities[i3+2] += (s_dz / Math.sqrt(s_distSq)) * blast;
+                    }
+                  }
+                  
+                  // Viscous friction to allow graceful spiraling
+                  velocities[i3] *= 0.94;
+                  velocities[i3+1] *= 0.94;
+                  velocities[i3+2] *= 0.94;
+                  
+                  positions[i3] += velocities[i3];
+                  positions[i3+1] += velocities[i3+1];
+                  positions[i3+2] += velocities[i3+2];
+                }
+              }
+              
+              if (shockwaveStrength > 0.01) {
+                shockwaveStrength *= 0.85; // Decay the micro-shockwave
               }
               needsUpdate = true;
             } else {
@@ -508,36 +547,7 @@ const ThreeBackground = () => {
     window.addEventListener('resize', resize);
 
     const stars = [];
-    const flashes = [];
     const maxStars = 8;
-
-    triggerAnnihilationFn = (originX, originY) => {
-      // 1. A subtle, glowing ethereal pop
-      flashes.push({ 
-        x: originX, 
-        y: originY, 
-        radius: 0, 
-        maxRadius: 30 + Math.random() * 20, // Much smaller, organic sizes
-        alpha: 0.6 + Math.random() * 0.3 // Not fully opaque
-      });
-      
-      // 2. The two opposing high-speed photon streaks (finer, more delicate)
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 12 + Math.random() * 6; // Fast but not jarring
-      
-      stars.push({
-        x: originX, y: originY,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        len: 40 + Math.random() * 30, life: 0, alpha: 0.8, isPhoton: true
-      });
-      stars.push({
-        x: originX, y: originY,
-        vx: Math.cos(angle + Math.PI) * speed,
-        vy: Math.sin(angle + Math.PI) * speed,
-        len: 40 + Math.random() * 30, life: 0, alpha: 0.8, isPhoton: true
-      });
-    };
 
     function spawnStar(originX, originY) {
       const isClick = originX !== undefined;
@@ -577,34 +587,7 @@ const ThreeBackground = () => {
         lastSpawn = ts;
       }
 
-      // Render flashes (soft radial glows)
-      for (let i = flashes.length - 1; i >= 0; i--) {
-        const f = flashes[i];
-        if (f.radius > 0.1) {
-          ctx.save();
-          const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.radius);
-          const color = darkModeRef.current ? '255, 255, 255' : '18, 52, 88'; // #ffffff or #123458
-          
-          gradient.addColorStop(0, `rgba(${color}, ${f.alpha})`);
-          gradient.addColorStop(0.4, `rgba(${color}, ${f.alpha * 0.5})`);
-          gradient.addColorStop(1, `rgba(${color}, 0)`);
-
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-
-        f.radius += (f.maxRadius - f.radius) * 0.15; // Smooth easing
-        f.alpha -= 0.03;
-
-        if (f.alpha <= 0) {
-          flashes.splice(i, 1);
-        }
-      }
-
-      // Render stars & photons
+      // Render stars
       for (let i = stars.length - 1; i >= 0; i--) {
         const s = stars[i];
         ctx.save();
@@ -639,7 +622,6 @@ const ThreeBackground = () => {
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
-      triggerAnnihilationFn = null;
     };
   }, [isMounted, unlockEgg]); // Remove darkMode from dependencies
 
