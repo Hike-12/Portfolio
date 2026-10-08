@@ -577,33 +577,39 @@ const ThreeBackground = () => {
         len: Math.random() * 80 + 80,
         life: 0,
         alpha: 1,
-        isPhoton: false
+        isPhoton: false,
+        thickness: Math.random() * 0.8 + 0.8,
+        tailMultiplier: Math.random() * 4 + 6
       });
     }
 
     window.triggerMassiveMeteorShower = () => {
-      // Spawn 150 meteors all at once, spread far out and high above the screen
-      for (let i = 0; i < 150; i++) {
+      // Spawn 400 meteors all at once
+      for (let i = 0; i < 400; i++) {
         // Uniform diagonal angle so they fall as a beautiful cohesive curtain
         const angle = (Math.random() * 0.2) + Math.PI / 4 + Math.PI / 8;
-        // Extremely slow drift (normal is 6-14)
-        const speed = Math.random() * 2.0 + 1.5; 
+        // Even slower drift for increased majestic duration
+        const speed = Math.random() * 1.8 + 1.2; 
         
-        // Spread them wide and slightly above the screen, so they enter smoothly but immediately.
-        // y will be between -50 and -height (so max 1 screen height above)
+        // Spread them wider and much higher up (up to 1.8x screen height) 
+        // so the shower continues pouring in for a longer time
         const x = (Math.random() * width * 1.5) - width * 0.25;
-        const y = -(Math.random() * height * 1.2) - 50; 
+        const y = -(Math.random() * height * 1.8) - 50; 
         
         stars.push({
           x, y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           // Massive length so they live long enough to cross the screen
-          len: Math.random() * 400 + 300,
+          len: Math.random() * 500 + 400,
           life: 0,
           alpha: 1,
           isPhoton: false,
-          isSlowMeteor: true
+          isSlowMeteor: true,
+          // Varied sizes (thickness) for depth
+          thickness: Math.random() * 1.8 + 0.4,
+          // Varied physical tail lengths
+          tailMultiplier: Math.random() * 20 + 8
         });
       }
     };
@@ -632,12 +638,16 @@ const ThreeBackground = () => {
         ctx.save();
         ctx.globalAlpha = s.alpha;
         ctx.strokeStyle = darkModeRef.current ? "#fff" : "#123458";
-        ctx.lineWidth = s.isPhoton ? 1.5 : 1.2;
+        
+        // Use the individual star's thickness if available, otherwise fallback
+        ctx.lineWidth = s.thickness ? s.thickness : (s.isPhoton ? 1.5 : 1.2);
         ctx.lineCap = "round";
+        
+        const tailMult = s.tailMultiplier ? s.tailMultiplier : (s.isPhoton ? 2 : 8);
         
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
-        ctx.lineTo(s.x - s.vx * (s.isPhoton ? 2 : 8), s.y - s.vy * (s.isPhoton ? 2 : 8));
+        ctx.lineTo(s.x - s.vx * tailMult, s.y - s.vy * tailMult);
         ctx.stroke();
         ctx.restore();
 
