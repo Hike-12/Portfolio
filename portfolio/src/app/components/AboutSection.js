@@ -144,7 +144,7 @@ const AboutSection = ({ sectionRef }) => {
               />
 
               <MaskTextReveal 
-                text="I love building micro-interactions. There are 5 hidden Easter eggs across this portfolio. See if you can find them all! ✨"
+                text="I love building micro-interactions. There are 5 hidden Easter eggs across this portfolio. See if you can find them all!"
                 className="text-base sm:text-lg leading-relaxed font-medium mt-2"
                 delay={1.0}
               />

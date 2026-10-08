@@ -68,7 +68,7 @@ const PortfolioContent = () => {
     );
     
     console.log(
-      `%cHi there! I see you're inspecting the code. 👀\n\nI'm Aliqyaan, a Full Stack Developer who loves building clean, interactive web experiences.\n\nType %cclaimAchievement()%c to unlock the Console Scout secret!`,
+      `%cHi there! I see you're inspecting the code.\n\nI'm Aliqyaan, a Full Stack Developer who loves building clean, interactive web experiences.\n\nType %cclaimAchievement()%c to unlock the Console Scout secret!`,
       'color: #D4C9BE; font-size: 14px; font-family: sans-serif; line-height: 1.5;',
       'color: #789DBC; font-size: 14px; font-weight: bold; background: #123458; padding: 2px 6px; border-radius: 4px;',
       'color: #D4C9BE; font-size: 14px; font-family: sans-serif; line-height: 1.5;'
@@ -83,7 +83,7 @@ const PortfolioContent = () => {
     // Attach a global function to the window so they actually have to use the console!
     window.claimAchievement = () => {
       unlockEgg('console_scout');
-      return "🏆 Achievement Unlocked: Console Scout!";
+      return "Achievement Unlocked: Console Scout!";
     };
   }, [isMounted, unlockEgg]);
 
