@@ -234,11 +234,11 @@ const ThreeBackground = () => {
             const mdz = mouseTarget.z - lastMouseWorldTarget.z;
             const mouseSpeedSq = mdx*mdx + mdy*mdy + mdz*mdz;
             
-            // Check for a rapid flick / slash (> 0.05 velocity sq)
-            if (mouseSpeedSq > 0.05 && !isMouseDown) { 
+            // Check for a rapid flick / slash (Increased threshold so it's much less sensitive)
+            if (mouseSpeedSq > 0.4 && !isMouseDown) { 
                const speed = Math.sqrt(mouseSpeedSq);
-               // Trigger the flare and cap max force
-               shockwaveStrength = Math.min(speed * 8.0, 12.0); // Make the initial hit much harder
+               // Trigger the vacuum wake with a softer multiplier
+               shockwaveStrength = Math.min(speed * 4.0, 6.0); 
                shockwaveOrigin.copy(mouseTarget);
                shockwaveDir.set(mdx, mdy, mdz).normalize();
             }
@@ -356,7 +356,7 @@ const ThreeBackground = () => {
                 const py = positions[i3+1];
                 const pz = positions[i3+2];
 
-                // 1. Kinetic Flare Force (blasting particles away from mouse flick)
+                // 1. Kinetic Vacuum Wake (pulling particles INWARD from mouse flick)
                 if (shockwaveStrength > 0.05) {
                   const s_dx = px - shockwaveOrigin.x;
                   const s_dy = py - shockwaveOrigin.y;
@@ -369,20 +369,20 @@ const ThreeBackground = () => {
                     const normY = s_dy / s_dist;
                     const normZ = s_dz / s_dist;
                     
-                    // The outward radial blast
-                    const blast = (4.0 - s_distSq) * shockwaveStrength * 0.15;
+                    // The inward vacuum pull
+                    const vacuum = (4.0 - s_distSq) * shockwaveStrength * 0.15;
                     
                     // The swirling fluid wake (cross product of radial vector and slice direction)
-                    // (cross product: X = y1*z2 - z1*y2, Y = z1*x2 - x1*z2, Z = x1*y2 - y1*x2)
                     const swirlX = (normY * shockwaveDir.z - normZ * shockwaveDir.y);
                     const swirlY = (normZ * shockwaveDir.x - normX * shockwaveDir.z);
                     const swirlZ = (normX * shockwaveDir.y - normY * shockwaveDir.x);
                     
-                    const swirlForce = blast * 1.5;
+                    const swirlForce = vacuum * 1.5;
 
-                    velocities[i3] += normX * blast + swirlX * swirlForce;
-                    velocities[i3+1] += normY * blast + swirlY * swirlForce;
-                    velocities[i3+2] += normZ * blast + swirlZ * swirlForce;
+                    // Apply INWARD force (-normX) and swirl
+                    velocities[i3] += -normX * vacuum + swirlX * swirlForce;
+                    velocities[i3+1] += -normY * vacuum + swirlY * swirlForce;
+                    velocities[i3+2] += -normZ * vacuum + swirlZ * swirlForce;
                   }
                 }
                 
