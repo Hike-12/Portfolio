@@ -46,13 +46,16 @@ const MaskTextReveal = ({ text, className, delay = 0 }) => {
       className={className}
     >
       {words.map((word, index) => (
-        <span key={index} style={{ display: "inline-block", marginRight: "0.25em", marginBottom: "-0.2em" }}>
-          <span style={{ overflow: "hidden", display: "inline-block", paddingBottom: "0.15em", verticalAlign: "bottom" }}>
-            <motion.span variants={child} style={{ display: "inline-block", transformOrigin: "bottom left" }}>
-              {word}
-            </motion.span>
+        <React.Fragment key={index}>
+          <span style={{ display: "inline-block", marginBottom: "-0.2em" }}>
+            <span style={{ overflow: "hidden", display: "inline-block", paddingBottom: "0.15em", verticalAlign: "bottom" }}>
+              <motion.span variants={child} style={{ display: "inline-block", transformOrigin: "bottom left" }}>
+                {word}
+              </motion.span>
+            </span>
           </span>
-        </span>
+          {index < words.length - 1 && " "}
+        </React.Fragment>
       ))}
     </motion.div>
   );
@@ -120,29 +123,29 @@ const AboutSection = ({ sectionRef }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
             <motion.div
-              className="space-y-4 sm:space-y-6"
+              className="space-y-4 sm:space-y-6 text-justify"
             >
               <MaskTextReveal 
                 text="Hey! I am Aliqyaan Mahimwala, a 20 year old Computer Engineering student at Fr. CRCE in Bandra, Mumbai. I am a full stack web developer who enjoys building clean, smooth, and user friendly web apps that people actually like using."
-                className="text-base sm:text-lg leading-relaxed text-balance"
+                className="text-base sm:text-lg leading-relaxed"
                 delay={0.1}
               />
 
               <MaskTextReveal 
                 text="I work with modern tools and frameworks, with Django being my go to choice on the backend. From writing solid backend logic to polishing the UI or chasing down a tricky bug, I genuinely enjoy improving things step by step and learning along the way."
-                className="text-base sm:text-lg leading-relaxed text-balance"
+                className="text-base sm:text-lg leading-relaxed"
                 delay={0.4}
               />
 
               <MaskTextReveal 
                 text="I am always building, always learning, and focused on keeping things simple, functional, and thoughtfully crafted."
-                className="text-base sm:text-lg leading-relaxed text-balance"
+                className="text-base sm:text-lg leading-relaxed"
                 delay={0.7}
               />
 
               <MaskTextReveal 
                 text="I love building micro-interactions. There are 5 hidden Easter eggs across this portfolio. See if you can find them all! ✨"
-                className="text-base sm:text-lg leading-relaxed text-balance font-medium mt-2"
+                className="text-base sm:text-lg leading-relaxed font-medium mt-2"
                 delay={1.0}
               />
 

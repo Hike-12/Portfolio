@@ -12,8 +12,20 @@ if (typeof window !== 'undefined') {
 
 const ThreeBackground = () => {
   const { darkMode, isMounted } = useTheme();
-  const { unlockEgg } = useEasterEggs();
+  const { unlockEgg, unlockedEggs } = useEasterEggs();
   const threeCanvasRef = useRef(null);
+
+  const unlockedEggsRef = useRef(unlockedEggs);
+  
+  useLayoutEffect(() => {
+    // Only trigger the celebration if they just unlocked the 5th egg during this session
+    if (unlockedEggs.length === 5 && unlockedEggsRef.current.length === 4) {
+      if (typeof window !== 'undefined' && window.triggerMassiveMeteorShower) {
+        window.triggerMassiveMeteorShower();
+      }
+    }
+    unlockedEggsRef.current = unlockedEggs;
+  }, [unlockedEggs]);
 
   // Track dark mode across renders without triggering useEffect cleanup for animations
   const darkModeRef = useRef(darkMode);
@@ -569,6 +581,33 @@ const ThreeBackground = () => {
       });
     }
 
+    window.triggerMassiveMeteorShower = () => {
+      // Spawn 150 meteors all at once, spread far out and high above the screen
+      for (let i = 0; i < 150; i++) {
+        // Uniform diagonal angle so they fall as a beautiful cohesive curtain
+        const angle = (Math.random() * 0.2) + Math.PI / 4 + Math.PI / 8;
+        // Extremely slow drift (normal is 6-14)
+        const speed = Math.random() * 2.0 + 1.5; 
+        
+        // Spread them wide and slightly above the screen, so they enter smoothly but immediately.
+        // y will be between -50 and -height (so max 1 screen height above)
+        const x = (Math.random() * width * 1.5) - width * 0.25;
+        const y = -(Math.random() * height * 1.2) - 50; 
+        
+        stars.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          // Massive length so they live long enough to cross the screen
+          len: Math.random() * 400 + 300,
+          life: 0,
+          alpha: 1,
+          isPhoton: false,
+          isSlowMeteor: true
+        });
+      }
+    };
+
     const handleStarClick = (e) => {
       spawnStar(e.clientX, e.clientY);
       unlockEgg('shooting_star');
@@ -605,7 +644,14 @@ const ThreeBackground = () => {
         s.x += s.vx;
         s.y += s.vy;
         s.life += 1;
-        s.alpha -= s.isPhoton ? 0.03 : 0.012;
+        
+        if (s.isPhoton) {
+          s.alpha -= 0.03;
+        } else if (s.isSlowMeteor) {
+          s.alpha -= 0.001; // Fade out extremely slowly (lasts ~1000 frames)
+        } else {
+          s.alpha -= 0.012; // Normal shooting star fade
+        }
 
         if (s.life > s.len || s.alpha <= 0) {
           stars.splice(i, 1);

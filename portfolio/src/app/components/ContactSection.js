@@ -224,7 +224,7 @@ const ContactSection = ({ sectionRef }) => {
           <motion.form
             variants={fadeInUp}
             onSubmit={handleSubmit}
-            className="max-w-3xl mx-auto mb-8 sm:mb-12"
+            className="w-full mb-8 sm:mb-12"
           >
             <div
               className="p-6 sm:p-8 rounded-3xl text-left"

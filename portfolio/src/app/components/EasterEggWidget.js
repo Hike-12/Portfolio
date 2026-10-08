@@ -77,12 +77,26 @@ const EasterEggWidget = () => {
               }}
             >
               <div className="flex justify-between items-center mb-6">
-                <div>
+                <div 
+                  className={unlockedEggs.length === SECRETS.length ? "cursor-pointer hover:opacity-80 transition-opacity" : ""}
+                  onClick={() => {
+                    if (unlockedEggs.length === SECRETS.length && typeof window !== 'undefined' && window.triggerMassiveMeteorShower) {
+                      window.triggerMassiveMeteorShower();
+                    }
+                  }}
+                  title={unlockedEggs.length === SECRETS.length ? "Click to replay meteor shower" : ""}
+                >
                   <h3 className="text-xl font-bold flex items-center gap-2">
                     <Sparkles size={20} color={currentTheme.primary} />
                     Secrets Discovered
                   </h3>
-                  <p className="text-sm opacity-70 mt-1">Find all the hidden interactions</p>
+                  {unlockedEggs.length === SECRETS.length ? (
+                    <p className="text-sm font-semibold mt-1" style={{ color: currentTheme.primary }}>
+                      Universe Unlocked (Click to replay)
+                    </p>
+                  ) : (
+                    <p className="text-sm opacity-70 mt-1">Find all the hidden interactions</p>
+                  )}
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
