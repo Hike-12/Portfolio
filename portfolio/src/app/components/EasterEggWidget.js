@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Lock, Unlock } from 'lucide-react';
+import { Telescope, X, Lock, Unlock } from 'lucide-react';
 import { useEasterEggs } from './EasterEggContext';
 import { useTheme } from './ThemeContext';
 
@@ -46,7 +46,7 @@ const EasterEggWidget = () => {
             '--tw-ring-color': currentTheme.primary
           }}
         >
-          <Sparkles size={14} color={justUnlocked ? currentTheme.primary : currentTheme.foreground} />
+          <Telescope size={14} color={justUnlocked ? currentTheme.primary : currentTheme.foreground} />
           <span className="text-xs font-medium" style={{ color: justUnlocked ? currentTheme.primary : currentTheme.foreground }}>
             {unlockedEggs.length}/5 Secrets
           </span>
@@ -87,7 +87,7 @@ const EasterEggWidget = () => {
                   title={unlockedEggs.length === SECRETS.length ? "Click to replay meteor shower" : ""}
                 >
                   <h3 className="text-xl font-bold flex items-center gap-2">
-                    <Sparkles size={20} color={currentTheme.primary} />
+                    <Telescope size={20} color={currentTheme.primary} />
                     Secrets Discovered
                   </h3>
                   {unlockedEggs.length === SECRETS.length ? (
