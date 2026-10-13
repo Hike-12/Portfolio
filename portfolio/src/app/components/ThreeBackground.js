@@ -59,14 +59,10 @@ const ThreeBackground = () => {
     let shockwaveOrigin;
     let shockwaveDir;
 
-    // Stillness Gravitational Well (passive accretion well when cursor is motionless)
+    // Stillness tracking for static cursor black hole
     let prevMouseX = 0;
     let prevMouseY = 0;
     let stillnessTimer = 0;
-    let stillnessStrength = 0;
-    let stillnessOrigin;
-    let dispersalStrength = 0;
-    let dispersalOrigin;
 
     const handleMouseMove = (event) => {
       mouseX = (event.clientX / window.innerWidth) * 2 - 1;
@@ -204,9 +200,6 @@ const ThreeBackground = () => {
         shockwaveOrigin = new THREE.Vector3();
         shockwaveDir = new THREE.Vector3();
         
-        stillnessOrigin = new THREE.Vector3();
-        dispersalOrigin = new THREE.Vector3();
-        
         // Apply initial colors
         updateThreeColorsRef.current(darkModeRef.current);
 
@@ -262,23 +255,8 @@ const ThreeBackground = () => {
 
             if (isMouseMotionless) {
               stillnessTimer++;
-              stillnessOrigin.copy(mouseTarget);
-              
-              if (stillnessTimer > 150) { // After 2.5s of static cursor (150 frames at 60fps)
-                // Collapse everything in over ~2 seconds (120 frames)
-                const collapseProgress = Math.min(Math.max((stillnessTimer - 150) / 120, 0), 1.0);
-                // Accelerating gravitational pull
-                const targetStrength = Math.pow(collapseProgress, 1.6);
-                stillnessStrength += (targetStrength - stillnessStrength) * 0.12;
-              }
             } else {
-              if (stillnessTimer > 150 && stillnessStrength > 0.02) {
-                // Singularity ruptures & bursts outward when user moves
-                dispersalOrigin.copy(stillnessOrigin);
-                dispersalStrength = Math.min(1.8 + stillnessStrength * 3.5, 5.5);
-              }
               stillnessTimer = 0;
-              stillnessStrength *= 0.75;
             }
 
             // Check for a rapid flick / slash (Increased threshold so it's much less sensitive)
@@ -391,9 +369,12 @@ const ThreeBackground = () => {
               if (shockwaveStrength > 0.01) {
                 shockwaveStrength *= 0.85; // Faster decay for the slicing force, so it's a sharp burst
               }
-              if (dispersalStrength > 0.01) {
-                dispersalStrength *= 0.88; // Smooth dispersal decay
-              }
+
+              const isStaticEclipse = stillnessTimer > 150;
+              const coronaRamp = isStaticEclipse ? Math.min((stillnessTimer - 150) / 40, 1.0) : 0;
+              const ringBreathe = Math.sin(stillnessTimer * 0.04) * 0.04;
+              const ringRadius = 1.35 + ringBreathe;
+              const outerRadius = ringRadius + 0.9;
 
               for (let i = 0; i < 12000; i++) {
                 const i3 = i * 3;
@@ -406,136 +387,129 @@ const ThreeBackground = () => {
                 const py = positions[i3+1];
                 const pz = positions[i3+2];
 
-                // 1. Kinetic Vacuum Wake (pulling particles INWARD from mouse flick)
-                if (shockwaveStrength > 0.05) {
-                  const s_dx = px - shockwaveOrigin.x;
-                  const s_dy = py - shockwaveOrigin.y;
-                  const s_dz = pz - shockwaveOrigin.z;
-                  const s_distSq = s_dx*s_dx + s_dy*s_dy + s_dz*s_dz;
-                  
-                  if (s_distSq > 0.01 && s_distSq < 4.0) { // Larger interaction bubble
-                    const s_dist = Math.sqrt(s_distSq);
-                    const normX = s_dx / s_dist;
-                    const normY = s_dy / s_dist;
-                    const normZ = s_dz / s_dist;
-                    
-                    // The inward vacuum pull
-                    const vacuum = (4.0 - s_distSq) * shockwaveStrength * 0.15;
-                    
-                    // The swirling fluid wake (cross product of radial vector and slice direction)
-                    const swirlX = (normY * shockwaveDir.z - normZ * shockwaveDir.y);
-                    const swirlY = (normZ * shockwaveDir.x - normX * shockwaveDir.z);
-                    const swirlZ = (normX * shockwaveDir.y - normY * shockwaveDir.x);
-                    
-                    const swirlForce = vacuum * 1.5;
+                if (isStaticEclipse) {
+                  // === THE ECLIPSE CORONA / EINSTEIN RING ===
+                  const dx = px - mouseTarget.x;
+                  const dy = py - mouseTarget.y;
+                  const dz = pz - mouseTarget.z;
+                  const distXY = Math.sqrt(dx * dx + dy * dy);
 
-                    // Apply INWARD force (-normX) and swirl
-                    velocities[i3] += -normX * vacuum + swirlX * swirlForce;
-                    velocities[i3+1] += -normY * vacuum + swirlY * swirlForce;
-                    velocities[i3+2] += -normZ * vacuum + swirlZ * swirlForce;
-                  }
-                }
+                  if (distXY < outerRadius) {
+                    const normX = dx / (distXY + 0.0001);
+                    const normY = dy / (distXY + 0.0001);
 
-                // 2. Stillness Singularity (Accretion Collapse: begins after 2.5s stillness, pulls everything in & holds at point)
-                if (stillnessStrength > 0.01) {
-                  const w_dx = stillnessOrigin.x - px;
-                  const w_dy = stillnessOrigin.y - py;
-                  const w_dz = stillnessOrigin.z - pz;
-                  const w_distSq = w_dx * w_dx + w_dy * w_dy + w_dz * w_dz;
-                  
-                  // Radius expands from 2.5 to 20.0 units (engulfing the entire universe)
-                  const currentRadius = 2.5 + stillnessStrength * 17.5;
-                  const currentRadiusSq = currentRadius * currentRadius;
-                  
-                  if (w_distSq < currentRadiusSq && w_distSq > 0.0001) {
-                    const w_dist = Math.sqrt(w_distSq);
-                    const normX = w_dx / w_dist;
-                    const normY = w_dy / w_dist;
-                    const normZ = w_dz / w_dist;
-                    
-                    // Inward pull acceleration
-                    const proximity = Math.pow(Math.max(1.0 - (w_dist / currentRadius), 0), 0.5);
-                    const pullSpeed = (0.025 + stillnessStrength * 0.32) * (0.3 + proximity * 0.7);
-                    
-                    // Cosmic spiral as particles fall inward
-                    const swirlFactor = pullSpeed * (0.8 + (1.0 - stillnessStrength) * 0.4);
-                    const swirlX = -normY * swirlFactor;
-                    const swirlY = normX * swirlFactor;
-                    
-                    velocities[i3] += normX * pullSpeed + swirlX;
-                    velocities[i3+1] += normY * pullSpeed + swirlY;
-                    velocities[i3+2] += normZ * pullSpeed;
-                    
-                    // EVENT HORIZON LOCK: Held tightly captive at that exact point!
-                    if (w_dist < 0.35) {
-                      // Direct core suction
-                      velocities[i3] += normX * 0.035;
-                      velocities[i3+1] += normY * 0.035;
-                      velocities[i3+2] += normZ * 0.035;
+                    if (distXY < ringRadius) {
+                      // 1. Deep Void: smoothly push stars outward to form the corona rim
+                      const pushDist = ringRadius - distXY;
+                      const pushForce = (pushDist / ringRadius) * 0.08 * coronaRamp;
+                      velocities[i3] += normX * pushForce;
+                      velocities[i3+1] += normY * pushForce;
+                    } else {
+                      // 2. Gravitational Lensing: pull nearby outer stars inward to concentrate the ring
+                      const pullDist = outerRadius - distXY;
+                      const pullForce = (pullDist / 0.9) * 0.045 * coronaRamp;
+                      velocities[i3] -= normX * pullForce;
+                      velocities[i3+1] -= normY * pullForce;
+                    }
+
+                    // 3. Gentle orbital slip along the ring perimeter (liquid starlight)
+                    if (Math.abs(distXY - ringRadius) < 0.28) {
+                      const tangentX = -normY * 0.008 * coronaRamp;
+                      const tangentY = normX * 0.008 * coronaRamp;
+                      velocities[i3] += tangentX;
+                      velocities[i3+1] += tangentY;
+
+                      // Flatten onto view plane for crisp ring definition
+                      velocities[i3+2] -= dz * 0.06 * coronaRamp;
                       
-                      // Heavy core braking so they are held captive at the singularity point
-                      const coreBrake = 0.55 + w_dist * 0.7;
-                      velocities[i3] *= coreBrake;
-                      velocities[i3+1] *= coreBrake;
-                      velocities[i3+2] *= coreBrake;
+                      // Ring stabilizer damping
+                      velocities[i3] *= 0.86;
+                      velocities[i3+1] *= 0.86;
+                      velocities[i3+2] *= 0.86;
+                    } else {
+                      velocities[i3] *= 0.92;
+                      velocities[i3+1] *= 0.92;
+                      velocities[i3+2] *= 0.92;
+                    }
+
+                    positions[i3] += velocities[i3];
+                    positions[i3+1] += velocities[i3+1];
+                    positions[i3+2] += velocities[i3+2];
+
+                    needsUpdate = true;
+                  } else {
+                    // Outside the corona: maintain soft home spring
+                    const h_dx = ox - px;
+                    const h_dy = oy - py;
+                    const h_dz = oz - pz;
+                    if (Math.abs(h_dx) > 0.01 || Math.abs(h_dy) > 0.01 || Math.abs(h_dz) > 0.01) {
+                      velocities[i3] += h_dx * 0.003;
+                      velocities[i3+1] += h_dy * 0.003;
+                      velocities[i3+2] += h_dz * 0.003;
+                      velocities[i3] *= 0.82;
+                      velocities[i3+1] *= 0.82;
+                      velocities[i3+2] *= 0.82;
+                      positions[i3] += velocities[i3];
+                      positions[i3+1] += velocities[i3+1];
+                      positions[i3+2] += velocities[i3+2];
+                      needsUpdate = true;
                     }
                   }
-                }
-
-                // 3. Dispersal Recoil (when mouse moves after stillness)
-                if (dispersalStrength > 0.02) {
-                  const d_dx = px - dispersalOrigin.x;
-                  const d_dy = py - dispersalOrigin.y;
-                  const d_dz = pz - dispersalOrigin.z;
-                  const d_distSq = d_dx * d_dx + d_dy * d_dy + d_dz * d_dz;
-                  
-                  // Dispersal radius reaches all particles that were pulled in
-                  const dispRadius = 4.0 + dispersalStrength * 3.0;
-                  const dispRadiusSq = dispRadius * dispRadius;
-                  
-                  if (d_distSq < dispRadiusSq && d_distSq > 0.001) {
-                    const d_dist = Math.sqrt(d_distSq);
-                    const push = (1.0 - d_dist / dispRadius) * dispersalStrength * 0.09;
-                    
-                    velocities[i3] += (d_dx / d_dist) * push;
-                    velocities[i3+1] += (d_dy / d_dist) * push;
-                    velocities[i3+2] += (d_dz / d_dist) * push;
-                  }
-                }
-                
-                // 4. Spring Restore Force (pulling particles back to origin smoothly without bouncing)
-                const dx = ox - px;
-                const dy = oy - py;
-                const dz = oz - pz;
-                
-                if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01 || Math.abs(dz) > 0.01 || 
-                    Math.abs(velocities[i3]) > 0.01 || Math.abs(velocities[i3+1]) > 0.01 || 
-                    shockwaveStrength > 0.05 || stillnessStrength > 0.01 || dispersalStrength > 0.02) {
-                  
-                  // Suppress home spring during active stillness collapse so particles stay trapped at the point!
-                  const springK = (stillnessStrength > 0.05) ? 0.0001 : 0.003;
-                  velocities[i3] += dx * springK;
-                  velocities[i3+1] += dy * springK;
-                  velocities[i3+2] += dz * springK;
-                  
-                  // Damping: lower friction when active to allow spiraling, high friction when restoring
-                  const friction = (stillnessStrength > 0.05) ? 0.92 : 0.82;
-                  velocities[i3] *= friction;
-                  velocities[i3+1] *= friction;
-                  velocities[i3+2] *= friction;
-                  
-                  positions[i3] += velocities[i3];
-                  positions[i3+1] += velocities[i3+1];
-                  positions[i3+2] += velocities[i3+2];
-                  
-                  needsUpdate = true;
                 } else {
-                  positions[i3] = ox;
-                  positions[i3+1] = oy;
-                  positions[i3+2] = oz;
-                  velocities[i3] = 0;
-                  velocities[i3+1] = 0;
-                  velocities[i3+2] = 0;
+                  // 1. Kinetic Vacuum Wake (pulling particles inward from rapid mouse flick)
+                  if (shockwaveStrength > 0.05) {
+                    const s_dx = px - shockwaveOrigin.x;
+                    const s_dy = py - shockwaveOrigin.y;
+                    const s_dz = pz - shockwaveOrigin.z;
+                    const s_distSq = s_dx*s_dx + s_dy*s_dy + s_dz*s_dz;
+                    
+                    if (s_distSq > 0.01 && s_distSq < 4.0) {
+                      const s_dist = Math.sqrt(s_distSq);
+                      const normX = s_dx / s_dist;
+                      const normY = s_dy / s_dist;
+                      const normZ = s_dz / s_dist;
+                      
+                      const vacuum = (4.0 - s_distSq) * shockwaveStrength * 0.15;
+                      const swirlX = (normY * shockwaveDir.z - normZ * shockwaveDir.y);
+                      const swirlY = (normZ * shockwaveDir.x - normX * shockwaveDir.z);
+                      const swirlZ = (normX * shockwaveDir.y - normY * shockwaveDir.x);
+                      const swirlForce = vacuum * 1.5;
+
+                      velocities[i3] += -normX * vacuum + swirlX * swirlForce;
+                      velocities[i3+1] += -normY * vacuum + swirlY * swirlForce;
+                      velocities[i3+2] += -normZ * vacuum + swirlZ * swirlForce;
+                    }
+                  }
+
+                  // 2. Spring Restore Force (smoothly floats particles back to original position)
+                  const dx = ox - px;
+                  const dy = oy - py;
+                  const dz = oz - pz;
+                  
+                  if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01 || Math.abs(dz) > 0.01 || 
+                      Math.abs(velocities[i3]) > 0.01 || Math.abs(velocities[i3+1]) > 0.01 || shockwaveStrength > 0.05) {
+                    
+                    velocities[i3] += dx * 0.003;
+                    velocities[i3+1] += dy * 0.003;
+                    velocities[i3+2] += dz * 0.003;
+                    
+                    velocities[i3] *= 0.82; 
+                    velocities[i3+1] *= 0.82;
+                    velocities[i3+2] *= 0.82;
+                    
+                    positions[i3] += velocities[i3];
+                    positions[i3+1] += velocities[i3+1];
+                    positions[i3+2] += velocities[i3+2];
+                    
+                    needsUpdate = true;
+                  } else {
+                    positions[i3] = ox;
+                    positions[i3+1] = oy;
+                    positions[i3+2] = oz;
+                    velocities[i3] = 0;
+                    velocities[i3+1] = 0;
+                    velocities[i3+2] = 0;
+                  }
                 }
               }
             }
@@ -545,7 +519,8 @@ const ThreeBackground = () => {
             }
 
             const activeIndices = [];
-            const radiusSq = 1.2 * 1.2;
+            const activeRadius = (stillnessTimer > 150 ? 1.65 : 1.2);
+            const radiusSq = activeRadius * activeRadius;
 
             // 1. Find particles near mouse
             for (let i = 0; i < 12000; i++) {
