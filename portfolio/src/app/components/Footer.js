@@ -3,60 +3,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Instagram, Github, Linkedin } from 'lucide-react';
 import { useTheme } from './ThemeContext';
+import {
+  SIGNATURE_PATHS,
+  SIGNATURE_LENGTHS,
+  SIGNATURE_TRANSFORM,
+  SIGNATURE_SCALE,
+} from './signatureData';
 
 const Footer = () => {
   const { darkMode, currentTheme } = useTheme();
-  const [signaturePaths, setSignaturePaths] = useState([]);
-  const signatureRefs = useRef([]);
-  const [signatureLengths, setSignatureLengths] = useState([]);
   const [signatureKey, setSignatureKey] = useState(0);
-  const [signatureTransform, setSignatureTransform] = useState("");
+  const [signatureLengths, setSignatureLengths] = useState(SIGNATURE_LENGTHS);
+  const signatureRefs = useRef([]);
 
+  // Loop drawing animation periodically
   useEffect(() => {
-    fetch("/Aliqyaan.svg")
-      .then(res => res.text())
-      .then(svg => {
-        const matches = [...svg.matchAll(/<path[^>]*d="([^"]+)"[^>]*>/gi)];
-        setSignaturePaths(matches.map(m => m[1]).reverse());
-      });
-  }, []);
-
-  useEffect(() => {
-    if (signaturePaths.length) {
-      const newLengths = signatureRefs.current.slice(0, signaturePaths.length).map(ref =>
-        ref ? ref.getTotalLength() : 0
-      );
-      setSignatureLengths(newLengths);
-    }
-  }, [signaturePaths]);
-
-  useEffect(() => {
-    if (!signaturePaths.length) return;
-    const totalDuration = 3 + (signaturePaths.length - 1) * (3 / (signaturePaths.length || 1));
+    const totalDuration = 3 + (SIGNATURE_PATHS.length - 1) * (3 / SIGNATURE_PATHS.length);
     const timeout = setTimeout(() => {
       setSignatureKey(k => k + 1);
     }, totalDuration * 1000 + 500);
     return () => clearTimeout(timeout);
-  }, [signaturePaths, signatureKey]);
-
-  useEffect(() => {
-    if (!signaturePaths.length || !signatureRefs.current[0]) return;
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    signatureRefs.current.forEach(ref => {
-      if (ref) {
-        const bbox = ref.getBBox();
-        minX = Math.min(minX, bbox.x);
-        minY = Math.min(minY, bbox.y);
-        maxX = Math.max(maxX, bbox.x + bbox.width);
-        maxY = Math.max(maxY, bbox.y + bbox.height);
-      }
-    });
-    const vbX = -1.04, vbY = 12.4, vbW = 91.2, vbH = 43.76;
-    const scale = Math.min(vbW / (maxX - minX), vbH / (maxY - minY));
-    const tx = vbX - minX * scale + (vbW - (maxX - minX) * scale) / 2;
-    const ty = vbY - minY * scale + (vbH - (maxY - minY) * scale) / 2;
-    setSignatureTransform(`translate(${tx},${ty}) scale(${scale})`);
-  }, [signaturePaths, signatureKey]);
+  }, [signatureKey]);
 
   return (
     <footer
@@ -80,19 +47,19 @@ const Footer = () => {
               style={{ display: "block", background: "none", height: "auto" }}
               preserveAspectRatio="xMidYMid meet"
             >
-              <g transform={signatureTransform}>
-                {signaturePaths.map((d, i) => (
+              <g transform={SIGNATURE_TRANSFORM}>
+                {SIGNATURE_PATHS.map((d, i) => (
                   <path
                     key={i}
                     ref={el => (signatureRefs.current[i] = el)}
                     d={d}
                     stroke={darkMode ? "#D4C9BE" : "#123458"}
-                    strokeWidth={0.9 / (signatureTransform ? Number(signatureTransform.match(/scale\(([^)]+)\)/)?.[1] || 1) : 1)}
+                    strokeWidth={0.9 / SIGNATURE_SCALE}
                     fill="none"
                     style={{
-                      strokeDasharray: signatureLengths[i] || 0,
-                      strokeDashoffset: signatureLengths[i] || 0,
-                      animation: `draw-signature 3s cubic-bezier(0.77,0,0.18,1) ${i * (3 / (signaturePaths.length || 1))}s forwards`,
+                      strokeDasharray: signatureLengths[i] || SIGNATURE_LENGTHS[i],
+                      strokeDashoffset: signatureLengths[i] || SIGNATURE_LENGTHS[i],
+                      animation: `draw-signature 3s cubic-bezier(0.77,0,0.18,1) ${i * (3 / SIGNATURE_PATHS.length)}s forwards`,
                       strokeLinecap: "round",
                       strokeLinejoin: "round",
                     }}

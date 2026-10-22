@@ -87,20 +87,6 @@ const PortfolioContent = () => {
     };
   }, [isMounted, unlockEgg]);
 
-  // If not mounted yet (during SSR), return a minimal loading state
-  if (!isMounted) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: currentTheme.background }}
-      >
-        <div className="text-center">
-          <p style={{ color: currentTheme.foreground }}>Loading portfolio...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <IntroAnimation />
