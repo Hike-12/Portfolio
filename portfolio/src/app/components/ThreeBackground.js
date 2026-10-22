@@ -63,10 +63,13 @@ const ThreeBackground = () => {
     let prevMouseX = 0;
     let prevMouseY = 0;
     let stillnessTimer = 0;
+    let hasMouseMoved = false;
+    let stillnessStartTime = null;
 
     const handleMouseMove = (event) => {
       mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      hasMouseMoved = true;
     };
 
     const handleTouchMove = (event) => {
@@ -251,11 +254,21 @@ const ThreeBackground = () => {
             prevMouseX = mouseX;
             prevMouseY = mouseY;
 
-            const isMouseMotionless = screenSpeedSq < 0.00002 && !isMouseDown;
+            const isIntroActive = Boolean(document.querySelector('[role="status"]'));
+            const isMouseMotionless = hasMouseMoved && !isIntroActive && screenSpeedSq < 0.00002 && !isMouseDown;
 
             if (isMouseMotionless) {
-              stillnessTimer++;
+              if (stillnessStartTime === null) {
+                stillnessStartTime = performance.now();
+              }
+              const motionlessElapsedMs = performance.now() - stillnessStartTime;
+              if (motionlessElapsedMs >= 3500) {
+                stillnessTimer = Math.max(211, stillnessTimer + 1);
+              } else {
+                stillnessTimer = Math.floor((motionlessElapsedMs / 3500) * 210);
+              }
             } else {
+              stillnessStartTime = null;
               stillnessTimer = 0;
             }
 
@@ -370,8 +383,8 @@ const ThreeBackground = () => {
                 shockwaveStrength *= 0.85; // Faster decay for the slicing force, so it's a sharp burst
               }
 
-              const isStaticEclipse = stillnessTimer > 150;
-              const coronaRamp = isStaticEclipse ? Math.min((stillnessTimer - 150) / 40, 1.0) : 0;
+              const isStaticEclipse = stillnessTimer > 210;
+              const coronaRamp = isStaticEclipse ? Math.min((stillnessTimer - 210) / 40, 1.0) : 0;
               const ringBreathe = Math.sin(stillnessTimer * 0.04) * 0.04;
               const ringRadius = 1.35 + ringBreathe;
               const outerRadius = ringRadius + 0.9;
@@ -519,8 +532,8 @@ const ThreeBackground = () => {
             }
 
             const activeIndices = [];
-            const activeRadius = (stillnessTimer > 150 ? 1.65 : 1.2);
-            const radiusSq = activeRadius * activeRadius;
+            const activeRadius = (stillnessTimer > 210 ? 1.65 : 1.2);
+            const radiusSq = hasMouseMoved ? activeRadius * activeRadius : -1;
 
             // 1. Find particles near mouse
             for (let i = 0; i < 12000; i++) {

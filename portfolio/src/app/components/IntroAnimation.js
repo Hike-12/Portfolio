@@ -12,9 +12,8 @@ import {
 const IntroAnimation = () => {
   const { darkMode } = useTheme();
   const [showIntro, setShowIntro] = useState(true);
-  const [startDrawing, setStartDrawing] = useState(false);
 
-  // Respect prefers-reduced-motion, otherwise trigger drawing on first painted frame after mount
+  // Respect prefers-reduced-motion
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -24,17 +23,9 @@ const IntroAnimation = () => {
       }
     }
 
-    const rafId = requestAnimationFrame(() => {
-      setStartDrawing(true);
-    });
-
-    // Fallback auto-hide after animation completes (2.85s draw + ~0.8s hold)
-    const timer = setTimeout(() => setShowIntro(false), 3800);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      clearTimeout(timer);
-    };
+    // Fallback auto-hide timer in case animationend doesn't fire
+    const timer = setTimeout(() => setShowIntro(false), 4500);
+    return () => clearTimeout(timer);
   }, []);
 
   // Skip on click, Enter, Space, or Escape
@@ -67,7 +58,6 @@ const IntroAnimation = () => {
         >
           <style>{`
             @keyframes draw-signature {
-              from { stroke-dashoffset: var(--path-length); }
               to { stroke-dashoffset: 0; }
             }
           `}</style>
@@ -99,12 +89,9 @@ const IntroAnimation = () => {
                       : undefined
                   }
                   style={{
-                    '--path-length': SIGNATURE_LENGTHS[i],
                     strokeDasharray: SIGNATURE_LENGTHS[i],
                     strokeDashoffset: SIGNATURE_LENGTHS[i],
-                    animation: startDrawing
-                      ? `draw-signature 1.8s cubic-bezier(0.4, 0, 0.2, 1) ${i * (1.2 / SIGNATURE_PATHS.length)}s forwards`
-                      : "none",
+                    animation: `draw-signature 1.8s cubic-bezier(0.4, 0, 0.2, 1) ${(0.15 + i * (1.2 / SIGNATURE_PATHS.length)).toFixed(3)}s forwards`,
                     strokeLinecap: "round",
                     strokeLinejoin: "round",
                   }}
