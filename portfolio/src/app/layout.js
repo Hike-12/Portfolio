@@ -114,12 +114,12 @@ export const metadata = {
   // Icons
   icons: {
     icon: [
-      { url: '/logo.png' },
-      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
-      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico?v=2', sizes: 'any' },
+      { url: '/logo.png?v=2', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.png?v=2', sizes: '32x32', type: 'image/png' },
     ],
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    shortcut: '/favicon.ico?v=2',
+    apple: '/logo.png?v=2',
   },
 
   // Category
@@ -186,9 +186,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/logo.png" />
-        <link rel="shortcut icon" href="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+
+
+
         <link rel="llms" href="/llms.txt" />
       </head>
       <body
