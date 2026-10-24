@@ -30,7 +30,8 @@ const ContactSection = ({ sectionRef }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    website: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,9 +82,15 @@ const ContactSection = ({ sectionRef }) => {
         setFormData({
           name: '',
           email: '',
-          message: ''
+          message: '',
+    website: ''
         });
       } else {
+        if (response.status === 429 || response.status === 400) {
+          const data = await response.json().catch(() => ({}));
+          toast.error(data.error || "Please check your submission.");
+          return;
+        }
         throw new Error("API endpoint not available");
       }
     } catch (error) {
@@ -103,7 +110,8 @@ const ContactSection = ({ sectionRef }) => {
           setFormData({
             name: '',
             email: '',
-            message: ''
+            message: '',
+    website: ''
           });
         }, 1000);
       } catch (mailtoError) {
@@ -234,6 +242,20 @@ const ContactSection = ({ sectionRef }) => {
               }}
             >
               <h3 className="text-2xl font-bold mb-6 text-center tracking-tight" style={{ paddingBottom: '0.1em' }}>Send Me a Message</h3>
+
+              {/* Honeypot field for bot spam prevention (invisible to humans) */}
+              <div style={{ display: 'none' }} aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleInputChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
 
               <div className="mb-4 sm:mb-6">
                 <label htmlFor="name" className="block mb-2 font-medium">
