@@ -144,10 +144,10 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
               >
                 <motion.button
                   onClick={() => scrollToSection('contact')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                  whileHover={{ scale: 1.03, boxShadow: darkMode ? "0 0 28px rgba(212, 201, 190, 0.35)" : "0 8px 24px rgba(18, 52, 88, 0.25)" }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer"
                   style={{
                     backgroundColor: currentTheme.primary,
                     color: currentTheme.primaryText,
@@ -161,10 +161,10 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
                   href="https://github.com/Hike-12"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 font-medium transition-shadow duration-300 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center"
+                  whileHover={{ scale: 1.03, backgroundColor: darkMode ? "rgba(212, 201, 190, 0.12)" : "rgba(18, 52, 88, 0.08)" }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="min-h-[44px] px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 inline-flex items-center cursor-pointer"
                   style={{
                     borderColor: currentTheme.primary,
                     color: currentTheme.primary,
@@ -183,12 +183,28 @@ const HeroSection = ({ sectionRef, onImageClick }) => {
               className="mx-auto md:mx-0 mt-8 md:mt-0 md:flex-shrink-0 flex flex-col items-center"
             >
               <figure className="relative">
+                {/* Ambient Warm Golden Backlight Glow */}
                 <div
-                  className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 overflow-hidden rounded-2xl border-4 shadow-lg flex items-center justify-center relative"
-                  style={{ borderColor: currentTheme.primary }}
+                  className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-75 blur-2xl transition-all duration-700 pointer-events-none -z-10"
+                  style={{
+                    background: darkMode
+                      ? 'radial-gradient(circle, rgba(220, 180, 120, 0.28) 0%, rgba(212, 201, 190, 0.1) 45%, transparent 75%)'
+                      : 'radial-gradient(circle, rgba(18, 52, 88, 0.18) 0%, transparent 70%)'
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div
+                  className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-3xl border-2 shadow-2xl flex items-center justify-center relative overflow-hidden"
+                  style={{
+                    borderColor: darkMode ? 'rgba(212, 201, 190, 0.4)' : currentTheme.primary,
+                    boxShadow: darkMode
+                      ? '0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 30px -5px rgba(220, 180, 120, 0.2)'
+                      : '0 20px 40px -15px rgba(18, 52, 88, 0.25)'
+                  }}
                 >
                   <button
-                    className="cursor-pointer w-full h-full flex items-center justify-center bg-transparent border-none p-0 focus-visible:ring-2 focus-visible:ring-offset-2 rounded-xl"
+                    className="cursor-pointer w-full h-full flex items-center justify-center bg-transparent border-none p-0 focus-visible:ring-2 focus-visible:ring-offset-2 rounded-3xl overflow-hidden relative"
                     onClick={() => onImageClick('/me2.webp')}
                     aria-label="View full-size photo of Aliqyaan Mahimwala"
                     style={{ '--tw-ring-color': currentTheme.primary }}
