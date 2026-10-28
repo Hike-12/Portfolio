@@ -262,10 +262,10 @@ const ThreeBackground = () => {
                 stillnessStartTime = performance.now();
               }
               const motionlessElapsedMs = performance.now() - stillnessStartTime;
-              if (motionlessElapsedMs >= 3500) {
-                stillnessTimer = Math.max(211, stillnessTimer + 1);
+              if (motionlessElapsedMs >= 4000) {
+                stillnessTimer = Math.max(241, stillnessTimer + 1);
               } else {
-                stillnessTimer = Math.floor((motionlessElapsedMs / 3500) * 210);
+                stillnessTimer = Math.floor((motionlessElapsedMs / 4000) * 240);
               }
             } else {
               stillnessStartTime = null;
@@ -383,8 +383,8 @@ const ThreeBackground = () => {
                 shockwaveStrength *= 0.85; // Faster decay for the slicing force, so it's a sharp burst
               }
 
-              const isStaticEclipse = stillnessTimer > 210;
-              const coronaRamp = isStaticEclipse ? Math.min((stillnessTimer - 210) / 40, 1.0) : 0;
+              const isStaticEclipse = stillnessTimer > 240;
+              const coronaRamp = isStaticEclipse ? Math.min((stillnessTimer - 240) / 40, 1.0) : 0;
               const ringBreathe = Math.sin(stillnessTimer * 0.04) * 0.04;
               const ringRadius = 1.35 + ringBreathe;
               const outerRadius = ringRadius + 0.9;
@@ -532,7 +532,7 @@ const ThreeBackground = () => {
             }
 
             const activeIndices = [];
-            const activeRadius = (stillnessTimer > 210 ? 1.65 : 1.2);
+            const activeRadius = (stillnessTimer > 240 ? 1.65 : 1.2);
             const radiusSq = hasMouseMoved ? activeRadius * activeRadius : -1;
 
             // 1. Find particles near mouse
