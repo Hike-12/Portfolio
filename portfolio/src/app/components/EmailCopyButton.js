@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
@@ -14,6 +15,9 @@ const EmailCopyButton = ({ currentTheme, justify = 'center', className = '', col
     e.preventDefault();
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText('aliqyaan12@gmail.com');
+      toast.success('Email copied to clipboard!');
+    } else {
+      toast.error('Failed to copy email. Please try manually.');
     }
     
     unlockEgg('copy_email');
@@ -33,7 +37,7 @@ const EmailCopyButton = ({ currentTheme, justify = 'center', className = '', col
     setCopied(true);
     
     setTimeout(() => setParticles([]), 1000);
-    setTimeout(() => setCopied(false), 2500);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   return (

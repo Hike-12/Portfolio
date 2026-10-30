@@ -35,14 +35,6 @@ const ContactSection = ({ sectionRef }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const copyEmail = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('aliqyaan12@gmail.com');
-      toast.success("Email copied to clipboard!");
-    } else {
-      toast.error("Failed to copy email. Please try manually.");
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
